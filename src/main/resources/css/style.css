@@ -1,0 +1,26 @@
+.sidebar {
+    -fx-background-color: #2C3E50;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.nav-button:hover {
+    -fx-background-color: #34495E;
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.content-area {
+    -fx-background-color: #ECF0F1;
+    -fx-padding: 20px;
+}

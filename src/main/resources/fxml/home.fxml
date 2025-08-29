@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HomeController" stylesheets="@home.css">
+        <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout"/>
+        <Button fx:id="signupButton" text="Sign Up" onAction="#goToSignup"/>
+        <Button fx:id="loginButton" text="Login" onAction="#goToLogin"/>
+        <Button fx:id="TicketButton" text="Ticket" onAction="#goToTicket"/>
+        <Button fx:id="MessageButton" text="Message" onAction="#goToMessage"/>
+        <Button fx:id="SponsoringButton" text="Sponsoring" onAction="#goToSponsoring"/>
+        <Button fx:id="SuiviSponsoringButon" text="SuiviSponsoring" onAction="#goToSuiviSponsoring"/>
+</VBox>

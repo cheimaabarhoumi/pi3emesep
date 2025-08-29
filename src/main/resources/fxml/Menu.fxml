@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controllers.MainMenuController"
+      prefWidth="600"
+      prefHeight="400"
+      spacing="20"
+      alignment="CENTER"
+      styleClass="menu-container">
+
+    <Label text="Mon Application" styleClass="title-label"/>
+
+    <Button text="Organiser un entretien" onAction="#openEntretien" styleClass="menu-button"/>
+    <Button text="Organiser un rendez-vous" onAction="#openRendezVous" styleClass="menu-button"/>
+
+</VBox>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.AnnonceController"
+            stylesheets="@../css/modern-style.css"
+            style="-fx-background-color: #F8F9FA;">
+    
+    <left>
+        <!-- Left Sidebar: Annonces List -->
+        <VBox spacing="15" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);" prefWidth="300">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Header -->
+            <VBox spacing="5">
+                <Label text="Annonces" styleClass="label-title"/>
+                <Label text="Gérez vos annonces" styleClass="label-subtitle"/>
+            </VBox>
+
+            <!-- Action Button -->
+            <Button onAction="#afficherFormulaireAjout" styleClass="button-primary" maxWidth="Infinity">
+                <graphic>
+                    <Label text="Nouvelle Annonce" style="-fx-text-fill: white;"/>
+                </graphic>
+            </Button>
+
+            <!-- Annonces List -->
+            <VBox spacing="5" VBox.vgrow="ALWAYS">
+                <Label text="Vos annonces publiées" styleClass="label-header"/>
+                <ListView fx:id="listViewAnnonces" VBox.vgrow="ALWAYS" styleClass="modern-list-view"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane style="-fx-background-color: #F8F9FA;">
+            <!-- Add/Edit Form -->
+            <VBox fx:id="formulairePane" style="-fx-background-color: transparent;" maxHeight="600" maxWidth="800">
+                <!-- Fixed Header -->
+                <VBox styleClass="card" style="-fx-padding: 15;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label fx:id="formTitleLabel" text="Nouvelle Annonce" styleClass="label-title"/>
+                            <Label text="Publiez une annonce pour votre véhicule" styleClass="label-subtitle"/>
+                        </VBox>
+                        <Button fx:id="enregistrerButton" onAction="#enregistrerAnnonce" styleClass="button-primary">
+                            <graphic>
+                                <Label text="Publier" style="-fx-text-fill: white;"/>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="annulerButton" onAction="#annulerFormulaire" styleClass="button">
+                            <graphic>
+                                <Label text="Annuler" style="-fx-text-fill: #212529;"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+                
+                <!-- Scrollable Content -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge"
+                          style="-fx-background-color: transparent;">
+                    <content>
+                        <VBox spacing="20" style="-fx-padding: 20px;">
+                            <!-- Vehicle Selection Card -->
+                            <HBox spacing="30" minHeight="200">
+                                <!-- Left Column -->
+                                <VBox spacing="20" HBox.hgrow="ALWAYS" styleClass="card">
+                                    <Label text="Sélectionnez un véhicule" styleClass="label-header"/>
+                                    <ComboBox fx:id="voitureComboBox" promptText="Choisir un véhicule" 
+                                             onAction="#handleSelectionVoiture" maxWidth="Infinity"
+                                             style="-fx-opacity: 0.85;"/>
+                                    
+                                    <!-- Vehicle Info -->
+                                    <VBox fx:id="voitureInfoPane" spacing="15" style="-fx-background-color: #F8F9FA; -fx-padding: 20; -fx-background-radius: 8;">
+                                        <Label text="Détails du véhicule sélectionné" styleClass="label-header"/>
+                                        <GridPane hgap="20" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="80"/>
+                                                <ColumnConstraints hgrow="ALWAYS"/>
+                                            </columnConstraints>
+                                            
+                                            <Label text="Marque:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                            <Label fx:id="marqueLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                            
+                                            <Label text="Modèle:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                            <Label fx:id="modeleLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                            
+                                            <Label text="Année:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                            <Label fx:id="anneeLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                            
+                                            <Label text="Prix:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                            <Label fx:id="prixLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        </GridPane>
+                                    </VBox>
+                                </VBox>
+
+                                <!-- Right Column - Image -->
+                                <VBox styleClass="card" alignment="CENTER" minWidth="300">
+                                    <ImageView fx:id="voitureImageView" fitWidth="250" fitHeight="180" 
+                                             style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"/>
+                                    <Label text="Photo du véhicule" styleClass="label-content" style="-fx-padding: 10 0 0 0;"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Annonce Details Card -->
+                            <VBox styleClass="card" spacing="20">
+                                <Label text="Détails de l'annonce" styleClass="label-header"/>
+                                
+                                <VBox spacing="10">
+                                    <Label text="Titre de l'annonce" styleClass="label-content"/>
+                                    <TextField fx:id="titreField" promptText="Un titre accrocheur qui met en valeur votre véhicule"
+                                             style="-fx-pref-height: 35;"/>
+                                </VBox>
+                                
+                                <VBox spacing="10">
+                                    <Label text="Description détaillée" styleClass="label-content"/>
+                                    <TextArea fx:id="descriptionField" 
+                                             promptText="Décrivez votre véhicule en détail : état, équipements, historique d'entretien..."
+                                             prefRowCount="6" wrapText="true"/>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Details View -->
+            <VBox fx:id="detailsPane" visible="false" style="-fx-background-color: transparent;">
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge"
+                          style="-fx-background-color: transparent;">
+                    <content>
+                        <VBox spacing="30" style="-fx-padding: 30;">
+                            <!-- Header -->
+                            <VBox styleClass="card" style="-fx-padding: 30;">
+                                <HBox spacing="20" alignment="CENTER_LEFT">
+                                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                        <Label fx:id="detailsTitreLabel" styleClass="label-title"/>
+                                        <Label text="Détails de l'annonce" styleClass="label-subtitle"/>
+                                    </VBox>
+                                    <Button onAction="#modifierAnnonce" styleClass="button-primary">
+                                        <graphic>
+                                            <Label text="Modifier" style="-fx-text-fill: white;"/>
+                                        </graphic>
+                                    </Button>
+                                    <Button onAction="#supprimerAnnonce" styleClass="button-danger">
+                                        <graphic>
+                                            <Label text="Supprimer" style="-fx-text-fill: white;"/>
+                                        </graphic>
+                                    </Button>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Content -->
+                            <HBox spacing="30" minHeight="400">
+                                <!-- Left Column -->
+                                <VBox spacing="20" HBox.hgrow="ALWAYS" styleClass="card">
+                                    <Label text="Informations" styleClass="label-header"/>
+                                    
+                                    <VBox spacing="20" style="-fx-padding: 20 0 0 0;">
+                                        <Label text="Description" styleClass="label-header"/>
+                                        <Text fx:id="detailsDescriptionText" wrappingWidth="400" 
+                                              style="-fx-fill: #495057;"/>
+                                    </VBox>
+                                    
+                                    <VBox spacing="15" style="-fx-padding: 20 0 0 0;">
+                                        <Label text="Caractéristiques du véhicule" styleClass="label-header"/>
+                                        <GridPane hgap="20" vgap="10">
+                                            <columnConstraints>
+                                                <ColumnConstraints minWidth="80"/>
+                                                <ColumnConstraints hgrow="ALWAYS"/>
+                                            </columnConstraints>
+                                            
+                                            <Label text="Marque:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                            <Label fx:id="detailsMarqueLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                            
+                                            <Label text="Modèle:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                            <Label fx:id="detailsModeleLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                            
+                                            <Label text="Année:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                            <Label fx:id="detailsAnneeLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                            
+                                            <Label text="Prix:" styleClass="label-content" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                            <Label fx:id="detailsPrixLabel" styleClass="label-content" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        </GridPane>
+                                    </VBox>
+                                </VBox>
+
+                                <!-- Right Column - Image -->
+                                <VBox styleClass="card" alignment="CENTER" minWidth="300">
+                                    <ImageView fx:id="detailsVoitureImageView" fitWidth="250" fitHeight="180"
+                                             style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);"/>
+                                    <Label text="Photo du véhicule" styleClass="label-content" style="-fx-padding: 10 0 0 0;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

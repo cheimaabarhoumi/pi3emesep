@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.UpdateVoitureController">
+
+    <VBox spacing="10" layoutX="50.0" layoutY="20.0" prefWidth="400" alignment="CENTER">
+
+        <Label text="Modifier une voiture" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <ImageView fx:id="imageViewVoiture" fitHeight="150.0" fitWidth="200.0" style="-fx-border-color: #ccc;" />
+    <!-- Image selection not implemented in controller; keep button but without handler to avoid FXMLLoader errors -->
+    <Button text="Choisir une image" fx:id="btnChooseImage" style="-fx-background-color: #007bff; -fx-text-fill: white;" />
+
+        <Label text="Marque:" />
+        <TextField fx:id="txtMarque" />
+
+        <Label text="Modèle:" />
+        <TextField fx:id="txtModele" />
+
+        <Label text="Année:" />
+        <TextField fx:id="txtAnnee" />
+
+        <Label text="Prix:" />
+        <TextField fx:id="txtPrix" />
+
+        <Label text="Kilométrage:" />
+        <TextField fx:id="txtKilometrage" />
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Enregistrer" fx:id="btnUpdate" onAction="#handleUpdate"
+            style="-fx-background-color: #28a745; -fx-text-fill: white;" />
+        <Button text="Annuler" fx:id="btnCancel" onAction="#handleCancel"
+            style="-fx-background-color: #dc3545; -fx-text-fill: white;" />
+    </HBox>
+    </VBox>
+
+</AnchorPane>

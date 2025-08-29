@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #F8F9FA;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddVoitureController">
+    <ScrollPane fitToWidth="true" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-background-color: transparent;">
+        <VBox alignment="TOP_CENTER" spacing="25" style="-fx-background-color: transparent; -fx-padding: 30px;">
+            <!-- Header -->
+            <VBox style="-fx-background-color: white; -fx-padding: 20px; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                <Label text="Ajouter une Voiture" styleClass="label-title"/>
+                <Label text="Remplissez les informations du véhicule" styleClass="label-subtitle"/>
+            </VBox>
+
+            <!-- Main Form -->
+            <VBox style="-fx-background-color: white; -fx-padding: 25px; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);">
+                <VBox spacing="20">
+                    <!-- Basic Info Section -->
+                    <VBox spacing="15">
+                        <Label text="Informations de Base" styleClass="label-header"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Marque" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-content"/>
+                            <ComboBox fx:id="comboMarque" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity"/>
+
+                            <Label text="Modèle" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-content"/>
+                            <ComboBox fx:id="comboModele" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity"/>
+
+                            <Label text="Année" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-content"/>
+                            <TextField fx:id="txtAnnee" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="Prix (€)" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="label-content"/>
+                            <TextField fx:id="txtPrix" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Technical Details Section -->
+                    <VBox spacing="15">
+                        <Label text="Caractéristiques Techniques" styleClass="label-header"/>
+                        <GridPane hgap="20" vgap="15">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Puissance" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-content"/>
+                            <TextField fx:id="txtPuissanceFiscale" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Kilométrage" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-content"/>
+                            <TextField fx:id="txtKilometrage" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Boîte" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-content"/>
+                            <ComboBox fx:id="comboBoiteVitesse" GridPane.columnIndex="1" GridPane.rowIndex="2" maxWidth="Infinity"/>
+
+                            <Label text="Carburant" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="label-content"/>
+                            <ComboBox fx:id="comboCarburant" GridPane.columnIndex="1" GridPane.rowIndex="3" maxWidth="Infinity"/>
+
+                            <Label text="Cylindrée" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="label-content"/>
+                            <TextField fx:id="txtCylindree" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                            <Label text="Portes" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="label-content"/>
+                            <TextField fx:id="txtNombrePortes" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Image Section -->
+                    <VBox spacing="15">
+                        <Label text="Photo du Véhicule" styleClass="label-header"/>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: #F8F9FA; -fx-padding: 20; -fx-background-radius: 5;">
+                                <ImageView fx:id="imageViewVoiture" fitWidth="200" fitHeight="150" preserveRatio="true"/>
+                                <Button fx:id="btnChooseImage" onAction="#handleChooseImage" styleClass="button">
+                                    <graphic>
+                                        <Label text="Choisir une image" style="-fx-text-fill: #212529;"/>
+                                    </graphic>
+                                </Button>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-padding: 20 0 0 0;">
+                    <Button fx:id="btnBack" onAction="#handleBack" styleClass="button">
+                        <graphic>
+                            <Label text="Annuler" style="-fx-text-fill: #212529;"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnAdd" onAction="#handleAdd" styleClass="button-primary">
+                        <graphic>
+                            <Label text="Ajouter le véhicule" style="-fx-text-fill: white;"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

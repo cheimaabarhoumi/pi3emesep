@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.ModifierAnnonceController"
+            prefWidth="500" prefHeight="400"
+            stylesheets="@../css/modern-style.css,@../css/components.css,@../css/modern-animations.css">
+    
+    <content>
+        <VBox styleClass="modern-card" spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="✏️ Modifier l'annonce" styleClass="modern-label-title"/>
+            
+            <VBox spacing="15" styleClass="modern-container">
+                <TextField fx:id="titreField" promptText="Titre de l'annonce" styleClass="modern-text-field"/>
+                <TextArea fx:id="descriptionField" promptText="Description détaillée" 
+                         prefRowCount="4" wrapText="true" 
+                         styleClass="modern-text-field"
+                         VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType fx:constant="OK"/>
+    </buttonTypes>
+</DialogPane>

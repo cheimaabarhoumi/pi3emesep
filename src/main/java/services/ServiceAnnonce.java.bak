@@ -1,0 +1,156 @@
+package services;
+import models.Annonce;
+import utils.MyDb;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ServiceAnnonce implements IAnnonce<Annonce> {
+    private final Connection cnx = MyDb.getInstance().getConnection();ervices;
+import models.Annonce;
+import utils.MyDb;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ServiceAnnonce implements IAnnonce <Annonce> {
+    private final Connection cnx = MyDb.getInstance().getConnection();
+
+    @Override
+    public void create(Annonce obj) throws Exception {
+        if (cnx == null) {
+            throw new Exception("Database connection failed");
+        }
+
+        String sql = "INSERT INTO annonce (titre, description, voiture_id) VALUES (?, ?, ?)";
+        
+        try (PreparedStatement pstmt = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, obj.getTitre());
+            pstmt.setString(2, obj.getDescription());
+            pstmt.setInt(3, obj.getVoitureId());
+            
+            int affectedRows = pstmt.executeUpdate();
+            
+            if (affectedRows == 0) {
+                throw new SQLException("Creating annonce failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    obj.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating annonce failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<Annonce> getAll() throws Exception {
+        List<Annonce> annonces = new ArrayList<>();
+        String query = "SELECT * FROM annonce";
+
+        try (PreparedStatement ps = cnx.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Annonce annonce = new Annonce(
+                    rs.getInt("id"),
+                    rs.getString("titre"),
+                    rs.getString("description"),
+                    rs.getInt("voiture_id")
+                );
+                annonces.add(annonce);
+            }
+        }
+        return annonces;
+    }
+    @Override
+    public void create(Annonce obj) throws Exception {
+        String sql = "INSERT INTO Annonce (id, titre, description, voiture_id) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = cnx.prepareStatement(sql)) {
+            pstmt.setInt(1, obj.getIdAnnonce());        // Set the ID of the annonce
+            pstmt.setString(2, obj.getTitre());         // Set the title of the annonce
+            pstmt.setString(3, obj.getDescription());  // Set the description of the annonce
+            pstmt.setInt(4, obj.getVoitureId());       // Correct method to get voitureId
+
+            pstmt.executeUpdate();  // Execute the insert statement
+            Annonces.add(obj);       // Assuming you are adding the annonce to a list
+            System.out.println("Annonce ajoutée: " + obj.getTitre() + " " + obj.getDescription());
+            System.out.println("Annonce ajoutée: " +
+                    "ID: " + obj.getIdAnnonce() + ", " +
+                    "Titre: " + obj.getTitre() + ", " +
+                    "Description: " + obj.getDescription() + ", " +
+                    "Voiture ID: " + obj.getVoitureId());
+        }
+    }
+
+
+
+
+    public boolean voitureExists(int voitureId) {
+        String query = "SELECT COUNT(*) FROM voiture WHERE id = ?";
+        try (
+                Connection conn = Database.getInstance().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, voitureId);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0; // Returns true if voitureId exists
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    @Override
+    public void update(int idAnnonce, Annonce obj) throws Exception {
+        String sql = "UPDATE Annonce SET titre = ?, description = ?, voiture_id = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = cnx.prepareStatement(sql)) {
+            // Set parameters for the update query
+            pstmt.setString(1, obj.getTitre()); // Set the new title (titre)
+            pstmt.setString(2, obj.getDescription()); // Set the new description
+            pstmt.setInt(3, obj.getVoitureId()); // Set the foreign key (idVoiture)
+            pstmt.setInt(4, idAnnonce); // Use idAnnonce to match the record to be updated
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Annonce with ID " + idAnnonce + " has been updated.");
+            } else {
+                System.out.println("Annonce with ID " + idAnnonce + " not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error while updating Annonce: " + e.getMessage());
+            throw new Exception("Failed to update Annonce", e);
+        }
+    }
+
+
+    @Override
+    public void delete(int idAnnonce) throws Exception {
+        String sql = "DELETE FROM Annonce WHERE id = ?";
+
+        try (PreparedStatement pstmt = cnx.prepareStatement(sql)) {
+            pstmt.setInt(1, idAnnonce);  // Set the ID of the annonce to be deleted
+            int rowsAffected = pstmt.executeUpdate();  // Execute the delete statement
+
+            if (rowsAffected > 0) {
+                // Optionally, if you are maintaining a list of Annonces in memory, remove it
+                Annonces.removeIf(annonce -> annonce.getIdAnnonce() == idAnnonce);
+                System.out.println("Annonce supprimée avec ID: " + idAnnonce);
+            } else {
+                System.out.println("Aucune annonce trouvée avec l'ID: " + idAnnonce);
+            }
+        }
+    }
+
+    @Override
+    public List<Annonce> getAll() throws Exception {
+        return List.of();
+    }
+
+
+}
+

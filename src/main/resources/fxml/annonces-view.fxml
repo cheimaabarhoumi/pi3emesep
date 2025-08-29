@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.GestionAnnoncesController"
+            stylesheets="@../css/modern-style.css,@../css/components.css,@../css/modern-animations.css">
+
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="modern-container">
+            <Label text="Gestion des Annonces" styleClass="modern-label-title">
+                <graphic>
+                    <Label text="&#x1F4D1;" style="-fx-font-size: 24px;"/>
+                </graphic>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnInvalidAnnonces" text="Annonces en Attente" onAction="#showInvalidAnnonces"
+                    styleClass="modern-button">
+                <graphic>
+                    <Label text="&#x1F50D;" style="-fx-font-size: 14px;"/>
+                </graphic>
+            </Button>
+            <Button fx:id="btnAllAnnonces" text="Toutes les Annonces" onAction="#showAllAnnonces"
+                    styleClass="modern-button">
+                <graphic>
+                    <Label text="&#x1F4C4;" style="-fx-font-size: 14px;"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </top>
+
+    <center>
+        <!-- Give more room to the details panel by moving divider left (40% -> 30%) -->
+        <SplitPane dividerPositions="0.3" xmlns="http://javafx.com/javafx/8.0" xmlns:fx="http://javafx.com/fxml/1">
+
+            <!-- Left: list of annonces -->
+            <VBox minWidth="300" maxWidth="350">
+                <VBox styleClass="modern-card">
+                        <Label text="Liste des Annonces" styleClass="modern-label-title">
+                            <graphic>
+                                <Label text="&#x1F4C1;" style="-fx-font-size: 14px;"/>
+                            </graphic>
+                        </Label>
+                        <TextField fx:id="searchField" promptText="🔍 Rechercher une annonce..." styleClass="search-field"/>
+                        <ListView fx:id="listViewAnnonces" VBox.vgrow="ALWAYS" minHeight="400" styleClass="modern-list"/>
+                </VBox>
+            </VBox>
+
+            <!-- Right: details and actions -->
+            <VBox fx:id="detailsPane" HBox.hgrow="ALWAYS" minHeight="700" prefHeight="800">
+                <!-- Welcome State -->
+                <VBox fx:id="welcomePane" styleClass="welcome-pane" alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <Label text="Bienvenue" styleClass="welcome-title"/>
+                    <Label text="Sélectionnez une annonce dans la liste pour voir ses détails" styleClass="welcome-subtitle"/>
+                </VBox>
+
+                <!-- Details State -->
+                <VBox fx:id="annonceDetailsPane" styleClass="modern-card" visible="false" VBox.vgrow="ALWAYS">
+                    <!-- Header with status and actions -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <VBox>
+                            <Label fx:id="detailsTitreLabel" styleClass="modern-label-title"/>
+                            <Label styleClass="modern-status modern-status-success" text="Annonce Validée"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnModifier" onAction="#modifierAnnonce" styleClass="modern-button">
+                            <graphic>
+                                <Label text="&#x270E;" style="-fx-font-size: 14px;"/>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnSupprimer" onAction="#supprimerAnnonce" styleClass="modern-button-secondary">
+                            <graphic>
+                                <Label text="&#x2716;" style="-fx-font-size: 14px;"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="modern-scroll-pane" minHeight="600">
+                        <VBox spacing="15">
+                            <!-- Description Section -->
+                            <VBox styleClass="modern-card">
+                                <Label text="Description" styleClass="modern-label-title">
+                                    <graphic>
+                                        <Label text="&#x1F4DD;" style="-fx-font-size: 14px;"/>
+                                    </graphic>
+                                </Label>
+                                <Label fx:id="detailsDescriptionText" wrapText="true" styleClass="modern-label"/>
+                            </VBox>
+
+                            <!-- Vehicle Image Section -->
+                            <VBox styleClass="modern-card">
+                                <Label text="Photo du véhicule" styleClass="modern-label-title">
+                                    <graphic>
+                                        <Label text="&#x1F4F7;" style="-fx-font-size: 14px;"/>
+                                    </graphic>
+                                </Label>
+                                <ImageView fx:id="detailsVoitureImageView" fitWidth="250" fitHeight="150" styleClass="modern-image"/>
+                            </VBox>
+
+                            <!-- Vehicle Info Section -->
+                            <VBox styleClass="modern-card">
+                                <Label text="Informations du véhicule" styleClass="modern-label-title">
+                                    <graphic>
+                                        <Label text="&#x1F697;" style="-fx-font-size: 14px;"/>
+                                    </graphic>
+                                </Label>
+                                <VBox spacing="8" styleClass="modern-container">
+                                    <Label fx:id="detailsMarqueLabel" styleClass="modern-label"/>
+                                    <Label fx:id="detailsModeleLabel" styleClass="modern-label"/>
+                                    <Label fx:id="detailsAnneeLabel" styleClass="modern-label"/>
+                                    <Label fx:id="detailsPrixLabel" styleClass="modern-label"/>
+                                </VBox>
+                            </VBox>
+
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10"/>
+                            </padding>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+                <VBox fx:id="invalidAnnoncesPane" styleClass="modern-card" visible="false">
+                    <VBox styleClass="modern-container">
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="⚠️ Annonces en Attente" styleClass="modern-label-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnRefreshInvalid" text="Actualiser" onAction="#refreshInvalidAnnonces" styleClass="modern-button">
+                                <graphic>
+                                    <Label text="🔄" style="-fx-font-size: 14px;"/>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                    
+                    <ListView fx:id="listViewInvalidAnnonces" VBox.vgrow="ALWAYS" styleClass="modern-list"/>
+
+                    <VBox fx:id="invalidDetailsPane" styleClass="modern-card" visible="false">
+                        <VBox styleClass="modern-container">
+                            <Label fx:id="invalidDetailsTitreLabel" styleClass="modern-label-title"/>
+                            <Label styleClass="modern-status modern-status-warning" text="⏳ En attente de validation"/>
+                        </VBox>
+                        
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="modern-scroll-pane">
+                            <VBox spacing="15">
+                                <VBox styleClass="modern-card">
+                                    <Label text="📝 Description" styleClass="modern-label-title"/>
+                                    <Label fx:id="invalidDetailsDescriptionText" wrapText="true" styleClass="modern-label"/>
+                                </VBox>
+                                
+                                <VBox styleClass="modern-card">
+                                    <Label text="🚗 Informations du véhicule" styleClass="modern-label-title"/>
+                                    <VBox spacing="10" styleClass="modern-container">
+                                        <Label fx:id="invalidDetailsMarqueLabel" styleClass="modern-label"/>
+                                        <Label fx:id="invalidDetailsModeleLabel" styleClass="modern-label"/>
+                                        <Label fx:id="invalidDetailsAnneeLabel" styleClass="modern-label"/>
+                                        <Label fx:id="invalidDetailsPrixLabel" styleClass="modern-label"/>
+                                    </VBox>
+                                    <ImageView fx:id="invalidDetailsVoitureImageView" fitWidth="250" fitHeight="150" styleClass="modern-image"/>
+                                </VBox>
+                                <padding>
+                                    <Insets top="10" right="10" bottom="10" left="10"/>
+                                </padding>
+                            </VBox>
+                        </ScrollPane>
+                        
+                        <HBox spacing="15" alignment="CENTER">
+                            <Button fx:id="btnValidateAnnonce" text="Valider l'Annonce" onAction="#validateAnnonce" styleClass="modern-button">
+                                <graphic>
+                                    <Label text="✓" style="-fx-font-size: 14px;"/>
+                                </graphic>
+                            </Button>
+                            <Button fx:id="btnDeleteInvalidAnnonce" text="Supprimer" onAction="#deleteInvalidAnnonce" styleClass="modern-button-secondary">
+                                <graphic>
+                                    <Label text="×" style="-fx-font-size: 14px;"/>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

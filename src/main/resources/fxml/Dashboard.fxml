@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="Controllers.DashboardController"
+            stylesheets="@../css/modern-style.css">
+    
+    <!-- Left Sidebar -->
+    <left>
+        <VBox styleClass="card" style="-fx-background-color: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);" 
+              prefWidth="250" spacing="20">
+            <padding>
+                <Insets top="30" right="20" bottom="30" left="20"/>
+            </padding>
+            
+            <!-- App Title -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="🚗 MechaRift" styleClass="welcome-title"/>
+                <Label text="Gestion de Votre Parc Auto" styleClass="welcome-subtitle"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Navigation Buttons -->
+            <VBox spacing="10">
+                <Label text="MENU PRINCIPAL" styleClass="label-header" 
+                       style="-fx-text-fill: -fx-text-light; -fx-font-size: 12px;"/>
+                
+                <Button fx:id="btnVoiture" styleClass="button-nav" maxWidth="Infinity" onAction="#showVoitures">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="🚘" style="-fx-font-size: 16px;"/>
+                            <Label text="Gestion des Voitures" style="-fx-font-size: 14px;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="btnAnnonce" styleClass="button-nav" maxWidth="Infinity" onAction="#showAnnonces">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="📢" style="-fx-font-size: 16px;"/>
+                            <Label text="Gestion des Annonces" style="-fx-font-size: 14px;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- User Profile Section -->
+            <VBox spacing="10" styleClass="card" style="-fx-padding: 10;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="👤" style="-fx-font-size: 24px;"/>
+                    <VBox spacing="2">
+                        <Label text="Admin User" styleClass="label-header"/>
+                        <Label text="Administrateur" styleClass="label-content"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <VBox>
+            <!-- Top Bar -->
+            <HBox styleClass="toolbar" spacing="15" alignment="CENTER_LEFT">
+                <Label text="Dashboard" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                
+                <!-- Search Box -->
+                <HBox spacing="10" alignment="CENTER" styleClass="card" 
+                      style="-fx-padding: 5 15; -fx-background-color: -fx-grey-light;">
+                    <Label text="🔍" style="-fx-font-size: 14px;"/>
+                    <TextField promptText="Rechercher..." style="-fx-background-color: transparent;"/>
+                </HBox>
+                
+                <!-- Notification Button -->
+                <Button styleClass="button">
+                    <graphic>
+                        <Label text="🔔" style="-fx-font-size: 16px;"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <!-- Content Area -->
+            <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS" style="-fx-background-color: -fx-grey-light;">
+                <!-- Welcome Message (shown when no content is loaded) -->
+                <VBox alignment="CENTER" spacing="20">
+                    <Label text="👋 Bienvenue sur MechaRift" styleClass="welcome-title"/>
+                    <Label text="Sélectionnez une option dans le menu pour commencer" styleClass="welcome-subtitle"/>
+                </VBox>
+                
+                <!-- Dynamic content will be loaded here -->
+            </StackPane>
+        </VBox>
+    </center>
+</BorderPane>

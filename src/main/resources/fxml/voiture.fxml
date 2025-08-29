@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.VoitureController"
+            stylesheets="@../css/modern-style.css">
+
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="toolbar">
+            <Label text="Gestion des Voitures" styleClass="label-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <!-- Action buttons moved to top -->
+            <Button fx:id="btnAdd" onAction="#handleAdd" styleClass="button-success">
+                <graphic>
+                    <Label text="Ajouter" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                </graphic>
+            </Button>
+            <Button fx:id="btnPrint" onAction="#handlePrint" styleClass="button">
+                <graphic>
+                    <Label text="Imprimer" style="-fx-font-size: 14px; -fx-text-fill: #212529;"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="15" style="-fx-padding: 15;">
+
+            <!-- Left: Liste des voitures -->
+            <VBox spacing="15" minWidth="300" maxWidth="350">
+                <VBox styleClass="card">
+                    <Label text="🚗 Véhicules disponibles" styleClass="label-header"/>
+                    <TextField fx:id="searchField" promptText="🔍 Rechercher par marque..." styleClass="search-field"/>
+                    <ListView fx:id="listviewVoiture" VBox.vgrow="ALWAYS" minHeight="400"
+                            onMouseClicked="#handleSelectVoiture"/>
+                </VBox>
+                
+                <!-- Moved buttons here -->
+                <HBox spacing="10">
+                    <Button fx:id="btnAnnonces" onAction="#handleOpenAnnonces" styleClass="button-primary">
+                        <graphic>
+                            <Label text="Nouvelle Annonce" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnAnnoncesview" onAction="#handleOpenAnnoncesview" styleClass="button">
+                        <graphic>
+                            <Label text="Liste" style="-fx-font-size: 14px; -fx-text-fill: #212529;"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+
+            <!-- Right: Détails -->
+            <VBox fx:id="detailsContainer" HBox.hgrow="ALWAYS" styleClass="card">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="🚘 Détails du véhicule" styleClass="label-subtitle"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnDelete" onAction="#handleDeleteVoiture" styleClass="button-danger">
+                        <graphic>
+                            <Label text="Supprimer" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnUpdate" onAction="#handleUpdateVoiture" styleClass="button-primary">
+                        <graphic>
+                            <Label text="Modifier" style="-fx-font-size: 14px; -fx-text-fill: white;"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge">
+                    <VBox spacing="15">
+                        <!-- Image -->
+                        <VBox styleClass="card">
+                            <Label text="📸 Photo du véhicule" styleClass="label-header"/>
+                            <ImageView fx:id="imageViewVoiture" fitWidth="250" fitHeight="150" styleClass="image-view"/>
+                        </VBox>
+
+                        <!-- Info -->
+                        <VBox styleClass="card">
+                            <Label text="ℹ️ Informations" styleClass="label-header"/>
+                            <VBox spacing="8" styleClass="label-content">
+                                <Label fx:id="lblMarque"/>
+                                <Label fx:id="lblModele"/>
+                                <Label fx:id="lblAnnee"/>
+                                <Label fx:id="lblPrix"/>
+                                <Label fx:id="lblKilometrage"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- QR Code -->
+                        <VBox styleClass="card">
+                            <Label text="📱 QR Code" styleClass="label-header"/>
+                            <ImageView fx:id="qrCodeImageView" fitWidth="200" fitHeight="200" styleClass="image-view"/>
+                        </VBox>
+                        
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                    </VBox>
+                </ScrollPane>
+
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
