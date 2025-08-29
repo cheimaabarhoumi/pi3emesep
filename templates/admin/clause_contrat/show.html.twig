@@ -1,0 +1,39 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Détail clause{% endblock %}
+{% block page_title %}Clauses{% endblock %}
+{% block page_heading %}Détail de la Clause{% endblock %}
+
+{% block body %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h6>Clause {{ clause.idClause }}</h6>
+    <div>
+      <a href="{{ path('admin_clause_contrat_edit', {
+                'contratId': clause.contrat.idContrat,
+                'id': clause.idClause
+              }) }}"
+         class="btn btn-sm btn-warning">✏️ Modifier</a>
+         {{ include('admin/clause_contrat/_delete_form.html.twig') }}
+      <a href="{{ path('admin_clause_contrat_index', {
+                'contratId': clause.contrat.idContrat
+              }) }}"
+         class="btn btn-sm btn-secondary">🔙 Retour</a>
+    </div>
+  </div>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Titre</dt>
+      <dd class="col-sm-9">{{ clause.titre }}</dd>
+
+      <dt class="col-sm-3">Type</dt>
+      <dd class="col-sm-9"><span class="badge bg-info">{{ clause.type }}</span></dd>
+
+      <dt class="col-sm-3">Ordre</dt>
+      <dd class="col-sm-9">{{ clause.ordre }}</dd>
+
+      <dt class="col-sm-3">Contenu</dt>
+      <dd class="col-sm-9">{{ clause.contenu|nl2br }}</dd>
+    </dl>
+  </div>
+</div>
+{% endblock %}

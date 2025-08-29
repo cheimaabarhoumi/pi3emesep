@@ -1,0 +1,252 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Nos Voitures - Neo Cars{% endblock %}
+
+{% block body %}
+<!-- Neo Page Header -->
+<div class="neo-page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <nav aria-label="breadcrumb" class="neo-breadcrumb mb-4">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_home') }}">
+                                <i class="fas fa-home"></i> Accueil
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">Voitures</li>
+                    </ol>
+                </nav>
+                
+                <div class="neo-header-content">
+                    <h1 class="neo-heading-1 mb-3">
+                        <i class="fas fa-car neo-text-primary me-3"></i>
+                        Nos Voitures
+                    </h1>
+                    <p class="neo-body-large text-muted">
+                        Découvrez notre collection de véhicules d'exception
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="d-flex justify-content-center gap-4 mt-4">
+                        <div class="neo-stat-card">
+                            <div class="neo-stat-number">{{ pagination.getTotalItemCount() }}</div>
+                            <div class="neo-stat-label">Véhicules</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<section class="neo-section py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="neo-search-bar">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="search-marque" class="form-control" placeholder="Rechercher par marque, modèle..." autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Voitures Grid -->
+<section class="neo-section pb-5">
+    <div class="container">
+        <div id="voitures-list">
+            {% if pagination|length > 0 %}
+                <div class="row g-4">
+                    {% for voiture in pagination %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="neo-card neo-card-hover h-100">
+                                <!-- Image -->
+                                <div class="neo-card-image">
+                                    {% if voiture.image %}
+                                        <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                                             alt="{{ voiture.marque ~ ' ' ~ voiture.modele }}" 
+                                             class="img-fluid">
+                                    {% else %}
+                                        <div class="neo-card-placeholder">
+                                            <i class="fas fa-car fa-3x"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Price Badge -->
+                                    {% if voiture.prix %}
+                                        <div class="neo-price-badge">
+                                            {{ voiture.prix|number_format(0, ',', ' ') }} TND
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Premium Badge -->
+                                    {% if voiture.prix and voiture.prix > 50000 %}
+                                        <div class="neo-premium-badge">
+                                            <i class="fas fa-crown"></i>
+                                            Premium
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="neo-card-content">
+                                    <h3 class="neo-card-title">
+                                        {{ voiture.marque }} {{ voiture.modele }}
+                                    </h3>
+                                    
+                                    <p class="neo-card-subtitle">
+                                        Année {{ voiture.annee }}
+                                    </p>
+                                    
+                                    <!-- Specifications -->
+                                    <div class="neo-specs-grid">
+                                        <div class="neo-spec-item">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                            <span>{{ voiture.kilometrage|number_format(0, ',', ' ') }} km</span>
+                                        </div>
+                                        <div class="neo-spec-item">
+                                            <i class="fas fa-gas-pump"></i>
+                                            <span>{{ voiture.carburant }}</span>
+                                        </div>
+                                        <div class="neo-spec-item">
+                                            <i class="fas fa-cogs"></i>
+                                            <span>{{ voiture.boite_vitesse }}</span>
+                                        </div>
+                                        <div class="neo-spec-item">
+                                            <i class="fas fa-door-open"></i>
+                                            <span>{{ voiture.nombre_portes }} portes</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div class="neo-card-actions">
+                                    <a href="{{ path('front_voiture_details', {id: voiture.id}) }}" 
+                                       class="neo-btn neo-btn-primary flex-grow-1">
+                                        <i class="fas fa-eye me-2"></i>
+                                        Voir Détails
+                                    </a>
+                                    
+                                    {% if app.user %}
+                                        <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" 
+                                           class="neo-btn neo-btn-outline-primary">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if pagination.pageCount > 1 %}
+                    <div class="neo-pagination-wrapper mt-5">
+                        <nav aria-label="Navigation des voitures">
+                            {{ knp_pagination_render(pagination, 'KnpPaginatorBundle:Pagination:sliding.html.twig') }}
+                        </nav>
+                    </div>
+                {% endif %}
+                
+            {% else %}
+                <!-- Empty State -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <div class="neo-empty-state">
+                            <i class="fas fa-car fa-4x neo-text-muted mb-4"></i>
+                            <h3 class="neo-heading-3 mb-3">Aucune voiture trouvée</h3>
+                            <p class="neo-body text-muted mb-4">
+                                Il n'y a pas encore de voitures dans notre catalogue.
+                            </p>
+                            <a href="{{ path('voiture_add') }}" class="neo-btn neo-btn-primary">
+                                <i class="fas fa-plus me-2"></i>
+                                Ajouter la Première Voiture
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Search Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-marque');
+    const voitureCards = document.querySelectorAll('.neo-card');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            
+            voitureCards.forEach(card => {
+                const title = card.querySelector('.neo-card-title');
+                if (title) {
+                    const cardText = title.textContent.toLowerCase();
+                    const cardContainer = card.closest('.col-lg-4, .col-md-6');
+                    
+                    if (cardText.includes(searchTerm)) {
+                        cardContainer.style.display = 'block';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    } else {
+                        cardContainer.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Show/hide empty state
+            const visibleCards = Array.from(voitureCards).filter(card => 
+                card.closest('.col-lg-4, .col-md-6').style.display !== 'none'
+            );
+            
+            if (visibleCards.length === 0 && searchTerm) {
+                showNoResultsMessage(searchTerm);
+            } else {
+                hideNoResultsMessage();
+            }
+        });
+    }
+    
+    function showNoResultsMessage(searchTerm) {
+        let noResultsDiv = document.getElementById('no-results-message');
+        
+        if (!noResultsDiv) {
+            noResultsDiv = document.createElement('div');
+            noResultsDiv.id = 'no-results-message';
+            noResultsDiv.className = 'col-12 text-center mt-5';
+            noResultsDiv.innerHTML = `
+                <div class="neo-empty-state">
+                    <i class="fas fa-search fa-3x neo-text-muted mb-3"></i>
+                    <h4 class="neo-heading-4 mb-2">Aucun résultat trouvé</h4>
+                    <p class="neo-body text-muted">
+                        Aucune voiture ne correspond à votre recherche "<strong>${searchTerm}</strong>"
+                    </p>
+                </div>
+            `;
+            
+            document.querySelector('#voitures-list .row').appendChild(noResultsDiv);
+        } else {
+            noResultsDiv.querySelector('strong').textContent = searchTerm;
+            noResultsDiv.style.display = 'block';
+        }
+    }
+    
+    function hideNoResultsMessage() {
+        const noResultsDiv = document.getElementById('no-results-message');
+        if (noResultsDiv) {
+            noResultsDiv.style.display = 'none';
+        }
+    }
+});
+</script>
+{% endblock %}

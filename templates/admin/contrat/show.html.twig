@@ -1,0 +1,195 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Contrat - {{ contrat.reference }}{% endblock %}
+{% block page_title %}Contrats{% endblock %}
+{% block page_heading %}Détails du Contrat{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{{ path('admin_contrat_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+            <a href="{{ path('admin_contrat_pdf', {'id': contrat.idContrat}) }}" class="btn btn-info">
+                <i class="fas fa-file-pdf"></i> Générer PDF
+            </a>
+        </div>
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="d-flex justify-content-between">
+                    <h5 class="mb-0">Contrat {{ contrat.reference }}</h5>
+                    <div>
+                        <a href="{{ path('admin_contrat_edit', {'id': contrat.idContrat}) }}" class="btn btn-warning btn-sm mb-0">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        {{ include('admin/contrat/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <div class="row">
+                    <!-- Colonne gauche -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Référence</label>
+                            <p class="form-control-static">{{ contrat.reference }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Intitulé</label>
+                            <p class="form-control-static">{{ contrat.intitule }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Début</label>
+                            <p class="form-control-static">{{ contrat.dateDebut ? contrat.dateDebut|date('d/m/Y') : '-' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Fin</label>
+                            <p class="form-control-static">{{ contrat.dateFin ? contrat.dateFin|date('d/m/Y') : '-' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Signature</label>
+                            <p class="form-control-static">{{ contrat.dateSignature ? contrat.dateSignature|date('d/m/Y') : 'Non signée' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Prochaine Révision</label>
+                            <p class="form-control-static">{{ contrat.dateProchaineRevision ? contrat.dateProchaineRevision|date('d/m/Y') : '-' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Renouvellement Automatique</label>
+                            <p class="form-control-static">{{ contrat.renouvellementAutomatique ? 'Oui' : 'Non' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Clauses Particulières</label>
+                            <p class="form-control-static">{{ contrat.clausesParticulieres ?: 'Aucune' }}</p>
+                        </div>
+                        {% if signature is not null %}
+                        <h5>Signature :</h5>
+                        <img src="{{ signature.base64 }}" alt="Signature" style="max-width: 300px;"/>
+                    {% else %}
+                        <p>Aucune signature enregistrée.</p>
+                    {% endif %}
+                    </div>
+
+                    <!-- Colonne droite -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <p class="form-control-static">{{ contrat.description ?: 'Aucune' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Montant</label>
+                            <p class="form-control-static">{{ contrat.montant|number_format(2, ',', ' ') }} €</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Fréquence Paiement</label>
+                            <p class="form-control-static">{{ contrat.frequencePaiement }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Mode Paiement</label>
+                            <p class="form-control-static">{{ contrat.modePaiement }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Statut</label>
+                            <p class="form-control-static">
+                                <span class="badge badge-sm bg-gradient-{{ contrat.statut == 'Actif' ? 'success' : (contrat.statut == 'En attente' ? 'warning' : 'danger') }}">
+                                    {{ contrat.statut }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label>Client</label>
+                            <p class="form-control-static">{{ contrat.client.nom ?? 'Non défini' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Utilisateur</label>
+                            <p class="form-control-static">{{ contrat.utilisateur.nom ?? 'Non défini' }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Fichier Contrat</label>
+                            <p class="form-control-static">
+                                {% if contrat.fichierContrat %}
+                                    <a href="{{ asset('uploads/contrats/' ~ contrat.fichierContrat) }}" target="_blank">Télécharger</a>
+                                {% else %}
+                                    Aucun fichier
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label>Créé le</label>
+                            <p class="form-control-static">{{ contrat.createdAt|date('d/m/Y H:i') }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Mis à jour le</label>
+                            <p class="form-control-static">{{ contrat.updatedAt|date('d/m/Y H:i') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section des clauses -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header pb-0">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Clauses du Contrat</h5>
+                                    <a href="{{ path('admin_clause_contrat_index', {'contratId': contrat.idContrat}) }}" class="btn btn-primary btn-sm mb-0">
+                                        <i class="fas fa-plus"></i> Gérer les clauses
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {% if contrat.clauses|length > 0 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ordre</th>
+                                                    <th>Titre</th>
+                                                    <th>Type</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for clause in contrat.clauses %}
+                                                    <tr>
+                                                        <td>{{ clause.ordre }}</td>
+                                                        <td>{{ clause.titre }}</td>
+                                                        <td>
+                                                            <span class="badge bg-info">{{ clause.type }}</span>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ path('admin_clause_contrat_show', {
+                                                                    'contratId': contrat.idContrat,
+                                                                    'id': clause.idClause
+                                                                     }) }}" class="btn btn-info btn-sm" title="Voir">
+                                                                <i class="fas fa-eye">👁️ Voir</i>
+                                                            </a>
+                                                            <a href="{{ path('admin_clause_contrat_edit', {
+                                                                'contratId': contrat.idContrat,
+                                                                'id': clause.idClause
+                                                                }) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                                                <i class="fas fa-edit">✏️ Modifier</i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info">
+                                        Aucune clause n'a été définie pour ce contrat.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Ajouter une Voiture - Neo Cars{% endblock %}
+
+{% block content %}
+<!-- Neo Page Header -->
+<div class="neo-page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <nav aria-label="breadcrumb" class="neo-breadcrumb mb-4">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_home') }}">
+                                <i class="fas fa-home"></i> Accueil
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_voiture') }}">Voitures</a>
+                        </li>
+                        <li class="breadcrumb-item active">Ajouter</li>
+                    </ol>
+                </nav>
+                
+                <div class="neo-header-content">
+                    <h1 class="neo-heading-1 mb-3">
+                        <i class="fas fa-plus-circle neo-text-primary me-3"></i>
+                        Ajouter une Voiture
+                    </h1>
+                    <p class="neo-body-large text-muted">
+                        Partagez votre véhicule avec notre communauté
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Neo Form Section -->
+<section class="neo-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="neo-card p-5">
+                    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'class': 'neo-form'}}) }}
+                    
+                    <div class="row g-4">
+                        <!-- Vehicle Information -->
+                        <div class="col-12">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-info-circle neo-text-primary me-2"></i>
+                                Informations du Véhicule
+                            </h3>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.marque, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.marque, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: BMW, Mercedes, Audi...'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.modele, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.modele, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Serie 3, Classe C...'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.annee, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.annee, {'attr': {'class': 'neo-form-control', 'placeholder': 'Année de fabrication'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.prix, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.prix, {'attr': {'class': 'neo-form-control', 'placeholder': 'Prix en €'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Technical Specifications -->
+                        <div class="col-12 mt-5">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-cogs neo-text-primary me-2"></i>
+                                Spécifications Techniques
+                            </h3>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.puissance_fiscale, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.puissance_fiscale, {'attr': {'class': 'neo-form-control', 'placeholder': 'Puissance en CV'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.kilometrage, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.kilometrage, {'attr': {'class': 'neo-form-control', 'placeholder': 'Kilométrage en km'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.boite_vitesse, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.boite_vitesse, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.carburant, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.carburant, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.cylindree, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.cylindree, {'attr': {'class': 'neo-form-control', 'placeholder': 'Cylindrée en L'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.nombre_portes, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.nombre_portes, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="col-12 mt-5">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-camera neo-text-primary me-2"></i>
+                                Photo du Véhicule
+                            </h3>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="neo-form-group">
+                                {{ form_label(form.image, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                <div class="neo-file-upload">
+                                    {{ form_widget(form.image, {'attr': {'class': 'neo-file-input', 'accept': 'image/*'}}) }}
+                                    <div class="neo-file-upload-area">
+                                        <i class="fas fa-cloud-upload-alt fa-3x neo-text-primary mb-3"></i>
+                                        <h4 class="neo-heading-4 mb-2">Glissez votre image ici</h4>
+                                        <p class="neo-body text-muted">ou cliquez pour sélectionner un fichier</p>
+                                        <small class="text-muted">PNG, JPG jusqu'à 10MB</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center mt-5">
+                            <button type="submit" class="neo-btn neo-btn-primary neo-btn-lg">
+                                <i class="fas fa-save me-2"></i>
+                                Ajouter la Voiture
+                            </button>
+                            <a href="{{ path('app_voiture') }}" class="neo-btn neo-btn-secondary neo-btn-lg ms-3">
+                                <i class="fas fa-times me-2"></i>
+                                Annuler
+                            </a>
+                        </div>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

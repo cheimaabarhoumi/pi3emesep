@@ -1,0 +1,21 @@
+{% extends 'base3.html.twig' %}
+
+{% block title %}Modifier le Contrat - {{ contrat.reference }}{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-warning text-white">
+            <h3>✏️ Modifier le Contrat</h3>
+        </div>
+        <div class="card-body">
+            {{ include('contrat/_form.html.twig', {'button_label': 'Mettre à Jour'}) }}
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ path('app_contrat_index') }}" class="btn btn-secondary">🔙 Retour</a>
+                {{ include('contrat/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'ffront.html.twig' %}
+
+{% block title %}Edit Entretien{% endblock %}
+
+{% block page_content %}
+    <div class="card">
+        <div class="card-header">
+            <h1>Modifier l'entretien</h1>
+        </div>
+        <div class="card-body">
+            {# Afficher les infos du rendez-vous associé #}
+            <div class="mb-4">
+                <h5>Rendez-vous associé :</h5>
+                {% if entretien.rendezVous %}
+                    <p>
+                        <strong>Date :</strong> {{ entretien.rendezVous.dateRdv|date('d/m/Y H:i') }}<br>
+                        <strong>Description :</strong> {{ entretien.rendezVous.description }}<br>
+                
+                    </p>
+                {% else %}
+                    <p class="text-muted">Aucun rendez-vous associé</p>
+                {% endif %}
+            </div>
+
+            {# Formulaire d'édition #}
+            {{ include('entretien/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('app_entretien_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    {# Formulaire de suppression (optionnel, vous pouvez le garder ou le supprimer) #}
+    {# {{ include('entretien/_delete_form.html.twig') }} #}
+{% endblock %}

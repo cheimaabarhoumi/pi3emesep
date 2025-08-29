@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST</title>
+    <style>
+        body { 
+            background: red; 
+            color: white; 
+            padding: 50px; 
+            font-size: 24px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>TEST - CONTROLLER IS WORKING!</h1>
+    <p>This is a test template</p>
+    {% if pagination is defined %}
+        <p>✅ Pagination exists: {{ pagination.getTotalItemCount() }} items</p>
+    {% else %}
+        <p>❌ No pagination</p>
+    {% endif %}
+</body>
+</html>

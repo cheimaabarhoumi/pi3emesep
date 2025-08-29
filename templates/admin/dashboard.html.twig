@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord administrateur{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Tableau de bord administrateur</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Gestion des utilisateurs</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.prenom }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="badge {% if user.role == 'admin' %}bg-danger{% elseif user.role == 'prestataire' %}bg-warning{% else %}bg-info{% endif %}">
+                                        {{ user.role }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.role != 'admin' %}
+                                        <a href="{{ path('app_admin_promote_user', {'id': user.id}) }}" class="btn btn-success btn-sm">
+                                            Promouvoir admin
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('app_admin_demote_user', {'id': user.id}) }}" class="btn btn-warning btn-sm">
+                                            Rétrograder
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if user != app.user %}
+                                        <a href="{{ path('app_admin_delete_user', {'id': user.id}) }}" 
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                                            Supprimer
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,28 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+<div class="row">
+    {% for field in form %}
+        {% if field.vars.name != '_token' %}
+            <div class="col-md-6 mb-3">
+                {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(field, {
+                    'attr': {
+                        'class': field.vars.block_prefixes|last == 'choice' ? 'form-select' : 'form-control'
+                    }
+                }) }}
+                {{ form_errors(field) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="mt-4 d-flex justify-content-between">
+    <button class="btn btn-success">
+        {{ button_label|default('Enregistrer') }}
+    </button>
+    {% if contratId is defined %}
+    <a href="{{ path('app_clause_contrat_index', {'contratId': contratId}) }}" class="btn btn-secondary">
+        ← Retour
+    </a>
+    {% endif %}
+
+</div>
+{{ form_end(form) }}

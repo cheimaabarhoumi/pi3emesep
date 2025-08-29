@@ -1,0 +1,205 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'user/_navbar.html.twig' with {'css_only': true} %}
+    <style>
+        .main-content {
+            padding-top: 80px;
+        }
+        .page-header {
+            height: 200px;
+            margin-bottom: -100px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .list-group-item {
+            border: none;
+            padding: 10px 0;
+        }
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            border: none;
+        }
+        .btn-danger {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            border: none;
+        }
+        .btn-info {
+            background: linear-gradient(45deg, #17a2b8, #138496);
+            border: none;
+            color: white;
+        }
+        .btn-info:hover {
+            background: linear-gradient(45deg, #138496, #117a8b);
+            color: white;
+        }
+        .alert {
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="main-content">
+    {% include 'user/_navbar.html.twig' with {'css_only': false} %}
+    
+    <div class="container">
+        <div class="page-header min-height-300 border-radius-xl" style="background-image: url('https://demos.creative-tim.com/soft-ui-dashboard/assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+            <span class="mask bg-gradient-primary opacity-6"></span>
+        </div>
+        <div class="card card-body mx-3 mx-md-4 mt-n6">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="row gx-4 mb-2">
+                <div class="col-auto">
+                    <div class="avatar">
+                        <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/bruce-mars.jpg" alt="profile_image">
+                    </div>
+                </div>
+                <div class="col-auto my-auto">
+                    <div class="h-100">
+                        <h5 class="mb-1">{{ user.prenom }} {{ user.nom }}</h5>
+                        <p class="mb-0 font-weight-normal text-sm">{{ user.role|capitalize }}</p>
+                    </div>
+                </div>
+                <div class="col-auto ms-auto">
+                    <a href="{{ path('app_sponsoring_new') }}" class="btn btn-info me-2">
+                        <i class="fa fa-star"></i> Sponsoring
+                    </a>
+                    <a href="{{ path('app_sponsoring_dashboard') }}" class="btn btn-success me-2">
+                        <i class="fa fa-dashboard"></i> Dashboard
+                    </a>
+                    <a href="/admin/contrat/new" class="btn btn-warning me-2">
+                        <i class="fa fa-file-text"></i> Générer les contrats
+                    </a>
+                    <a href="{{ path('app_logout') }}" class="btn btn-danger">
+                        <i class="fa fa-sign-out"></i> Déconnexion
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-xl-6">
+                    <div class="card card-plain h-100">
+                        <div class="card-header pb-0 p-3">
+                            <h6 class="mb-0">Informations personnelles</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong class="text-dark">Nom complet:</strong> &nbsp; {{ user.prenom }} {{ user.nom }}</li>
+                                <li class="list-group-item"><strong class="text-dark">Email:</strong> &nbsp; {{ user.email }}</li>
+                                <li class="list-group-item"><strong class="text-dark">CIN:</strong> &nbsp; {{ user.cin }}</li>
+                                <li class="list-group-item"><strong class="text-dark">Rôle:</strong> &nbsp; {{ user.role }}</li>
+                                {% if user.role == 'prestataire' %}
+                                    <li class="list-group-item"><strong class="text-dark">Réputation:</strong> &nbsp; {{ user.reputation ?? 'Non évalué' }}</li>
+                                    <li class="list-group-item"><strong class="text-dark">Tarif:</strong> &nbsp; {{ user.tarif ?? 'Non défini' }} €</li>
+                                    <li class="list-group-item"><strong class="text-dark">Services:</strong> &nbsp; {{ user.services ?? 'Non défini' }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card card-plain h-100">
+                        <div class="card-header pb-0 p-3">
+                            <h6 class="mb-0">Modifier mes informations</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                                <div class="form-group mb-3">
+                                    {{ form_row(form.nom, {
+                                        'attr': {'class': 'form-control'},
+                                        'label_attr': {'class': 'form-label'}
+                                    }) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_row(form.prenom, {
+                                        'attr': {'class': 'form-control'},
+                                        'label_attr': {'class': 'form-label'}
+                                    }) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_row(form.email, {
+                                        'attr': {'class': 'form-control'},
+                                        'label_attr': {'class': 'form-label'}
+                                    }) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_row(form.cin, {
+                                        'attr': {'class': 'form-control'},
+                                        'label_attr': {'class': 'form-label'}
+                                    }) }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    {{ form_row(form.motdepasse, {
+                                        'attr': {'class': 'form-control'},
+                                        'label_attr': {'class': 'form-label'},
+                                        'required': false,
+                                        'help': 'Laissez vide pour ne pas changer le mot de passe'
+                                    }) }}
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-4">
+                                    <a href="{{ path('app_front_accueil') }}" class="btn btn-light m-0 me-2">Retour à l'accueil</a>
+                                    <button type="submit" class="btn btn-primary m-0">Enregistrer les modifications</button>
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/jquery.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootsnav.js') }}"></script>
+    <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('assets/js/slick.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('assets/js/waypoints.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.easing.1.3.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+{% endblock %} 

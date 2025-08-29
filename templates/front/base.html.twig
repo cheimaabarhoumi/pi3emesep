@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NeoCarVilla{% endblock %}</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Global Design System -->
+    <style>
+        :root {
+            /* Neo Color Palette */
+            --neo-primary: #6366f1;
+            --neo-primary-light: #818cf8;
+            --neo-primary-dark: #4f46e5;
+            --neo-secondary: #f59e0b;
+            --neo-accent: #10b981;
+            --neo-accent-light: #34d399;
+            --neo-danger: #ef4444;
+            --neo-warning: #f59e0b;
+            --neo-success: #10b981;
+            
+            /* Neo Neutrals */
+            --neo-white: #ffffff;
+            --neo-gray-50: #f8fafc;
+            --neo-gray-100: #f1f5f9;
+            --neo-gray-200: #e2e8f0;
+            --neo-gray-300: #cbd5e1;
+            --neo-gray-400: #94a3b8;
+            --neo-gray-500: #64748b;
+            --neo-gray-600: #475569;
+            --neo-gray-700: #334155;
+            --neo-gray-800: #1e293b;
+            --neo-gray-900: #0f172a;
+            
+            /* Neo Gradients */
+            --neo-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --neo-gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --neo-gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --neo-gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --neo-gradient-dark: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            
+            /* Neo Typography */
+            --neo-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --neo-font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            /* Neo Spacing */
+            --neo-space-xs: 0.25rem;
+            --neo-space-sm: 0.5rem;
+            --neo-space-md: 1rem;
+            --neo-space-lg: 1.5rem;
+            --neo-space-xl: 2rem;
+            --neo-space-2xl: 3rem;
+            --neo-space-3xl: 4rem;
+            
+            /* Neo Border Radius */
+            --neo-radius-sm: 0.375rem;
+            --neo-radius-md: 0.5rem;
+            --neo-radius-lg: 0.75rem;
+            --neo-radius-xl: 1rem;
+            --neo-radius-2xl: 1.5rem;
+            --neo-radius-full: 9999px;
+            
+            /* Neo Shadows */
+            --neo-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --neo-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --neo-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --neo-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --neo-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --neo-shadow-glow: 0 0 20px rgb(99 102 241 / 0.3);
+        }
+        
+        /* Global Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--neo-font-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--neo-gray-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Neo Typography System */
+        .neo-display-1 {
+            font-family: var(--neo-font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        .neo-display-2 {
+            font-family: var(--neo-font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        
+        .neo-heading-1 {
+            font-family: var(--neo-font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .neo-heading-2 {
+            font-family: var(--neo-font-display);
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .neo-heading-3 {
+            font-family: var(--neo-font-display);
+            font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .neo-body-large {
+            font-size: 1.125rem;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+        
+        .neo-body {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        
+        .neo-body-small {
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        /* Neo Components */
+        .neo-card {
+            background: var(--neo-white);
+            border-radius: var(--neo-radius-xl);
+            box-shadow: var(--neo-shadow-md);
+            border: 1px solid var(--neo-gray-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--neo-shadow-xl);
+        }
+        
+        .neo-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--neo-radius-full);
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neo-btn-primary {
+            background: var(--neo-gradient-primary);
+            color: var(--neo-white);
+            box-shadow: var(--neo-shadow-md);
+        }
+        
+        .neo-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--neo-shadow-lg);
+            color: var(--neo-white);
+        }
+        
+        .neo-btn-secondary {
+            background: var(--neo-white);
+            color: var(--neo-gray-800);
+            border: 2px solid var(--neo-gray-200);
+        }
+        
+        .neo-btn-secondary:hover {
+            background: var(--neo-gray-50);
+            border-color: var(--neo-primary);
+            color: var(--neo-primary);
+        }
+        
+        .neo-btn-ghost {
+            background: transparent;
+            color: var(--neo-gray-600);
+            border: 1px solid var(--neo-gray-300);
+        }
+        
+        .neo-btn-ghost:hover {
+            background: var(--neo-gray-50);
+            color: var(--neo-gray-800);
+        }
+        
+        /* Neo Navigation */
+        .neo-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--neo-gray-200);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .neo-navbar.scrolled {
+            box-shadow: var(--neo-shadow-lg);
+        }
+        
+        .neo-nav-brand {
+            font-family: var(--neo-font-display);
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--neo-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .neo-nav-link {
+            color: var(--neo-gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--neo-radius-md);
+            transition: all 0.3s ease;
+        }
+        
+        .neo-nav-link:hover,
+        .neo-nav-link.active {
+            color: var(--neo-primary);
+            background: var(--neo-gray-50);
+        }
+        
+        /* Neo Utilities */
+        .neo-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .neo-gradient-text {
+            background: var(--neo-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .neo-floating {
+            animation: neoFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes neoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .neo-pulse {
+            animation: neoPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes neoPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        .neo-fade-in {
+            animation: neoFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes neoFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Neo Page Layout */
+        .neo-page {
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        .neo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--neo-space-lg);
+        }
+        
+        .neo-section {
+            padding: var(--neo-space-3xl) 0;
+        }
+        
+        /* Neo Footer */
+        .neo-footer {
+            background: var(--neo-gray-900);
+            color: var(--neo-gray-300);
+            padding: var(--neo-space-3xl) 0 var(--neo-space-xl);
+            margin-top: var(--neo-space-3xl);
+        }
+        
+        /* Neo Animations */
+        .neo-animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Neo Responsive */
+        @media (max-width: 768px) {
+            .neo-container {
+                padding: 0 var(--neo-space-md);
+            }
+            
+            .neo-section {
+                padding: var(--neo-space-2xl) 0;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neo-gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--neo-gradient-primary);
+            border-radius: var(--neo-radius-full);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neo-primary-dark);
+        }
+        
+        /* Additional Neo Components */
+        .neo-page-header {
+            background: var(--neo-gradient-primary);
+            padding: var(--neo-space-2xl) 0 var(--neo-space-xl);
+            margin-bottom: var(--neo-space-xl);
+        }
+        
+        .neo-breadcrumb .breadcrumb {
+            background: transparent;
+            padding: 0;
+        }
+        
+        .neo-breadcrumb .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        
+        .neo-breadcrumb .breadcrumb-item a:hover {
+            color: white;
+        }
+        
+        .neo-breadcrumb .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .neo-header-content h1 {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .neo-stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--neo-radius-lg);
+            padding: var(--neo-space-md);
+            text-align: center;
+            color: white;
+        }
+        
+        .neo-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        
+        .neo-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .neo-search-bar .input-group {
+            border-radius: var(--neo-radius-xl);
+            overflow: hidden;
+            box-shadow: var(--neo-shadow-md);
+        }
+        
+        .neo-search-bar .input-group-text {
+            background: var(--neo-primary);
+            color: white;
+            border: none;
+        }
+        
+        .neo-search-bar .form-control {
+            border: none;
+            padding: var(--neo-space-md);
+            font-size: 1rem;
+        }
+        
+        .neo-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--neo-shadow-xl);
+        }
+        
+        .neo-card-image {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+        
+        .neo-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .neo-card-hover:hover .neo-card-image img {
+            transform: scale(1.05);
+        }
+        
+        .neo-card-placeholder {
+            background: var(--neo-gray-100);
+            color: var(--neo-gray-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .neo-price-badge {
+            position: absolute;
+            top: var(--neo-space-md);
+            right: var(--neo-space-md);
+            background: var(--neo-gradient-primary);
+            color: white;
+            padding: var(--neo-space-sm) var(--neo-space-md);
+            border-radius: var(--neo-radius-full);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .neo-premium-badge {
+            position: absolute;
+            top: var(--neo-space-md);
+            left: var(--neo-space-md);
+            background: var(--neo-gradient-secondary);
+            color: white;
+            padding: var(--neo-space-sm) var(--neo-space-md);
+            border-radius: var(--neo-radius-full);
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        .neo-specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--neo-space-sm);
+            margin: var(--neo-space-md) 0;
+        }
+        
+        .neo-spec-item {
+            display: flex;
+            align-items: center;
+            gap: var(--neo-space-xs);
+            font-size: 0.875rem;
+            color: var(--neo-gray-600);
+        }
+        
+        .neo-spec-item i {
+            color: var(--neo-primary);
+        }
+        
+        .neo-card-actions {
+            display: flex;
+            gap: var(--neo-space-sm);
+            margin-top: auto;
+            padding-top: var(--neo-space-md);
+        }
+        
+        .neo-card-content {
+            padding: var(--neo-space-lg);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .neo-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--neo-gray-900);
+            margin-bottom: var(--neo-space-sm);
+            line-height: 1.4;
+        }
+        
+        .neo-card-subtitle {
+            color: var(--neo-gray-600);
+            font-size: 0.875rem;
+            margin-bottom: var(--neo-space-md);
+        }
+        
+        .neo-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--neo-space-sm);
+            margin-bottom: var(--neo-space-md);
+        }
+        
+        .neo-stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--neo-radius-lg);
+            padding: var(--neo-space-lg);
+            text-align: center;
+            color: white;
+        }
+        
+        .neo-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .neo-stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .neo-search-bar {
+            margin-bottom: var(--neo-space-xl);
+        }
+        
+        .neo-search-bar .input-group-text {
+            background: var(--neo-white);
+            border: 2px solid var(--neo-gray-200);
+            border-right: none;
+            color: var(--neo-gray-500);
+        }
+        
+        .neo-search-bar .form-control {
+            border: 2px solid var(--neo-gray-200);
+            border-left: none;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+        }
+        
+        .neo-search-bar .form-control:focus {
+            border-color: var(--neo-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .neo-search-bar .input-group-text:focus-within {
+            border-color: var(--neo-primary);
+        }
+        
+        .neo-empty-state {
+            text-align: center;
+            padding: var(--neo-space-3xl);
+        }
+        
+        .neo-form {
+            /* Form styles already defined above */
+        }
+        
+        .neo-form-group {
+            margin-bottom: var(--neo-space-lg);
+        }
+        
+        .neo-form-label {
+            display: block;
+            margin-bottom: var(--neo-space-sm);
+            font-weight: 600;
+            color: var(--neo-gray-700);
+        }
+        
+        .neo-form-control {
+            width: 100%;
+            padding: var(--neo-space-md);
+            border: 2px solid var(--neo-gray-200);
+            border-radius: var(--neo-radius-lg);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .neo-form-control:focus {
+            outline: none;
+            border-color: var(--neo-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .neo-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .neo-form-help {
+            display: block;
+            margin-top: var(--neo-space-xs);
+            font-size: 0.875rem;
+            color: var(--neo-gray-500);
+        }
+        
+        .neo-file-upload {
+            position: relative;
+        }
+        
+        .neo-file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .neo-file-upload-area {
+            border: 2px dashed var(--neo-gray-300);
+            border-radius: var(--neo-radius-lg);
+            padding: var(--neo-space-2xl);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .neo-file-upload-area:hover {
+            border-color: var(--neo-primary);
+            background: var(--neo-gray-50);
+        }
+        
+        .neo-alert {
+            padding: var(--neo-space-md);
+            border-radius: var(--neo-radius-lg);
+            margin-bottom: var(--neo-space-lg);
+        }
+        
+        .neo-alert-info {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: var(--neo-primary);
+        }
+        
+        .neo-alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #d97706;
+        }
+        
+        .neo-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .neo-modal {
+            background: white;
+            border-radius: var(--neo-radius-xl);
+            box-shadow: var(--neo-shadow-2xl);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .neo-modal-header {
+            padding: var(--neo-space-lg);
+            border-bottom: 1px solid var(--neo-gray-200);
+        }
+        
+        .neo-modal-body {
+            padding: var(--neo-space-lg);
+        }
+        
+        .neo-modal-footer {
+            padding: var(--neo-space-lg);
+            border-top: 1px solid var(--neo-gray-200);
+            display: flex;
+            gap: var(--neo-space-md);
+            justify-content: flex-end;
+        }
+        
+        .neo-dropdown {
+            border: none;
+            border-radius: var(--neo-radius-lg);
+            box-shadow: var(--neo-shadow-lg);
+            padding: var(--neo-space-sm);
+        }
+        
+        .neo-dropdown .dropdown-item {
+            border-radius: var(--neo-radius-md);
+            padding: var(--neo-space-sm) var(--neo-space-md);
+            transition: all 0.2s ease;
+        }
+        
+        .neo-dropdown .dropdown-item:hover {
+            background: var(--neo-gray-50);
+            color: var(--neo-primary);
+        }
+    </style>
+    
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body class="neo-page">
+    <!-- Neo Navigation -->
+    <nav class="neo-navbar">
+        <div class="neo-container">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <a href="{{ path('app_front_accueil') }}" class="neo-nav-brand">
+                    NeoCarVilla
+                </a>
+                
+                <div class="d-none d-lg-flex align-items-center gap-4">
+                    <a href="{{ path('app_front_accueil') }}" class="neo-nav-link">
+                        <i class="fas fa-home me-1"></i>Accueil
+                    </a>
+                    <a href="{{ path('front_annonces') }}" class="neo-nav-link">
+                        <i class="fas fa-megaphone me-1"></i>Annonces
+                    </a>
+                    <a href="{{ path('app_voiture') }}" class="neo-nav-link">
+                        <i class="fas fa-car me-1"></i>Voitures
+                    </a>
+                    {% if app.user %}
+                        <div class="dropdown">
+                            <a href="#" class="neo-nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-plus me-1"></i>Ajouter
+                            </a>
+                            <ul class="dropdown-menu neo-dropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('voiture_add') }}">
+                                        <i class="fas fa-car me-2"></i>Nouvelle Voiture
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <span class="dropdown-item-text text-muted small">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Ajoutez d'abord une voiture pour créer une annonce
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <a href="#contact" class="neo-nav-link">
+                        <i class="fas fa-envelope me-1"></i>Contact
+                    </a>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <a href="{{ path('front_annonces') }}" class="neo-btn neo-btn-secondary d-none d-md-inline-flex">
+                        <i class="fas fa-car"></i>
+                        Explorer
+                    </a>
+                    <a href="{{ path('voiture_add') }}" class="neo-btn neo-btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Ajouter Voiture
+                    </a>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="neo-btn neo-btn-ghost d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#neoMobileMenu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="collapse d-lg-none" id="neoMobileMenu">
+                <div class="py-3 border-top border-gray-200">
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{{ path('app_front_accueil') }}" class="neo-nav-link">
+                            <i class="fas fa-home me-2"></i>Accueil
+                        </a>
+                        <a href="{{ path('front_annonces') }}" class="neo-nav-link">
+                            <i class="fas fa-megaphone me-2"></i>Annonces
+                        </a>
+                        <a href="{{ path('app_voiture') }}" class="neo-nav-link">
+                            <i class="fas fa-car me-2"></i>Voitures
+                        </a>
+                        {% if app.user %}
+                            <hr class="my-2">
+                            <span class="text-muted small px-3 mb-1">Actions</span>
+                            <a href="{{ path('voiture_add') }}" class="neo-nav-link">
+                                <i class="fas fa-plus me-2"></i>Ajouter Voiture
+                            </a>
+                        {% endif %}
+                        <a href="#contact" class="neo-nav-link">
+                            <i class="fas fa-envelope me-2"></i>Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Neo Footer -->
+    <footer class="neo-footer" id="contact">
+        <div class="neo-container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="mb-4">
+                        <h3 class="neo-heading-3 text-white mb-3">NeoCarVilla</h3>
+                        <p class="neo-body text-gray-400 mb-4">
+                            La plateforme nouvelle génération pour acheter, vendre et découvrir les plus belles voitures.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="neo-btn neo-btn-ghost text-white border-gray-600">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="#" class="neo-btn neo-btn-ghost text-white border-gray-600">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="neo-btn neo-btn-ghost text-white border-gray-600">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="neo-btn neo-btn-ghost text-white border-gray-600">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h4 class="text-white mb-3">Navigation</h4>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="{{ path('app_front_accueil') }}" class="text-gray-400 text-decoration-none">Accueil</a>
+                        <a href="{{ path('front_annonces') }}" class="text-gray-400 text-decoration-none">Annonces</a>
+                        <a href="{{ path('app_voiture') }}" class="text-gray-400 text-decoration-none">Voitures</a>
+                        <a href="#contact" class="text-gray-400 text-decoration-none">Contact</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h4 class="text-white mb-3">Services</h4>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="#" class="text-gray-400 text-decoration-none">Vendre</a>
+                        <a href="#" class="text-gray-400 text-decoration-none">Acheter</a>
+                        <a href="#" class="text-gray-400 text-decoration-none">Expertise</a>
+                        <a href="#" class="text-gray-400 text-decoration-none">Financement</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h4 class="text-white mb-3">Newsletter</h4>
+                    <p class="text-gray-400 mb-3">Restez informé des dernières nouveautés et offres exclusives.</p>
+                    <div class="d-flex gap-2">
+                        <input type="email" class="form-control" placeholder="Votre email" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        <button class="neo-btn neo-btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <p class="text-gray-400 mb-0">© 2025 NeoCarVilla. Tous droits réservés.</p>
+                <div class="d-flex gap-4">
+                    <a href="#" class="text-gray-400 text-decoration-none">Politique de confidentialité</a>
+                    <a href="#" class="text-gray-400 text-decoration-none">Conditions d'utilisation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Neo Navigation Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.neo-navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Neo Animate on Scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.neo-animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+    
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

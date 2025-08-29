@@ -1,0 +1,615 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Nos Annonces - Neo Cars{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="fas fa-bullhorn me-3"></i>Nos Annonces
+            </h1>
+            <p class="lead text-muted">Découvrez notre collection d'annonces de véhicules d'exception</p>
+            <div class="badge bg-primary fs-6 px-3 py-2">
+                <span id="totalCount">{{ pagination.getTotalItemCount() }}</span> annonce<span id="plural">{{ pagination.getTotalItemCount() > 1 ? 's' : '' }}</span> disponible<span id="pluralDisp">{{ pagination.getTotalItemCount() > 1 ? 's' : '' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Annonce Button -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="{{ path('annonce_add') }}" class="btn btn-success btn-lg rounded-pill shadow">
+                <i class="fas fa-plus me-2"></i>Ajouter une Annonce
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 col-md-4">
+            <div class="card shadow-lg border-0 rounded-4 sticky-top" style="top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-header border-0 text-white text-center py-4" style="background: transparent;">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-search me-2"></i>Recherche Intelligente
+                    </h5>
+                    <small class="opacity-75">Trouvez l'annonce parfaite</small>
+                </div>
+                <div class="card-body p-4" style="background: rgba(255,255,255,0.95); margin: 1rem; border-radius: 1rem;">
+                    <!-- Live Search -->
+                    <div class="mb-4">
+                        <label for="liveSearch" class="form-label fw-semibold d-flex align-items-center">
+                            <i class="fas fa-magic text-primary me-2"></i>Recherche Instantanée
+                        </label>
+                        <div class="search-container position-relative">
+                            <input type="text" 
+                                   class="form-control form-control-lg ps-5" 
+                                   id="liveSearch" 
+                                   placeholder="Tapez le titre, marque ou modèle..."
+                                   autocomplete="off"
+                                   style="border: 2px solid #e9ecef; border-radius: 50px; background: #f8f9fa;">
+                            <i class="fas fa-search position-absolute" 
+                               style="left: 1rem; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
+                            <button type="button" 
+                                    class="btn-clear position-absolute" 
+                                    id="clearSearch"
+                                    style="right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #dc3545; display: none;">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions mt-2" id="searchSuggestions" style="display: none;">
+                            <small class="text-muted">Suggestions populaires:</small>
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="BMW">BMW</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Mercedes">Mercedes</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Toyota">Toyota</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Audi">Audi</span>
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>Résultats instantanés dès la première lettre
+                        </small>
+                    </div>
+                    
+                    <!-- Price Range with Visual Slider -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold d-flex align-items-center">
+                            <i class="fas fa-dollar-sign text-success me-2"></i>Gamme de Prix
+                        </label>
+                        
+                        <!-- Price Display -->
+                        <div class="price-display mb-3 p-3 rounded-3" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                            <div class="d-flex justify-content-between align-items-center text-white">
+                                <div>
+                                    <small class="opacity-75">De</small>
+                                    <div class="fw-bold" id="minPriceDisplay">0 TND</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-arrows-alt-h"></i>
+                                </div>
+                                <div class="text-end">
+                                    <small class="opacity-75">À</small>
+                                    <div class="fw-bold" id="maxPriceDisplay">∞</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="priceMin" 
+                                       placeholder="Prix min"
+                                       min="0"
+                                       step="1000"
+                                       style="border-radius: 20px;">
+                                <small class="text-muted">Prix minimum</small>
+                            </div>
+                            <div class="col-6">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="priceMax" 
+                                       placeholder="Prix max"
+                                       min="0"
+                                       step="1000"
+                                       style="border-radius: 20px;">
+                                <small class="text-muted">Prix maximum</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Price Filters -->
+                        <div class="mt-3">
+                            <small class="text-muted mb-2 d-block">Sélection rapide:</small>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="0" data-max="20000">
+                                    <i class="fas fa-tag me-1"></i>Moins de 20k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="20000" data-max="50000">
+                                    <i class="fas fa-tags me-1"></i>20k - 50k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="50000" data-max="100000">
+                                    <i class="fas fa-crown me-1"></i>50k - 100k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="100000" data-max="">
+                                    <i class="fas fa-gem me-1"></i>Plus de 100k TND
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill" id="resetFilters">
+                            <i class="fas fa-refresh me-2"></i>Tout Réinitialiser
+                        </button>
+                    </div>
+                    
+                    <!-- Results Info -->
+                    <div class="mt-4 p-3 rounded-3" style="background: linear-gradient(45deg, #e3f2fd, #f3e5f5); border: 1px solid #e1bee7;">
+                        <div class="text-center">
+                            <i class="fas fa-chart-bar text-primary mb-2"></i>
+                            <div class="fw-bold text-primary" id="filterResults">Affichage de toutes les annonces</div>
+                            <small class="text-muted">Résultats en temps réel</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="text-center mb-4" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Recherche en cours...</span>
+                </div>
+                <p class="mt-2 text-muted">Recherche en cours...</p>
+            </div>
+            
+            <!-- Cars Grid -->
+            <div id="carsContainer">
+                {% if pagination|length > 0 %}
+                    <div class="row g-4" id="carsGrid">
+                        {% for annonce in pagination %}
+                            {% set voiture = annonce.voiture %}
+                            <div class="col-lg-4 col-md-6 car-item" 
+                                 data-marque="{{ voiture.marque|lower }}" 
+                                 data-modele="{{ voiture.modele|lower }}" 
+                                 data-prix="{{ voiture.prix ?: 0 }}"
+                                 data-search="{{ (annonce.titre ~ ' ' ~ voiture.marque ~ ' ' ~ voiture.modele)|lower }}">
+                                <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                                    <!-- Image -->
+                                    <div class="position-relative">
+                                        {% if voiture.image %}
+                                            <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                                                 alt="{{ voiture.marque ~ ' ' ~ voiture.modele }}" 
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                                                <i class="fas fa-car fa-4x text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Price Badge -->
+                                        {% if voiture.prix %}
+                                            <div class="position-absolute top-0 end-0 m-3">
+                                                <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">
+                                                    {{ voiture.prix|number_format(0, ',', ' ') }} TND
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Status Badge -->
+                                        <div class="position-absolute top-0 start-0 m-3">
+                                            {% if annonce.valider %}
+                                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                                    <i class="fas fa-check me-1"></i>Validée
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning px-3 py-2 rounded-pill">
+                                                    <i class="fas fa-clock me-1"></i>En attente
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Content -->
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold text-primary mb-2">
+                                            {{ voiture.marque }} {{ voiture.modele }}
+                                        </h5>
+                                        
+                                        <p class="text-muted mb-3">{{ annonce.titre }}</p>
+                                        
+                                        <p class="text-muted mb-3">Année {{ voiture.annee }}</p>
+                                        
+                                        <!-- Specifications -->
+                                        <div class="row g-2 mb-3 small">
+                                            {% if voiture.kilometrage %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-tachometer-alt text-primary me-1"></i>
+                                                    {{ voiture.kilometrage|number_format(0, ',', ' ') }} km
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.carburant %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-gas-pump text-danger me-1"></i>
+                                                    {{ voiture.carburant }}
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.boiteVitesse %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-cogs text-info me-1"></i>
+                                                    {{ voiture.boiteVitesse }}
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.nombrePortes %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-door-open text-success me-1"></i>
+                                                    {{ voiture.nombrePortes }} portes
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Actions -->
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                <a href="{{ path('front_annonce_details', {id: annonce.id}) }}" 
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye me-2"></i>Voir Détails
+                                                </a>
+                                                
+                                                {% if voiture.prix %}
+                                                    <small class="text-center text-muted">
+                                                        <i class="fas fa-tag me-1"></i>
+                                                        Prix: <strong>{{ voiture.prix|number_format(0, ',', ' ') }} TND</strong>
+                                                    </small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-5">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <i class="fas fa-car fa-4x text-muted mb-4"></i>
+                        <h3 class="text-muted">Aucune annonce disponible</h3>
+                        <p class="text-muted">Il n'y a actuellement aucune annonce à afficher.</p>
+                        <a href="{{ path('annonce_add') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Ajouter une Annonce
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- No Results Message -->
+            <div id="noResults" class="text-center mt-5" style="display: none;">
+                <div class="card border-0 shadow-sm p-5">
+                    <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                    <h3 class="fw-bold text-muted mb-3">Aucune annonce trouvée</h3>
+                    <p class="text-muted mb-4">Essayez de modifier vos critères de recherche ou explorez toutes nos annonces.</p>
+                    <button class="btn btn-primary rounded-pill" onclick="resetAllFilters()">
+                        <i class="fas fa-refresh me-2"></i>Voir toutes les annonces
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Search enhancements */
+.search-container .form-control:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+}
+
+.suggestion-pill {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.suggestion-pill:hover {
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+}
+
+.price-filter:hover, .price-filter.active {
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+    color: white !important;
+}
+
+/* Card hover effects */
+.car-item .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.car-item:hover .card {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Sticky sidebar */
+@media (min-width: 992px) {
+    .sticky-top {
+        position: sticky !important;
+        top: 20px !important;
+    }
+}
+
+/* Loading animation */
+.spinner-border {
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/* Price display gradient */
+.price-display {
+    background: linear-gradient(45deg, #28a745, #20c997) !important;
+    color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .col-lg-3 {
+        margin-bottom: 2rem;
+    }
+    
+    .sticky-top {
+        position: relative !important;
+        top: auto !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const searchInput = document.getElementById('liveSearch');
+    const clearButton = document.getElementById('clearSearch');
+    const priceMinInput = document.getElementById('priceMin');
+    const priceMaxInput = document.getElementById('priceMax');
+    const carsGrid = document.getElementById('carsGrid');
+    const noResults = document.getElementById('noResults');
+    const totalCountElement = document.getElementById('totalCount');
+    const pluralElement = document.getElementById('plural');
+    const pluralDispElement = document.getElementById('pluralDisp');
+    const filterResultsElement = document.getElementById('filterResults');
+    const minPriceDisplay = document.getElementById('minPriceDisplay');
+    const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const resetFiltersBtn = document.getElementById('resetFilters');
+    const suggestionPills = document.querySelectorAll('.suggestion-pill');
+    const priceFilterButtons = document.querySelectorAll('.price-filter');
+    
+    let searchTimeout;
+    let allCars = [];
+    
+    // Initialize
+    function init() {
+        if (carsGrid) {
+            allCars = Array.from(carsGrid.querySelectorAll('.car-item'));
+        }
+        updateResultsCount();
+        updatePriceDisplay();
+    }
+    
+    // Show loading
+    function showLoading() {
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+        }
+    }
+    
+    // Hide loading
+    function hideLoading() {
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+        }
+    }
+    
+    // Filter cars
+    function filterCars() {
+        if (!carsGrid || allCars.length === 0) return;
+        
+        showLoading();
+        
+        setTimeout(() => {
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const minPrice = priceMinInput ? parseFloat(priceMinInput.value) || 0 : 0;
+            const maxPrice = priceMaxInput ? parseFloat(priceMaxInput.value) || Infinity : Infinity;
+            
+            let visibleCount = 0;
+            
+            allCars.forEach(car => {
+                const searchText = car.dataset.search || '';
+                const price = parseFloat(car.dataset.prix) || 0;
+                
+                const matchesSearch = searchTerm === '' || searchText.includes(searchTerm);
+                const matchesPrice = price >= minPrice && (maxPrice === Infinity || price <= maxPrice);
+                
+                const shouldShow = matchesSearch && matchesPrice;
+                
+                car.style.display = shouldShow ? 'block' : 'none';
+                
+                if (shouldShow) {
+                    visibleCount++;
+                }
+            });
+            
+            // Update UI
+            if (carsGrid) {
+                carsGrid.style.display = visibleCount > 0 ? 'flex' : 'none';
+            }
+            
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+            
+            updateResultsCount(visibleCount);
+            hideLoading();
+        }, 200);
+    }
+    
+    // Update results count
+    function updateResultsCount(count = null) {
+        const totalCount = count !== null ? count : allCars.length;
+        
+        if (totalCountElement) {
+            totalCountElement.textContent = totalCount;
+        }
+        
+        if (pluralElement) {
+            pluralElement.textContent = totalCount > 1 ? 's' : '';
+        }
+        
+        if (pluralDispElement) {
+            pluralDispElement.textContent = totalCount > 1 ? 's' : '';
+        }
+        
+        if (filterResultsElement) {
+            if (count !== null && count < allCars.length) {
+                filterResultsElement.textContent = `${totalCount} annonce${totalCount > 1 ? 's' : ''} trouvée${totalCount > 1 ? 's' : ''}`;
+            } else {
+                filterResultsElement.textContent = 'Affichage de toutes les annonces';
+            }
+        }
+    }
+    
+    // Update price display
+    function updatePriceDisplay() {
+        if (minPriceDisplay && priceMinInput) {
+            const minValue = priceMinInput.value || '0';
+            minPriceDisplay.textContent = minValue === '0' ? '0 TND' : `${parseInt(minValue).toLocaleString()} TND`;
+        }
+        
+        if (maxPriceDisplay && priceMaxInput) {
+            const maxValue = priceMaxInput.value;
+            maxPriceDisplay.textContent = maxValue ? `${parseInt(maxValue).toLocaleString()} TND` : '∞';
+        }
+    }
+    
+    // Reset all filters
+    function resetAllFilters() {
+        if (searchInput) {
+            searchInput.value = '';
+            toggleClearButton();
+        }
+        if (priceMinInput) priceMinInput.value = '';
+        if (priceMaxInput) priceMaxInput.value = '';
+        
+        updatePriceDisplay();
+        filterCars();
+        
+        // Reset active price filter buttons
+        priceFilterButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+        });
+    }
+    
+    // Toggle clear button
+    function toggleClearButton() {
+        if (clearButton && searchInput) {
+            clearButton.style.display = searchInput.value.length > 0 ? 'block' : 'none';
+        }
+    }
+    
+    // Event Listeners
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            toggleClearButton();
+            
+            searchTimeout = setTimeout(() => {
+                filterCars();
+            }, 300);
+        });
+    }
+    
+    if (clearButton) {
+        clearButton.addEventListener('click', function() {
+            searchInput.value = '';
+            toggleClearButton();
+            filterCars();
+        });
+    }
+    
+    if (priceMinInput) {
+        priceMinInput.addEventListener('input', function() {
+            updatePriceDisplay();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterCars, 500);
+        });
+    }
+    
+    if (priceMaxInput) {
+        priceMaxInput.addEventListener('input', function() {
+            updatePriceDisplay();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterCars, 500);
+        });
+    }
+    
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', resetAllFilters);
+    }
+    
+    // Suggestion pills
+    suggestionPills.forEach(pill => {
+        pill.addEventListener('click', function() {
+            const suggestion = this.dataset.suggestion;
+            if (searchInput) {
+                searchInput.value = suggestion;
+                toggleClearButton();
+                filterCars();
+            }
+        });
+    });
+    
+    // Price filter buttons
+    priceFilterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const minPrice = this.dataset.min;
+            const maxPrice = this.dataset.max;
+            
+            if (priceMinInput) priceMinInput.value = minPrice;
+            if (priceMaxInput) priceMaxInput.value = maxPrice;
+            
+            // Update button states
+            priceFilterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            
+            this.classList.add('active');
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary');
+            
+            updatePriceDisplay();
+            filterCars();
+        });
+    });
+    
+    // Global reset function
+    window.resetAllFilters = resetAllFilters;
+    
+    // Initialize
+    init();
+});
+</script>
+{% endblock %}

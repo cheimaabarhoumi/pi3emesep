@@ -1,0 +1,847 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}{{ annonce.titre }} - NeoCarVilla{% endblock %}
+
+{% block content %}
+<!-- Neo Breadcrumb Section -->
+<section class="neo-section py-4" style="background: var(--neo-gray-50); margin-top: 80px;">
+    <div class="neo-container">
+        <nav aria-label="breadcrumb" class="neo-animate-on-scroll">
+            <ol class="breadcrumb mb-0" style="background: transparent;">
+                <li class="breadcrumb-item">
+                    <a href="{{ path('app_front_accueil') }}" class="text-decoration-none text-primary">
+                        <i class="fas fa-home me-1"></i>Accueil
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ path('front_annonces') }}" class="text-decoration-none text-primary">Annonces</a>
+                </li>
+                <li class="breadcrumb-item active text-muted">{{ annonce.titre }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Neo Car Details Section -->
+<section class="neo-section">
+    <div class="neo-container">
+        <div class="row g-5">
+            <!-- Main Image & Gallery -->
+            <div class="col-lg-8">
+                <div class="neo-animate-on-scroll">
+                    <!-- Main Image Display -->
+                    <div class="neo-card overflow-hidden mb-4">
+                        {% if annonce.voiture.image %}
+                            <div class="position-relative">
+                                <img src="{{ asset('uploads/' ~ annonce.voiture.image) }}" 
+                                     alt="{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}"
+                                     class="w-100" 
+                                     style="height: 500px; object-fit: cover; transition: transform 0.3s ease;"
+                                     id="mainCarImage">
+                                
+                                <!-- Status Badges -->
+                                <div class="position-absolute top-0 start-0 m-4">
+                                    {% if annonce.valider %}
+                                        <span class="badge" style="background: var(--neo-gradient-success); padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 600;">
+                                            <i class="fas fa-check-circle me-2"></i>Vérifié & Certifié
+                                        </span>
+                                    {% else %}
+                                        <span class="badge" style="background: var(--neo-gradient-secondary); padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 600;">
+                                            <i class="fas fa-clock me-2"></i>En cours de validation
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Premium Badge -->
+                                {% if annonce.voiture.prix and annonce.voiture.prix > 50000 %}
+                                    <div class="position-absolute top-0 end-0 m-4">
+                                        <span class="badge" style="background: linear-gradient(45deg, #ffd700, #ffed4e); color: #8b4513; padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 700;">
+                                            <i class="fas fa-crown me-2"></i>COLLECTION PRESTIGE
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Zoom Overlay -->
+                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 zoom-overlay" 
+                                     style="background: rgba(0,0,0,0.7); transition: opacity 0.3s ease; cursor: zoom-in;">
+                                    <div class="text-white text-center">
+                                        <i class="fas fa-search-plus fs-1 mb-2"></i>
+                                        <div>Cliquer pour agrandir</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="w-100 d-flex align-items-center justify-content-center text-muted" 
+                                 style="height: 500px; background: var(--neo-gray-100);">
+                                <div class="text-center">
+                                    <i class="fas fa-car" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                    <h4 class="neo-heading-3 text-muted">Image en cours de traitement</h4>
+                                    <p class="neo-body text-muted">L'image du véhicule sera disponible sous peu</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Car Title & Basic Info -->
+                    <div class="mb-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                            <div>
+                                <h1 class="neo-display-2 mb-2">{{ annonce.titre }}</h1>
+                                <h2 class="neo-heading-2 text-primary">{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</h2>
+                            </div>
+                            {% if annonce.voiture.prix %}
+                                <div class="text-end">
+                                    <div class="neo-display-2 text-primary mb-1">{{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</div>
+                                    <div class="neo-body-small text-muted">Prix négociable</div>
+                                </div>
+                            {% else %}
+                                <div class="text-end">
+                                    <div class="neo-heading-2 text-muted">Prix sur demande</div>
+                                    <div class="neo-body-small text-muted">Contactez-nous</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Quick Specs Row -->
+                        <div class="row g-3">
+                            {% if annonce.voiture.annee %}
+                                <div class="col-6 col-md-3">
+                                    <div class="neo-glass p-3 rounded-3 text-center">
+                                        <i class="fas fa-calendar-alt text-primary fs-4 mb-2"></i>
+                                        <div class="neo-body-small text-muted">Année</div>
+                                        <div class="fw-bold">{{ annonce.voiture.annee }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if annonce.voiture.kilometrage %}
+                                <div class="col-6 col-md-3">
+                                    <div class="neo-glass p-3 rounded-3 text-center">
+                                        <i class="fas fa-road text-success fs-4 mb-2"></i>
+                                        <div class="neo-body-small text-muted">Kilométrage</div>
+                                        <div class="fw-bold">{{ annonce.voiture.kilometrage|number_format(0, ',', ' ') }} km</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if annonce.voiture.carburant %}
+                                <div class="col-6 col-md-3">
+                                    <div class="neo-glass p-3 rounded-3 text-center">
+                                        <i class="fas fa-gas-pump text-warning fs-4 mb-2"></i>
+                                        <div class="neo-body-small text-muted">Carburant</div>
+                                        <div class="fw-bold">{{ annonce.voiture.carburant }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if annonce.voiture.boiteVitesse %}
+                                <div class="col-6 col-md-3">
+                                    <div class="neo-glass p-3 rounded-3 text-center">
+                                        <i class="fas fa-cogs text-info fs-4 mb-2"></i>
+                                        <div class="neo-body-small text-muted">Transmission</div>
+                                        <div class="fw-bold">{{ annonce.voiture.boiteVitesse }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="neo-animate-on-scroll" style="animation-delay: 0.2s;">
+                    <!-- Contact Card -->
+                    <div class="neo-card p-4 mb-4" style="background: var(--neo-gradient-primary); color: white;">
+                        <h3 class="neo-heading-3 text-white mb-3">
+                            <i class="fas fa-phone-alt me-2"></i>Contactez le Vendeur
+                        </h3>
+                        <div class="d-grid gap-2 mb-3">
+                            <a href="tel:+21612345678" class="neo-btn" style="background: white; color: var(--neo-primary);">
+                                <i class="fas fa-phone me-2"></i>Appeler Maintenant
+                            </a>
+                            <a href="mailto:?subject=Intérêt%20pour%20{{ annonce.titre|url_encode }}&body=Bonjour,%0D%0A%0D%0AJe%20suis%20intéressé(e)%20par%20votre%20annonce%20:%20{{ annonce.titre|url_encode }}%0D%0A%0D%0ALien%20:%20{{ app.request.uri }}" 
+                               class="neo-btn neo-btn-ghost" style="border-color: white; color: white;">
+                                <i class="fas fa-envelope me-2"></i>Envoyer un Email
+                            </a>
+                        </div>
+                        <div class="neo-glass p-3 rounded-3">
+                            <div class="d-flex align-items-center justify-content-center gap-2 text-white">
+                                <i class="fas fa-shield-check"></i>
+                                <span class="neo-body-small">Vendeur vérifié & certifié</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="neo-card p-4 mb-4">
+                        <h4 class="neo-heading-3 mb-3">Actions Rapides</h4>
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('front_annonce_pdf', { id: annonce.id }) }}" 
+                               class="neo-btn neo-btn-secondary" target="_blank">
+                                <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
+                            </a>
+                            <a href="{{ path('edit_annonce', { id: annonce.id }) }}" 
+                               class="neo-btn neo-btn-ghost">
+                                <i class="fas fa-edit me-2"></i>Modifier l'Annonce
+                            </a>
+                            <form action="{{ path('annonce_delete', {id: annonce.id}) }}" 
+                                  method="post" 
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');" 
+                                  class="d-grid">
+                                <button class="neo-btn neo-btn-ghost text-danger border-danger" type="submit">
+                                    <i class="fas fa-trash-alt me-2"></i>Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- QR Code -->
+                    <div class="neo-card p-4 text-center">
+                        <h4 class="neo-heading-3 mb-3">
+                            <i class="fas fa-qrcode text-primary me-2"></i>Code QR - Carte de Contact
+                        </h4>
+                        <div class="mb-3">
+                            <img src="{{ qrCode }}" alt="QR Code pour {{ annonce.titre }}" class="img-fluid rounded-3" style="max-width: 200px; border: 2px solid var(--neo-gray-200);">
+                        </div>
+                        <p class="neo-body-small text-muted mb-3">
+                            <i class="fas fa-mobile-alt me-1"></i>
+                            Scannez ce code QR pour ajouter cette annonce comme contact avec toutes les informations
+                        </p>
+                        <div class="neo-glass p-3 rounded-3 mb-3">
+                            <div class="row g-2 text-start small">
+                                <div class="col-12"><strong>📱 Format vCard:</strong></div>
+                                <div class="col-12">🏢 Neo Cars</div>
+                                <div class="col-12">🚗 {{ annonce.titre }}</div>
+                                <div class="col-12">🔧 {{ annonce.voiture.marque }} {{ annonce.voiture.modele }} ({{ annonce.voiture.annee }})</div>
+                                {% if annonce.voiture.prix %}
+                                    <div class="col-12">💰 {{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</div>
+                                {% endif %}
+                                <div class="col-12 text-muted">📝 + spécifications complètes</div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info p-2 mb-3">
+                            <small>
+                                <i class="fas fa-info-circle me-1"></i>
+                                Ce QR code créera un contact dans votre téléphone avec toutes les informations du véhicule
+                            </small>
+                        </div>
+                        
+                        <h5 class="neo-heading-4 mb-3">Partager l'Annonce</h5>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ annonceUrl|url_encode }}" 
+                               target="_blank" 
+                               class="neo-btn neo-btn-ghost" 
+                               style="width: 40px; height: 40px; padding: 0;"
+                               title="Partager sur Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ annonceUrl|url_encode }}&text=Découvrez%20cette%20{{ annonce.titre|url_encode }}" 
+                               target="_blank" 
+                               class="neo-btn neo-btn-ghost" 
+                               style="width: 40px; height: 40px; padding: 0;"
+                               title="Partager sur Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://wa.me/?text=Découvrez%20cette%20annonce%20:%20{{ annonceUrl|url_encode }}" 
+                               target="_blank" 
+                               class="neo-btn neo-btn-ghost" 
+                               style="width: 40px; height: 40px; padding: 0;"
+                               title="Partager sur WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <button onclick="copyToClipboard('{{ annonceUrl }}')"
+                                    class="neo-btn neo-btn-ghost" 
+                                    style="width: 40px; height: 40px; padding: 0;"
+                                    title="Copier le lien">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Neo Detailed Specifications Section -->
+<section class="neo-section" style="background: var(--neo-gray-50);">
+    <div class="neo-container">
+        <div class="row g-5">
+            <!-- Technical Specifications -->
+            <div class="col-lg-8">
+                <div class="neo-animate-on-scroll">
+                    <div class="neo-card p-4 mb-4">
+                        <h3 class="neo-heading-2 mb-4">
+                            <i class="fas fa-cog text-primary me-2"></i>Spécifications Techniques
+                        </h3>
+                        <div class="row g-4">
+                            {% if annonce.voiture.puissanceFiscale %}
+                                <div class="col-md-6">
+                                    <div class="spec-item">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="spec-icon">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                            <div>
+                                                <div class="neo-body-small text-muted">Puissance Fiscale</div>
+                                                <div class="neo-heading-3">{{ annonce.voiture.puissanceFiscale }} CV</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if annonce.voiture.cylindree %}
+                                <div class="col-md-6">
+                                    <div class="spec-item">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="spec-icon">
+                                                <i class="fas fa-tachometer-alt"></i>
+                                            </div>
+                                            <div>
+                                                <div class="neo-body-small text-muted">Cylindrée</div>
+                                                <div class="neo-heading-3">{{ annonce.voiture.cylindree }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if annonce.voiture.nombrePortes %}
+                                <div class="col-md-6">
+                                    <div class="spec-item">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="spec-icon">
+                                                <i class="fas fa-door-open"></i>
+                                            </div>
+                                            <div>
+                                                <div class="neo-body-small text-muted">Nombre de Portes</div>
+                                                <div class="neo-heading-3">{{ annonce.voiture.nombrePortes }} portes</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="col-md-6">
+                                <div class="spec-item">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="spec-icon">
+                                            <i class="fas fa-car"></i>
+                                        </div>
+                                        <div>
+                                            <div class="neo-body-small text-muted">Type de Véhicule</div>
+                                            <div class="neo-heading-3">{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description Section -->
+                    <div class="neo-card p-4">
+                        <h3 class="neo-heading-2 mb-4">
+                            <i class="fas fa-file-alt text-primary me-2"></i>Description du Véhicule
+                        </h3>
+                        <div class="neo-body text-muted" style="line-height: 1.8;">
+                            {% if annonce.description %}
+                                <p>{{ annonce.description|nl2br }}</p>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-info-circle fs-2 text-muted mb-3"></i>
+                                    <p class="neo-body text-muted">Aucune description détaillée n'a été fournie pour ce véhicule.</p>
+                                    <p class="neo-body-small text-muted">Contactez le vendeur pour plus d'informations.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="col-lg-4">
+                <div class="neo-animate-on-scroll" style="animation-delay: 0.3s;">
+                    <!-- Safety & Security -->
+                    <div class="neo-card p-4 mb-4">
+                        <h4 class="neo-heading-3 mb-3">
+                            <i class="fas fa-shield-alt text-success me-2"></i>Sécurité & Garanties
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Véhicule inspecté</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Historique vérifié</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Vendeur certifié</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Support client 24/7</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financing Options -->
+                    <div class="neo-card p-4">
+                        <h4 class="neo-heading-3 mb-3">
+                            <i class="fas fa-calculator text-warning me-2"></i>Options de Financement
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="neo-body-small">Paiement comptant</span>
+                                    <i class="fas fa-check text-success"></i>
+                                </div>
+                            </div>
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="neo-body-small">Crédit auto</span>
+                                    <i class="fas fa-check text-success"></i>
+                                </div>
+                            </div>
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="neo-body-small">Leasing</span>
+                                    <i class="fas fa-check text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="neo-btn neo-btn-primary w-100 mt-3">
+                            <i class="fas fa-calculator me-2"></i>Simuler un Crédit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Neo Related Cars Section -->
+<section class="neo-section">
+    <div class="neo-container">
+        <div class="text-center mb-5 neo-animate-on-scroll">
+            <h2 class="neo-heading-1 mb-3">Véhicules Similaires</h2>
+            <p class="neo-body-large text-muted">Découvrez d'autres véhicules qui pourraient vous intéresser</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Related Car 1 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <img src="{{ asset('front/images/featured-cars/fc1.png') }}" alt="Véhicule similaire" class="w-100" style="height: 220px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">BMW Série 3</h4>
+                        <p class="neo-body-small text-muted mb-3">2022 • 25,000 km • Automatique</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">75,000 TND</span>
+                        </div>
+                        <a href="#" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Car 2 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll" style="animation-delay: 0.2s;">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <img src="{{ asset('front/images/featured-cars/fc2.png') }}" alt="Véhicule similaire" class="w-100" style="height: 220px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">Audi A4</h4>
+                        <p class="neo-body-small text-muted mb-3">2021 • 35,000 km • Automatique</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">68,000 TND</span>
+                        </div>
+                        <a href="#" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Car 3 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll" style="animation-delay: 0.4s;">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <img src="{{ asset('front/images/featured-cars/fc3.png') }}" alt="Véhicule similaire" class="w-100" style="height: 220px; object-fit: cover;">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">Mercedes Classe C</h4>
+                        <p class="neo-body-small text-muted mb-3">2023 • 15,000 km • Automatique</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">85,000 TND</span>
+                        </div>
+                        <a href="#" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ path('front_annonces') }}" class="neo-btn neo-btn-secondary" style="padding: 1rem 2rem;">
+                <i class="fas fa-th-large me-2"></i>Voir Toutes les Annonces
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Enhanced Neo Design for Annonce Details */
+        
+        /* Image hover effects */
+        #mainCarImage:hover {
+            transform: scale(1.05);
+        }
+        
+        .zoom-overlay {
+            transition: opacity 0.3s ease;
+        }
+        
+        .neo-card:hover .zoom-overlay {
+            opacity: 1 !important;
+        }
+        
+        /* Specification items */
+        .spec-item {
+            padding: 1.5rem;
+            background: var(--neo-gray-50);
+            border-radius: var(--neo-radius-lg);
+            border: 2px solid var(--neo-gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .spec-item:hover {
+            border-color: var(--neo-primary);
+            background: var(--neo-white);
+            transform: translateY(-2px);
+            box-shadow: var(--neo-shadow-lg);
+        }
+        
+        .spec-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--neo-gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            box-shadow: var(--neo-shadow-md);
+        }
+        
+        /* Enhanced Glass Effect */
+        .neo-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .neo-glass:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        /* Badge enhancements */
+        .badge {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            box-shadow: var(--neo-shadow-md);
+        }
+        
+        /* Contact card gradient overlay */
+        .neo-card[style*="--neo-gradient-primary"] {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neo-card[style*="--neo-gradient-primary"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></svg>');
+            background-size: 30px 30px;
+            pointer-events: none;
+        }
+        
+        /* Social sharing buttons */
+        .neo-btn[style*="width: 40px"] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .neo-btn[style*="width: 40px"]:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        /* Image zoom modal effect */
+        @media (min-width: 768px) {
+            .zoom-overlay {
+                cursor: zoom-in;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .neo-display-2 {
+                font-size: 2rem !important;
+            }
+            
+            .neo-heading-2 {
+                font-size: 1.5rem !important;
+            }
+            
+            #mainCarImage {
+                height: 300px !important;
+            }
+            
+            .spec-item {
+                padding: 1rem;
+            }
+            
+            .spec-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* Enhanced animations */
+        .neo-animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Breadcrumb styling */
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: var(--neo-gray-400);
+            font-weight: 600;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--neo-primary-dark) !important;
+        }
+        
+        /* Form button improvements */
+        form[onsubmit] {
+            margin: 0;
+        }
+        
+        /* Enhanced card shadows */
+        .neo-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Price styling */
+        .neo-display-2.text-primary {
+            background: var(--neo-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        /* Quick specs cards */
+        .row.g-3 .neo-glass {
+            transition: all 0.3s ease;
+        }
+        
+        .row.g-3 .neo-glass:hover {
+            transform: translateY(-5px);
+            background: var(--neo-white);
+            box-shadow: var(--neo-shadow-lg);
+        }
+        
+        /* QR Code enhancements */
+        .neo-card img[alt*="QR Code"] {
+            transition: transform 0.3s ease;
+        }
+        
+        .neo-card img[alt*="QR Code"]:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Copy button animation */
+        .neo-btn[onclick*="copyToClipboard"] {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neo-btn[onclick*="copyToClipboard"].copied::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--neo-success);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            animation: checkmark 0.5s ease;
+        }
+        
+        @keyframes checkmark {
+            0% { opacity: 0; scale: 0; }
+            50% { opacity: 1; scale: 1.2; }
+            100% { opacity: 1; scale: 1; }
+        }
+    </style>
+    
+    <script>
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.neo-animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+        
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Success - show visual feedback
+                const button = event.target.closest('button');
+                const originalContent = button.innerHTML;
+                
+                button.classList.add('copied');
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.innerHTML = originalContent;
+                }, 2000);
+                
+                // Show toast notification if available
+                if (typeof showToast === 'function') {
+                    showToast('Lien copié dans le presse-papiers!', 'success');
+                }
+            }).catch(function(err) {
+                console.error('Erreur lors de la copie: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    if (typeof showToast === 'function') {
+                        showToast('Lien copié dans le presse-papiers!', 'success');
+                    }
+                } catch (err) {
+                    console.error('Fallback copy failed: ', err);
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+        
+        // Image zoom functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainImage = document.getElementById('mainCarImage');
+            if (mainImage) {
+                mainImage.addEventListener('click', function() {
+                    // Create modal for image zoom
+                    const modal = document.createElement('div');
+                    modal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0,0,0,0.9);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 9999;
+                        cursor: zoom-out;
+                    `;
+                    
+                    const img = document.createElement('img');
+                    img.src = this.src;
+                    img.style.cssText = `
+                        max-width: 95%;
+                        max-height: 95%;
+                        object-fit: contain;
+                        border-radius: 10px;
+                    `;
+                    
+                    modal.appendChild(img);
+                    document.body.appendChild(modal);
+                    
+                    // Close on click
+                    modal.addEventListener('click', function() {
+                        document.body.removeChild(modal);
+                    });
+                    
+                    // Close on escape key
+                    document.addEventListener('keydown', function(e) {
+                        if (e.key === 'Escape') {
+                            if (document.body.contains(modal)) {
+                                document.body.removeChild(modal);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock %}

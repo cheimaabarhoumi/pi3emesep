@@ -1,0 +1,43 @@
+{% extends 'backPage/tables.html.twig' %}
+
+{% block title %}Modifier le Rendez-vous #{{ rdv.id }}{% endblock %}
+
+{% block authors_table_body %}
+<div class="card shadow-sm rounded-3">
+    <div class="card-header bg-white border-0 pb-0">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0 text-primary fw-bold">
+                <i class="fas fa-calendar-edit me-2"></i>Modifier le Rendez-vous #{{ rdv.id }}
+            </h1>
+            <a href="{{ path('app_rendez_vous_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        {{ include('rendez_vous/_form.html.twig', {
+            'button_label': 'Mettre à jour',
+            'include_delete': true
+        }) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation spécifique à la page d'édition
+    const deleteForm = document.querySelector('.delete-form');
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce rendez-vous ?')) {
+                e.preventDefault();
+            }
+        });
+    }
+
+  
+});
+</script>
+{% endblock %}

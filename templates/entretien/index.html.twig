@@ -1,0 +1,206 @@
+{% extends 'backPage/tables.html.twig' %}
+
+{% block title %}Gestion Des Entretiens | CarVilla{% endblock %}
+
+{% block authors_table_body %}
+<div class="entretien-dashboard">
+    <div class="dashboard-header">
+        <h1>Gestion Des Entretiens</h1>
+        <div class="stats-container">
+            <span class="stat-badge stat-total">
+                <i class="fas fa-list" aria-hidden="true"></i>
+                <span class="sr-only">Total des entretiens</span>
+                Total: {{ total_entretiens }}
+            </span>
+            <span class="stat-badge stat-completed">
+                <i class="fas fa-check" aria-hidden="true"></i>
+                <span class="sr-only">Entretiens terminés</span>
+                Terminés: {{ entretiens_termines }}
+            </span>
+        </div>
+        
+    </div>
+ <a href="{{ path('app_rendez_vous_index') }}" class="btn btn-outline-secondary mt-3 w-100">
+            <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+        </a>
+        
+    <div class="entretien-cards">
+        {% for entretien in entretiens %}
+            <div class="entretien-card">
+                <div class="card-header">
+                    <div class="card-type">
+                        <i class="fas {{ entretien.typeEntretien|lower == 'garage' ? 'fa-warehouse' : 'fa-tools' }}" aria-hidden="true"></i>
+                        <span>{{ entretien.typeEntretien }}</span>
+                    </div>
+                    <div class="card-date">
+                        {{ entretien.datePlanifiee|date('d/m/Y H:i') }}
+                    </div>
+                </div>
+                
+                <div class="card-actions">
+                    <a href="{{ path('app_entretien_show', {'id': entretien.id}) }}" class="action-btn btn-view">
+                        <i class="fas fa-eye" aria-hidden="true"></i>
+                        <span class="sr-only">Voir</span> Voir
+                    </a>
+                    <a href="{{ path('app_entretien_edit', {'id': entretien.id}) }}" class="action-btn btn-edit">
+                        <i class="fas fa-edit" aria-hidden="true"></i>
+                        <span class="sr-only">Modifier</span> Modifier
+                    </a>
+                   
+    <a href="{{ path('app_entretien_pdf', {'id': entretien.id}) }}" class="action-btn btn-pdf">
+          <i class="fas fa-edit" aria-hidden="true"></i>
+                        <span class="sr-only">PDFr</span> PDF
+    </a>
+                    <form action="{{ path('app_entretien_delete', {'id': entretien.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entretien.id) }}">
+                        <button type="submit" class="action-btn btn-delete" onclick="return confirm('Confirmer la suppression ?')">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                            <span class="sr-only">Supprimer</span> Supprimer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="no-entretiens">
+                <i class="fas fa-tools fa-3x" style="color: #bdc3c7; margin-bottom: 1rem;" aria-hidden="true"></i>
+                <h3>Aucun entretien programmé</h3>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if rendezVous is defined %}
+    <div style="text-align: center;">
+        <a href="{{ path('app_entretien_new', {'id': rendezVous.id}) }}" class="btn-new-entretien">
+            <i class="fas fa-plus" aria-hidden="true"></i> Nouvel Entretien
+        </a>
+    </div>
+{% endif %}
+
+          
+</div>
+
+{% block stylesheets %}
+{{ parent() }}
+    <style>
+.no-entretiens {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    font-weight: 500;
+    grid-column: 1 / -1;
+}
+        .entretien-dashboard {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .entretien-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .entretien-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #3498db;
+        }
+        .entretien-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .card-type {
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card-type i {
+            color: #3498db;
+        }
+        .card-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            padding: 0.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        .btn-view { color: #3498db; background: rgba(52, 152, 219, 0.1); }
+        .btn-edit { color: #f39c12; background: rgba(243, 156, 18, 0.1); }
+        .btn-pdf { color:rgb(100, 14, 193); background: rgba(243, 156, 18, 0.1); }
+        .btn-delete { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
+        .stats-container {
+            display: flex;
+            gap: 1rem;
+        }
+        .stat-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        .stat-total { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+        .stat-completed { background: rgba(46, 204, 113, 0.1); color: #2ecc71; }
+        .btn-new-entretien {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+        .btn-new-entretien:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        .no-entretiens {
+            text-align: center;
+            padding: 3rem;
+            grid-column: 1 / -1;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+{% endblock %}
+{% endblock %}

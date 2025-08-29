@@ -1,0 +1,300 @@
+{# Modal for annonce details #}
+<div class="modal fade" id="annonceDetailsModal" tabindex="-1" aria-labelledby="annonceDetailsModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<style>
+.modal-backdrop.show {
+  backdrop-filter: blur(6px);
+  background-color: rgba(0,0,0,0.1) !important;
+}
+</style>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="annonceDetailsModalLabel">Détails de l'annonce</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="annonceDetailsModalBody">
+        <!-- Details will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% block title %}admin{% endblock %}
+
+{% block content %}
+<div class="d-flex">
+  {% include 'admin/sidebar.html.twig' %}
+  {# Modal for details popup #}
+        <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Détails</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="detailsModalBody">
+                <!-- Details will be injected here -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  {# No sidebar popup JS needed #}
+  {# Admin Add Annonce Modal (content loaded via AJAX) #}
+  <div class="modal fade" id="adminAddAnnonceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="adminAddAnnonceModalContent">
+        <!-- Loaded via AJAX -->
+      </div>
+    </div>
+  </div>
+  <!-- Main Content -->
+  <div class="flex-grow-1 px-4 py-4">
+    <div class="d-flex justify-content-end mb-3">
+      <a href="{{ path('annonce_pdf') }}" class="btn btn-primary me-2" target="_blank">
+        <i class="fas fa-file-pdf"></i> Télécharger PDF
+      </a>
+      <button id="openAddAnnonce" class="btn btn-info"><i class="fas fa-plus"></i> Ajouter Annonce</button>
+    </div>
+    <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-gradient-info text-white position-relative overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3 rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
+              <i class="fas fa-bullhorn fa-2x text-info"></i>
+            </div>
+            <div>
+              <h5 class="mb-1 fw-bold">Total Annonces</h5>
+              <h3 class="mb-0 fw-bold">{{ annonces|length }}</h3>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;right:-30px;bottom:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-gradient-success text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3"><i class="fas fa-check-circle fa-2x"></i></div>
+            <div>
+              <h5 class="mb-0">Validées</h5>
+              <h3 class="mb-0">
+                {% set count_valid = 0 %}
+                {% for annonce in annonces %}
+                  {% if annonce.valider %}
+                    {% set count_valid = count_valid + 1 %}
+                  {% endif %}
+                {% endfor %}
+                {{ count_valid }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-gradient-info text-white position-relative overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3 rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
+              <i class="fas fa-clock fa-2x text-info"></i>
+            </div>
+            <div>
+              <h5 class="mb-1 fw-bold">En attente</h5>
+              <h3 class="mb-0 fw-bold">
+                {% set count_pending = 0 %}
+                {% for annonce in annonces %}
+                  {% if not annonce.valider %}
+                    {% set count_pending = count_pending + 1 %}
+                  {% endif %}
+                {% endfor %}
+                {{ count_pending }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;right:-30px;bottom:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une annonce...">
+      </div>
+    </div>
+  </div>
+    <div class="row g-4">
+      {% for annonce in annonces %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100 shadow border-0 annonce-card position-relative" data-titre="{{ annonce.titre }}" data-description="{{ annonce.description }}" data-marque="{{ annonce.voiture.marque }}" data-modele="{{ annonce.voiture.modele }}" data-valider="{{ annonce.valider ? 'Validée' : 'En attente' }}">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Existing search
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.querySelectorAll('.annonce-card');
+    cards.forEach(card => {
+      let text = card.textContent.toLowerCase();
+      card.parentElement.style.display = text.includes(filter) ? '' : 'none';
+    });
+  });
+
+  // Annonce card click for details
+  document.querySelectorAll('.annonce-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var titre = card.getAttribute('data-titre');
+      var description = card.getAttribute('data-description');
+      var marque = card.getAttribute('data-marque');
+      var modele = card.getAttribute('data-modele');
+      var valider = card.getAttribute('data-valider');
+      var html = `<h5>${titre}</h5>` +
+        `<p><strong>Description:</strong> ${description}</p>` +
+        `<p><strong>Voiture:</strong> ${marque} ${modele}</p>` +
+        `<p><strong>Statut:</strong> ${valider}</p>`;
+      document.getElementById('annonceDetailsModalBody').innerHTML = html;
+      var modalEl = document.getElementById('annonceDetailsModal');
+      var modal = new bootstrap.Modal(modalEl);
+      modal.show();
+      modalEl.addEventListener('hidden.bs.modal', function handler() {
+        window.location.href = window.location.pathname;
+        modalEl.removeEventListener('hidden.bs.modal', handler);
+      });
+    });
+  });
+});
+</script>
+            <div class="card-body">
+              <h5 class="card-title mb-2">{{ annonce.titre }}</h5>
+              <p class="card-text text-muted mb-2">{{ annonce.description }}</p>
+              <div class="mb-2">
+                <span class="badge bg-info"><i class="fas fa-car"></i> {{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</span>
+              </div>
+              <div class="mb-2">
+                {% if annonce.voiture.image %}
+                  <img src="{{ asset('uploads/' ~ annonce.voiture.image) }}" alt="Image de {{ annonce.voiture.marque }}" class="img-fluid rounded shadow-sm" style="max-width: 120px; max-height: 80px;">
+                {% else %}
+                  <span class="text-muted">Pas d'image</span>
+                {% endif %}
+              </div>
+              <div class="mb-2">
+                {% if annonce.valider %}
+                  <span class="badge bg-success"><i class="fas fa-check"></i> Validée</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> En attente</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+              <a href="{{ path('delete_annonce', { id: annonce.id }) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');"><i class="fas fa-trash"></i> Supprimer</a>
+              {% if not annonce.valider %}
+                <a href="{{ path('valider_annonce', { id: annonce.id }) }}" class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i> Valider</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-12">
+          <div class="alert alert-info text-center">Aucune annonce trouvée.</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<style>
+.annonce-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transform: translateY(-4px) scale(1.01);
+  transition: all 0.2s;
+}
+</style>
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+  let filter = this.value.toLowerCase();
+  let cards = document.querySelectorAll('.annonce-card');
+  cards.forEach(card => {
+    let text = card.textContent.toLowerCase();
+    card.parentElement.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var openBtn = document.getElementById('openAddAnnonce');
+  var modalEl = document.getElementById('adminAddAnnonceModal');
+  var modalContent = document.getElementById('adminAddAnnonceModalContent');
+  if (!openBtn) return;
+
+  openBtn.addEventListener('click', function() {
+    fetch('{{ path('admin_annonce_add') }}')
+      .then(r => r.text())
+      .then(html => {
+        modalContent.innerHTML = html;
+        var bsModal = new bootstrap.Modal(modalEl);
+        bsModal.show();
+
+        var submitBtn = modalContent.querySelector('#admin-annonce-submit');
+        var form = modalContent.querySelector('#admin-annonce-form');
+        if (submitBtn && form) {
+          submitBtn.addEventListener('click', function() {
+            var formData = new FormData(form);
+            fetch('{{ path('admin_annonce_add') }}', {
+              method: 'POST',
+              body: formData,
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(resp => {
+              if (resp.status === 200) return resp.json();
+              // If validation failed server returns 400 with HTML body
+              return resp.text().then(html => { throw { html: html }; });
+            }).then(data => {
+              if (data.success) {
+                bsModal.hide();
+                window.location.reload();
+              }
+            }).catch(err => {
+              if (err && err.html) {
+                // Replace modal content with server-rendered form (with errors)
+                modalContent.innerHTML = err.html;
+              } else {
+                console.error(err);
+                alert('Erreur lors de l\'envoi du formulaire.');
+              }
+            });
+          });
+        }
+      });
+  });
+});
+</script>
+{% endblock %}
+   {% block stylesheets %}
+        <!-- Ajoutez vos fichiers CSS ici -->
+        <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
+        <link href="{{ asset('back/css/nucleo-icons.css') }}" rel="stylesheet" />
+        <link href="{{ asset('back/css/nucleo-svg.css') }}" rel="stylesheet" />
+        <link href="{{ asset('back/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
+    {% endblock %}
+
+
+      {% block javascripts %}
+        <script src="{{ asset('back/js/core/popper.min.js') }}"></script>
+        <script src="{{ asset('back/js/core/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/perfect-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/smooth-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/chartjs.min.js') }}"></script>
+
+ 
+        <script src="{{ asset('back/js/charts.js') }}"></script>
+        <script src="{{ asset('back/js/soft-ui-dashboard.min.js') }}"></script>
+    {% endblock %}

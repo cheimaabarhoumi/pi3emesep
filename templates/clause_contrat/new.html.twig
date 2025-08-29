@@ -1,0 +1,96 @@
+{% extends 'base3.html.twig' %}
+
+{% block title %}Nouvelle Clause{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4>📝 Nouvelle Clause</h4>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row">
+                {% for field in form %}
+                    {% if field.vars.name != '_token' %}
+                        <div class="col-md-6 mb-3" id="field-{{ field.vars.name }}">
+                            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(field, {
+                                'attr': {
+                                    'class': field.vars.block_prefixes|last == 'choice' ? 'form-select' : 'form-control'
+                                }
+                            }) }}
+                            {{ form_errors(field) }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="mt-4 d-flex justify-content-between">
+                <button class="btn btn-success">
+                    {{ button_label|default('Créer la clause') }}
+                </button>
+                {% if contratId is defined %}
+                    <a href="{{ path('app_clause_contrat_index', {'contratId': contratId}) }}" class="btn btn-secondary">
+                        ← Retour
+                    </a>
+                {% endif %}
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const typeField = document.querySelector('select[name$="[type]"]');
+    const contenuField = document.querySelector('textarea[name$="[contenu]"]');
+    
+    // Create spinner
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner-border text-primary ms-2';
+    spinner.role = 'status';
+    spinner.style.display = 'none'; // hidden by default
+    const spinnerWrapper = document.createElement('div');
+    spinnerWrapper.className = 'my-3';
+    spinnerWrapper.appendChild(spinner);
+    contenuField.parentElement.appendChild(spinnerWrapper);
+
+    typeField.addEventListener('change', function () {
+        const selectedType = this.value;
+
+        if (selectedType) {
+            contenuField.disabled = true;   // 🔒 Disable textarea
+            spinner.style.display = 'inline-block'; // Show spinner
+
+            fetch('{{ path('clause_generate') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ type: selectedType })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.content) {
+                    contenuField.value = data.content.trim();
+                } else {
+                    contenuField.value = 'Erreur : contenu non généré.';
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                contenuField.value = 'Erreur lors de la génération.';
+            })
+            .finally(() => {
+                spinner.style.display = 'none';  // ❌ Hide spinner
+                contenuField.disabled = false;   // 🔓 Enable textarea
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+

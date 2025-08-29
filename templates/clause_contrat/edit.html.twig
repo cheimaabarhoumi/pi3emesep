@@ -1,0 +1,21 @@
+{% extends 'base3.html.twig' %}
+
+{% block title %}Modifier la Clause{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4>✏️ Modifier la Clause</h4>
+        </div>
+        <div class="card-body">
+            {{ include('clause_contrat/_form.html.twig', {
+                'button_label': 'Enregistrer les modifications',
+                'contratId': clause.contrat.idContrat
+            }) }}
+
+
+        </div>
+    </div>
+</div>
+{% endblock %} 

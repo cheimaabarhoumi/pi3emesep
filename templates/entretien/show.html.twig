@@ -1,0 +1,49 @@
+{% extends 'ffront.html.twig' %}
+
+{% block title %}Entretien{% endblock %}
+
+{% block page_content %}
+    <h1>Entretien</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entretien.id }}</td>
+            </tr>
+            <tr>
+                <th>TypeEntretien</th>
+                <td>{{ entretien.typeEntretien }}</td>
+            </tr>
+            <tr>
+                <th>DatePlanifiee</th>
+                <td>{{ entretien.datePlanifiee ? entretien.datePlanifiee|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Cout</th>
+                <td>{{ entretien.cout }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entretien.status }}</td>
+            </tr>
+            <tr>
+                <th>Rendez-vous associé</th>
+                <td>
+                    {% if entretien.rendezVous %}
+                        {{ entretien.rendezVous.description }} - 
+                        {{ entretien.rendezVous.dateRdv|date('d/m/Y H:i') }}
+                    {% else %}
+                        Aucun rendez-vous associé
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_entretien_index') }}">back to list</a>
+
+    <a href="{{ path('app_entretien_edit', {'id': entretien.id}) }}">edit</a>
+
+    {{ include('entretien/_delete_form.html.twig') }}
+{% endblock %}

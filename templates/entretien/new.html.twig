@@ -1,0 +1,237 @@
+{% extends 'ffront.html.twig' %}
+
+{% block title %}Nouvel Entretien | CarVilla{% endblock %}
+
+{% block page_content %}
+<section class="welcome-hero" style="padding: 100px 0; background: #f9f9f9;">
+    <div class="container">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <h2>Créer un nouvel entretien</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="single-featured-cars" style="padding: 30px; background: #fff; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'}}) }}
+                    
+                    <!-- Champ Type d'entretien -->
+                    <div class="form-group">
+                        {{ form_label(form.typeEntretien, null, {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+                        <div class="col-sm-9">
+                           {{ form_widget(form.typeEntretien, {
+                                'attr': {
+                                    'class': 'form-control' ~ (form.typeEntretien.vars.valid ? '' : ' is-invalid'),
+                                }
+                            }) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.typeEntretien) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Date planifiée -->
+                    <div class="form-group">
+                        {{ form_label(form.datePlanifiee, null, {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+                        <div class="col-sm-9">
+                            <div class="input-group date">
+                                {{ form_widget(form.datePlanifiee, {
+                                    'attr': {
+                                        'class': 'form-control datepicker' ~ (form.datePlanifiee.vars.valid ? '' : ' is-invalid'),
+                                        'readonly': 'readonly'
+                                    }
+                                }) }}
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.datePlanifiee) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Coût -->
+                    <div class="form-group">
+                        {{ form_label(form.cout, null, {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">€</span>
+                                {{ form_widget(form.cout, {
+                                    'attr': {
+                                        'class': 'form-control' ~ (form.cout.vars.valid ? '' : ' is-invalid'),
+                                        'inputmode': 'decimal'
+                                    }
+                                }) }}
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.cout) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Champ Statut (seulement en mode édition) -->
+                    {% if form.status is defined %}
+                    <div class="form-group">
+                        {{ form_label(form.status, null, {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+                        <div class="col-sm-9">
+                            {{ form_widget(form.status, {
+                                'attr': {
+                                    'class': 'form-control' ~ (form.status.vars.valid ? '' : ' is-invalid')
+                                }
+                            }) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.status) }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Champ Rendez-vous -->
+                    {% if form.rendezVous is defined %}
+                    <div class="form-group">
+                        {{ form_label(form.rendezVous, null, {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+                        <div class="col-sm-9">
+                            {{ form_widget(form.rendezVous, {
+                                'attr': {
+                                    'class': 'form-control' ~ (form.rendezVous.vars.valid ? '' : ' is-invalid')
+                                }
+                            }) }}
+                            <div class="invalid-feedback">
+                                {{ form_errors(form.rendezVous) }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Boutons -->
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <div class="btn-group">
+                                <a href="{{ path('app_entretien_index') }}" class="btn btn-default">
+                                    <i class="fa fa-arrow-left"></i> Retour
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i> Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Styles spécifiques pour le formulaire d'entretien */
+        .entretien-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .entretien-form .form-group {
+            margin-bottom: 25px;
+        }
+
+        .entretien-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .entretien-form .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .entretien-form .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+        }
+
+        .input-group-addon {
+            padding: 10px 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-default {
+            background: white;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .btn-default:hover {
+            background: #f8f9fa;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            border: 1px solid #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .text-muted {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+    // Validation en temps réel
+    $('form').on('submit', function(e) {
+        if (!this.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        $(this).addClass('was-validated');
+    });
+
+    // Initialisation du datepicker
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        startDate: new Date(),
+        language: 'fr'
+    });
+});
+</script>
+{% endblock %}

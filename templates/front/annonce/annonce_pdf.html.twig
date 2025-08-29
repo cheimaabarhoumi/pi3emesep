@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Détails Annonce</title>
+    <style>
+        body { font-family: 'DejaVu Sans', sans-serif; margin: 0; padding: 0; }
+        .header {
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #ccc;
+        }
+        .header img {
+            height: 80px;
+        }
+        .header h1 {
+            margin: 10px 0 0;
+            font-size: 24px;
+        }
+        .header .date {
+            font-size: 12px;
+            color: #555;
+        }
+        .content {
+            padding: 30px;
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .details h2 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .details p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        {% if logoBase64 is defined and logoBase64 %}
+            <img src="{{ logoBase64 }}" alt="Logo CarVilla">
+        {% endif %}
+        <h1>Fiche Détail Annonce</h1>
+        <div class="date">Généré le {{ "now"|date("d/m/Y H:i") }}</div>
+    </div>
+
+    <!-- CONTENU -->
+    <div class="content">
+        {% if imageBase64 %}
+            <div class="image-container">
+                <img src="{{ imageBase64 }}" alt="{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}">
+            </div>
+        {% endif %}
+
+<div class="details" style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #007BFF; border-bottom: 2px solid #007BFF; padding-bottom: 5px; margin-bottom: 20px;">
+        {{ annonce.titre }}
+    </h2>
+
+    <table style="width: 100%; font-size: 14px; line-height: 1.6; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 8px; font-weight: bold; width: 30%;">Description :</td>
+            <td style="padding: 8px;">{{ annonce.description }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Marque & Modèle :</td>
+            <td style="padding: 8px;">{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Année :</td>
+            <td style="padding: 8px;">{{ annonce.voiture.annee }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Kilométrage :</td>
+            <td style="padding: 8px;">{{ annonce.voiture.kilometrage }} km</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Puissance Fiscale :</td>
+            <td style="padding: 8px;">{{ annonce.voiture.puissanceFiscale }} CV</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Prix :</td>
+            <td style="padding: 8px;">{{ annonce.voiture.prix ? annonce.voiture.prix ~ ' TND' : 'Non spécifié' }}</td>
+        </tr>
+    </table>
+    
+ <img src="{{ qrCode }}" alt="QR Code" 
+     style=" margin-top:10px; margin-left:50px;  max-width: 100px; max-height: 100px; border: 2px solid #000; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" />
+
+</div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        © {{ "now"|date("Y") }} CarVilla - Merci de votre confiance.
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<form
+    method="post"
+    action="{{ path('admin_clause_contrat_delete', {
+        contratId: contratId,
+        id: clause.idClause
+    }) }}"
+    onsubmit="return confirm('Voulez-vous vraiment supprimer cette clause ?');"
+    style="display:inline"
+>
+    <input
+        type="hidden"
+        name="_token"
+        value="{{ csrf_token('delete' ~ clause.idClause) }}"
+    />
+    <button class="btn btn-sm btn-danger">
+        🗑️ Supprimer
+    </button>
+</form>

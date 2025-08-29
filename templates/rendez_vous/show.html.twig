@@ -1,0 +1,55 @@
+{% extends 'ffront.html.twig' %}
+
+{% block title %}RendezVous{% endblock %}
+
+{% block page_content %}
+    <h1>RendezVous</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rdv.id }}</td>
+            </tr>
+            <tr>
+                <th>DateRdv</th>
+                <td>{{ rdv.dateRdv ? rdv.dateRdv|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ rdv.status }}</td>
+            </tr>
+            <tr>
+    <th>Type</th>
+    <td>
+        {% if rdv.typeRendezVous == constant('App\\Entity\\RendezVous::TYPE_ENTRETIEN') %}
+            <i class="fas fa-oil-can me-2"></i>Entretien régulier
+        {% elseif rdv.typeRendezVous == constant('App\\Entity\\RendezVous::TYPE_REPARATION') %}
+            <i class="fas fa-tools me-2"></i>Réparation
+        {% elseif rdv.typeRendezVous == constant('App\\Entity\\RendezVous::TYPE_CONTROLE') %}
+            <i class="fas fa-clipboard-check me-2"></i>Contrôle technique
+        {% elseif rdv.typeRendezVous == constant('App\\Entity\\RendezVous::TYPE_VISITE') %}
+            <i class="fas fa-car me-2"></i>Visite pré-achat
+        {% else %}
+            <i class="fas fa-question-circle me-2"></i>Autre
+        {% endif %}
+    </td>
+</tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ rdv.description }}</td>
+            </tr>
+           <tr>
+    <th>Email</th>
+    <td>{{ rdv.email }}</td>
+</tr>
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rendez_vous_index') }}">back to list</a>
+
+    <a href="{{ path('app_rendez_vous_edit', {'id': rdv.id}) }}">edit</a>
+
+    {{ include('rendez_vous/_delete_form.html.twig') }}
+{% endblock %}

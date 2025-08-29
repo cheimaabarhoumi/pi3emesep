@@ -1,0 +1,44 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+{# Loop through all fields except _token and handle "renouvellement_automatique" separately #}
+{% for field in form %}
+    {% if field.vars.name != '_token' and field.vars.name != 'renouvellement_automatique' %}
+        <div class="form-group mb-3">
+            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {
+                'attr': {
+                    'class': 'form-control' ~ (field.vars.errors|length > 0 ? ' is-invalid' : '')
+                }
+            }) }}
+            {% if field.vars.errors|length > 0 %}
+                <div class="invalid-feedback d-block">
+                    {% for error in field.vars.errors %}
+                        <small>{{ error.message }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endfor %}
+
+{# Handle checkbox field with custom styling #}
+<div class="form-check mb-3">
+    {{ form_widget(form.renouvellement_automatique, {
+        'attr': {
+            'class': 'form-check-input' ~ (form.renouvellement_automatique.vars.errors|length > 0 ? ' is-invalid' : '')
+        }
+    }) }}
+    {{ form_label(form.renouvellement_automatique, null, {'label_attr': {'class': 'form-check-label'}}) }}
+
+    {% if form.renouvellement_automatique.vars.errors|length > 0 %}
+        <div class="invalid-feedback d-block">
+            {% for error in form.renouvellement_automatique.vars.errors %}
+                <small>{{ error.message }}</small>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+
+{{ form_end(form) }}

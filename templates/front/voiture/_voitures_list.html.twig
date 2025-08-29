@@ -1,0 +1,155 @@
+{# Partial template for AJAX voiture list rendering #}
+<div id="voitures-list">
+{% if pagination|length > 0 %}
+    <div class="row g-4">
+        {% for voiture in pagination %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="voiture-card h-100">
+                    <div class="card h-100 border-0 rounded-4 overflow-hidden position-relative">
+                        {# ...existing card content... #}
+                        {% if voiture.prix and voiture.prix > 50000 %}
+                            <div class="premium-badge">
+                                <i class="fas fa-crown"></i>
+                                <span>Premium</span>
+                            </div>
+                        {% endif %}
+                        <div class="voiture-image-container position-relative">
+                            {% if voiture.image %}
+                                <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                                     alt="{{ voiture.marque }} {{ voiture.modele }}"
+                                     class="voiture-image">
+                                <div class="image-overlay">
+                                    <div class="overlay-content">
+                                        <a href="{{ path('front_voiture_details', {id: voiture.id}) }}" 
+                                           class="btn btn-light btn-sm rounded-pill">
+                                            <i class="fas fa-eye me-2"></i>Voir détails
+                                        </a>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="no-image-placeholder d-flex align-items-center justify-content-center">
+                                    <div class="placeholder-content text-center">
+                                        <i class="fas fa-car fa-4x text-muted mb-3"></i>
+                                        <p class="text-muted mb-0">Aucune image</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if voiture.prix %}
+                                <div class="price-badge">
+                                    <div class="badge-content">
+                                        <i class="fas fa-tag me-2"></i>
+                                        <span class="price-amount">{{ voiture.prix }}</span>
+                                        <small class="currency">TND</small>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if voiture.annee %}
+                                <div class="year-badge">
+                                    <div class="badge-content">
+                                        <i class="fas fa-calendar me-2"></i>
+                                        {{ voiture.annee }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column justify-content-between h-100">
+                            <div class="voiture-header mb-3 d-flex align-items-center gap-2">
+                                <i class="fas fa-car-side fa-lg text-success"></i>
+                                <h3 class="card-title h4 fw-bold text-dark mb-0 flex-grow-1">{{ voiture.marque }} {{ voiture.modele }}</h3>
+                            </div>
+                            <div class="voiture-specs d-flex flex-wrap gap-3 mb-3">
+                                {% if voiture.kilometrage %}
+                                    <span class="spec-item d-flex align-items-center gap-1">
+                                        <i class="fas fa-tachometer-alt text-primary"></i>
+                                        <span>{{ voiture.kilometrage }} km</span>
+                                    </span>
+                                {% endif %}
+                                {% if voiture.puissanceFiscale %}
+                                    <span class="spec-item d-flex align-items-center gap-1">
+                                        <i class="fas fa-bolt text-warning"></i>
+                                        <span>{{ voiture.puissanceFiscale }} CV</span>
+                                    </span>
+                                {% endif %}
+                                {% if voiture.annee %}
+                                    <span class="spec-item d-flex align-items-center gap-1">
+                                        <i class="fas fa-calendar-alt text-info"></i>
+                                        <span>{{ voiture.annee }}</span>
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="voiture-details mb-4">
+                                <table class="table table-borderless mb-0 voiture-details-table">
+                                    <tbody>
+                                        {% if voiture.boiteVitesse %}
+                                        <tr>
+                                            <td class="align-middle text-center" style="width:36px"><i class="fas fa-cogs text-secondary"></i></td>
+                                            <td class="align-middle"><small class="text-muted">Boîte</small></td>
+                                            <td class="align-middle"><strong>{{ voiture.boiteVitesse }}</strong></td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if voiture.carburant %}
+                                        <tr>
+                                            <td class="align-middle text-center"><i class="fas fa-gas-pump text-danger"></i></td>
+                                            <td class="align-middle"><small class="text-muted">Carburant</small></td>
+                                            <td class="align-middle"><strong>{{ voiture.carburant }}</strong></td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if voiture.cylindree %}
+                                        <tr>
+                                            <td class="align-middle text-center"><i class="fas fa-industry text-info"></i></td>
+                                            <td class="align-middle"><small class="text-muted">Cylindrée</small></td>
+                                            <td class="align-middle"><strong>{{ voiture.cylindree }}</strong></td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if voiture.nombrePortes %}
+                                        <tr>
+                                            <td class="align-middle text-center"><i class="fas fa-door-open text-success"></i></td>
+                                            <td class="align-middle"><small class="text-muted">Portes</small></td>
+                                            <td class="align-middle"><strong>{{ voiture.nombrePortes }}</strong></td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="voiture-actions d-flex flex-column flex-md-row gap-2 mt-auto">
+                                <a href="{{ path('edit_voiture', {id: voiture.id}) }}" 
+                                   class="btn btn-warning btn-sm w-100 action-btn d-flex align-items-center justify-content-center gap-1">
+                                    <i class="fas fa-edit"></i>Modifier
+                                </a>
+                                <form method="post" action="{{ path('voiture_delete', {id: voiture.id}) }}" 
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette voiture ?');" 
+                                      class="d-inline w-100">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ voiture.id) }}">
+                                    <button class="btn btn-danger btn-sm w-100 action-btn d-flex align-items-center justify-content-center gap-1" type="submit">
+                                        <i class="fas fa-trash"></i>Supprimer
+                                    </button>
+                                </form>
+                                <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" 
+                                   class="btn btn-success btn-sm action-btn w-100 d-flex align-items-center justify-content-center gap-1">
+                                    <i class="fas fa-plus"></i>Créer une annonce
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="empty-state">
+            <div class="empty-icon mb-4">
+                <i class="fas fa-car fa-5x text-white-50"></i>
+            </div>
+            <h4 class="text-white mb-3">Aucune voiture trouvée</h4>
+            <p class="text-white-75 mb-4">Commencez par ajouter votre première voiture</p>
+            <a href="{{ path('voiture_add') }}" class="btn btn-light btn-lg rounded-pill shadow-lg">
+                <i class="fas fa-plus me-3"></i>Ajouter une voiture
+            </a>
+        </div>
+    </div>
+{% endif %}
+</div>

@@ -1,0 +1,77 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des Contrats{% endblock %}
+{% block page_title %}Contrats{% endblock %}
+{% block page_heading %}Liste des Contrats{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-header pb-0">
+        <div class="d-flex justify-content-between">
+            <h6>Liste des Contrats</h6>
+            <a href="{{ path('admin_contrat_new') }}" class="btn btn-primary btn-sm mb-0">Ajouter un Contrat</a>
+        </div>
+    </div>
+    <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Référence</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Intitulé</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Début</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Fin</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Statut</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Montant</th>
+                        <th class="text-secondary opacity-7">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contrat in contrats %}
+                    <tr>
+                        <td class="ps-4">
+                            <p class="text-xs font-weight-bold mb-0">{{ contrat.idContrat }}</p>
+                        </td>
+                        <td>
+                            <div class="d-flex px-2 py-1">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-sm">{{ contrat.reference }}</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="text-sm font-weight-bold mb-0">{{ contrat.intitule }}</p>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="text-secondary text-xs font-weight-bold">{{ contrat.dateDebut|date('d/m/Y') }}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="text-secondary text-xs font-weight-bold">{{ contrat.dateFin|date('d/m/Y') }}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="badge badge-sm bg-gradient-{{ contrat.statut == 'Actif' ? 'success' : (contrat.statut == 'En attente' ? 'warning' : 'danger') }}">{{ contrat.statut }}</span>
+                        </td>
+                        <td class="align-middle text-center text-sm">
+                            <span class="text-secondary text-xs font-weight-bold">{{ contrat.montant|number_format(2, ',', ' ') }} €</span>
+                        </td>
+                        <td class="align-middle">
+                            <a href="{{ path('admin_contrat_show', {'id': contrat.idContrat}) }}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Show contrat">
+                                <i class="fas fa-eye me-2"></i> 👁️ Voir
+                            </a>
+                            <a href="{{ path('admin_contrat_edit', {'id': contrat.idContrat}) }}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit contrat">
+                                <i class="fas fa-edit me-2"></i> ✏️ Modifier
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Aucun contrat trouvé</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

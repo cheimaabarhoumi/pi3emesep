@@ -1,0 +1,21 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Modifier clause{% endblock %}
+{% block page_title %}Clauses{% endblock %}
+{% block page_heading %}Modifier la Clause{% endblock %}
+
+{% block body %}
+<div class="card">
+  <div class="card-header">
+    <h6>Modifier la clause {{ clause.idClause }}</h6>
+  </div>
+  <div class="card-body">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+      {{ form_row(form.titre) }}
+      {{ form_row(form.type) }}
+      {{ form_row(form.ordre) }}
+      {{ form_row(form.contenu) }}
+      <button class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
+  </div>
+</div>
+{% endblock %}

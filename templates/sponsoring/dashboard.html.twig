@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Sponsorings{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4">Dashboard Sponsorings</h1>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sponsoring (mois en cours)</h5>
+                    <h2 id="total-amount" class="card-text text-primary">...</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Nouveaux Sponsors</h5>
+                    <h2 id="new-sponsors" class="card-text text-success">...</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Sponsors Actifs</h5>
+                    <h2 id="active-sponsors" class="card-text text-info">...</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">Répartition par type</div>
+                <div class="card-body">
+                    <canvas id="typeChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">Comparaison Mois en cours / Mois précédent</div>
+                <div class="card-body">
+                    <canvas id="monthChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+fetch('/api/dashboard/stats')
+    .then(response => response.json())
+    .then(data => {
+        // Statistiques principales
+        document.getElementById('total-amount').textContent = data.stats.current_month.total + ' DT';
+        document.getElementById('new-sponsors').textContent = data.stats.current_month.new_sponsors;
+        document.getElementById('active-sponsors').textContent = data.stats.current_month.active_sponsors;
+
+        // Répartition par type (Pie Chart)
+        const typeLabels = Object.keys(data.type_distribution);
+        const typeData = Object.values(data.type_distribution);
+        new Chart(document.getElementById('typeChart'), {
+            type: 'pie',
+            data: {
+                labels: typeLabels,
+                datasets: [{
+                    data: typeData,
+                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Comparaison Mois en cours / Mois précédent (Bar Chart)
+        new Chart(document.getElementById('monthChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Mois en cours', 'Mois précédent'],
+                datasets: [{
+                    label: 'Total Sponsoring',
+                    data: [
+                        data.stats.current_month.total,
+                        data.stats.last_month.total
+                    ],
+                    backgroundColor: ['#007bff', '#6c757d']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

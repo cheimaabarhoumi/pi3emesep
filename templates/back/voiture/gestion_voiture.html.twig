@@ -1,0 +1,315 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}admin{% endblock %}
+
+{% block content %}
+  {# Modal for voiture details #}
+  <div class="modal fade" id="voitureDetailsModal" tabindex="-1" aria-labelledby="voitureDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="voitureDetailsModalLabel">Détails de la voiture</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="voitureDetailsModalBody">
+          <!-- Details will be injected here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+</div>
+<style>
+.modal-backdrop.show {
+  backdrop-filter: blur(6px);
+  background-color: rgba(0,0,0,0.1) !important;
+}
+</style>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="d-flex">
+  {% include 'admin/sidebar.html.twig' %}
+  {# Add button moved into the top action group below #}
+        {# Modal for details popup #}
+        <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Détails</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="detailsModalBody">
+                <!-- Details will be injected here -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  {# No sidebar popup JS needed #}
+  {# Admin Add Voiture Modal (content loaded via AJAX) #}
+  <div class="modal fade" id="adminAddVoitureModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="adminAddVoitureModalContent">
+        <!-- Loaded via AJAX -->
+      </div>
+    </div>
+  </div>
+  <!-- Main Content -->
+  <div class="flex-grow-1 px-4 py-4">
+   <div class="d-flex justify-content-end mb-3">
+    <button id="openAddVoiture" class="btn btn-success ms-2"><i class="fas fa-plus"></i> Ajouter Voiture</button>
+  </div>
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-gradient-info text-white position-relative overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3 rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
+              <i class="fas fa-car fa-2x text-info"></i>
+            </div>
+            <div>
+              <h5 class="mb-1 fw-bold">Total Voitures</h5>
+              <h3 class="mb-0 fw-bold">{{ voitures|length }}</h3>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;right:-30px;bottom:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 bg-gradient-success text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3"><i class="fas fa-calendar fa-2x"></i></div>
+            <div>
+              <h5 class="mb-0">Année la plus récente</h5>
+              <h3 class="mb-0">
+                {% set max_annee = 0 %}
+                {% for voiture in voitures %}
+                  {% if voiture.annee > max_annee %}
+                    {% set max_annee = voiture.annee %}
+                  {% endif %}
+                {% endfor %}
+                {{ max_annee > 0 ? max_annee : 'N/A' }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+  <div class="card shadow-sm border-0 bg-gradient-info text-white position-relative overflow-hidden">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="me-3 rounded-circle bg-white bg-opacity-25 d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
+              <i class="fas fa-money-bill-wave fa-2x text-info"></i>
+            </div>
+            <div>
+              <h5 class="mb-1 fw-bold">Prix moyen</h5>
+              <h3 class="mb-0 fw-bold">{{ voitures|length > 0 ? (voitures|map(v => v.prix)|reduce((a, b) => a + b) / voitures|length)|number_format(0, '.', ' ') ~ ' TND' : '0 TND' }}</h3>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;right:-30px;bottom:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="input-group mb-3 shadow-sm">
+        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une voiture...">
+      </div>
+    </div>
+  </div>
+  <div class="row g-4">
+    {% for voiture in voitures %}
+      <div class="col-md-6 col-lg-4">
+  <div class="card h-100 shadow border-0 voiture-card position-relative" data-marque="{{ voiture.marque }}" data-modele="{{ voiture.modele }}" data-annee="{{ voiture.annee }}" data-prix="{{ voiture.prix }}" data-image="{{ voiture.image ? asset('uploads/' ~ voiture.image) : '' }}">
+<!-- Voiture card modal JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.querySelectorAll('.voiture-card');
+    cards.forEach(card => {
+      let text = card.textContent.toLowerCase();
+      card.parentElement.style.display = text.includes(filter) ? '' : 'none';
+    });
+  });
+  document.querySelectorAll('.voiture-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var marque = card.getAttribute('data-marque');
+      var modele = card.getAttribute('data-modele');
+      var annee = card.getAttribute('data-annee');
+      var prix = card.getAttribute('data-prix');
+      var image = card.getAttribute('data-image');
+      var html = `<h5>${marque} ${modele}</h5>` +
+        `<p><strong>Année:</strong> ${annee}</p>` +
+        `<p><strong>Prix:</strong> ${prix} TND</p>`;
+      if (image) {
+        html += `<img src="${image}" alt="Image de ${marque}" class="img-fluid rounded shadow-sm mb-2" style="max-width: 200px; max-height: 120px;">`;
+      }
+      document.getElementById('voitureDetailsModalBody').innerHTML = html;
+      var modalEl = document.getElementById('voitureDetailsModal');
+      var modal = new bootstrap.Modal(modalEl);
+      modal.show();
+      modalEl.addEventListener('hidden.bs.modal', function handler() {
+        window.location.href = window.location.pathname;
+        modalEl.removeEventListener('hidden.bs.modal', handler);
+      });
+    });
+  });
+});
+</script>
+          <div class="card-body">
+            <h5 class="card-title mb-2">{{ voiture.marque }} {{ voiture.modele }}</h5>
+            <div class="mb-2">
+              <span class="badge bg-info"><i class="fas fa-calendar"></i> {{ voiture.annee }}</span>
+              <span class="badge bg-success"><i class="fas fa-money-bill-wave"></i> {{ voiture.prix }} TND</span>
+            </div>
+            <div class="mb-2">
+              {% if voiture.image %}
+                <img src="{{ asset('uploads/' ~ voiture.image) }}" alt="Image de {{ voiture.marque }}" class="img-fluid rounded shadow-sm" style="max-width: 120px; max-height: 80px;">
+              {% else %}
+                <span class="text-muted">Pas d'image</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+            <a href="{{ path('delete_voiture', { id: voiture.id }) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette voiture ?');"><i class="fas fa-trash"></i> Supprimer</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-info text-center">Aucune voiture trouvée.</div>
+      </div>
+    {% endfor %}
+  </div>
+    </div>
+  </div>
+</div>
+<style>
+.voiture-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  transform: translateY(-4px) scale(1.01);
+  transition: all 0.2s;
+}
+</style>
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+  let filter = this.value.toLowerCase();
+  let cards = document.querySelectorAll('.voiture-card');
+  cards.forEach(card => {
+    let text = card.textContent.toLowerCase();
+    card.parentElement.style.display = text.includes(filter) ? '' : 'none';
+  });
+});
+</script>
+<script>
+// Admin modal load & submit
+document.addEventListener('DOMContentLoaded', function() {
+  var openBtn = document.getElementById('openAddVoiture');
+  if (!openBtn) return;
+  var modalEl = document.getElementById('adminAddVoitureModal');
+  var modalContent = document.getElementById('adminAddVoitureModalContent');
+
+  openBtn.addEventListener('click', function() {
+    fetch('{{ path('admin_voiture_add') }}')
+      .then(r => r.text())
+      .then(html => {
+        modalContent.innerHTML = html;
+        var bsModal = new bootstrap.Modal(modalEl);
+        bsModal.show();
+
+        // wire submit button
+        var submitBtn = modalContent.querySelector('#admin-voiture-submit');
+        var form = modalContent.querySelector('#admin-voiture-form');
+        if (submitBtn && form) {
+          submitBtn.addEventListener('click', function() {
+            var formData = new FormData(form);
+            fetch('{{ path('admin_voiture_add') }}', {
+              method: 'POST',
+              body: formData,
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(resp => {
+              if (resp.status === 200) return resp.json();
+              // If validation failed server returns 400 with HTML body
+              return resp.text().then(html => { throw { html: html }; });
+            }).then(data => {
+              if (data.success) {
+                bsModal.hide();
+                window.location.reload();
+              }
+            }).catch(err => {
+              if (err && err.html) {
+                modalContent.innerHTML = err.html;
+              } else {
+                console.error(err);
+                alert('Erreur lors de l\'envoi du formulaire.');
+              }
+            });
+          });
+        }
+      }).catch(err => {
+        console.error('Erreur chargement formulaire:', err);
+      });
+  });
+});
+</script>
+{% endblock %}
+   {% block stylesheets %}
+        <!-- Ajoutez vos fichiers CSS ici -->
+        <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
+        <link href="{{ asset('back/css/nucleo-icons.css') }}" rel="stylesheet" />
+        <link href="{{ asset('back/css/nucleo-svg.css') }}" rel="stylesheet" />
+        <link href="{{ asset('back/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
+    {% endblock %}
+
+
+      {% block javascripts %}
+        <script src="{{ asset('back/js/core/popper.min.js') }}"></script>
+        <script src="{{ asset('back/js/core/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/perfect-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/smooth-scrollbar.min.js') }}"></script>
+        <script src="{{ asset('back/js/plugins/chartjs.min.js') }}"></script>
+
+ 
+        <script src="{{ asset('back/js/charts.js') }}"></script>
+        <script src="{{ asset('back/js/soft-ui-dashboard.min.js') }}"></script>
+    
+    <script>
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    console.log('Recherche :', filter); // Vérifiez la valeur saisie
+
+    const table = document.getElementById('voitureTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // Ignore l'en-tête
+        const cells = rows[i].getElementsByTagName('td');
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j]) {
+                const text = cells[j].textContent || cells[j].innerText;
+                console.log('Cellule :', text); // Vérifiez le contenu des cellules
+                if (text.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+        }
+
+        rows[i].style.display = match ? '' : 'none';
+    }
+}
+
+    </script>
+   
+   
+    {% endblock %}

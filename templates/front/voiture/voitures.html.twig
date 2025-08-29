@@ -1,0 +1,682 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Nos Voitures - Neo Cars{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">
+                <i class="fas fa-car me-3"></i>Nos Voitures
+            </h1>
+            <p class="lead text-muted">Découvrez notre collection de véhicules d'exception</p>
+            <div class="badge bg-primary fs-6 px-3 py-2">
+                <span id="totalCount">{{ pagination.getTotalItemCount() }}</span> véhicule<span id="plural">{{ pagination.getTotalItemCount() > 1 ? 's' : '' }}</span> disponible<span id="pluralDisp">{{ pagination.getTotalItemCount() > 1 ? 's' : '' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Car Button -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="{{ path('voiture_add') }}" class="btn btn-success btn-lg rounded-pill shadow">
+                <i class="fas fa-plus me-2"></i>Ajouter une Voiture
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 col-md-4">
+            <div class="card shadow-lg border-0 rounded-4 sticky-top" style="top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-header border-0 text-white text-center py-4" style="background: transparent;">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-search me-2"></i>Recherche Intelligente
+                    </h5>
+                    <small class="opacity-75">Trouvez votre voiture idéale</small>
+                </div>
+                <div class="card-body p-4" style="background: rgba(255,255,255,0.95); margin: 1rem; border-radius: 1rem;">
+                    <!-- Live Search -->
+                    <div class="mb-4">
+                        <label for="liveSearch" class="form-label fw-semibold d-flex align-items-center">
+                            <i class="fas fa-magic text-primary me-2"></i>Recherche Instantanée
+                        </label>
+                        <div class="search-container position-relative">
+                            <input type="text" 
+                                   class="form-control form-control-lg ps-5" 
+                                   id="liveSearch" 
+                                   placeholder="Tapez la marque ou modèle..."
+                                   autocomplete="off"
+                                   style="border: 2px solid #e9ecef; border-radius: 50px; background: #f8f9fa;">
+                            <i class="fas fa-search position-absolute" 
+                               style="left: 1rem; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
+                            <button type="button" 
+                                    class="btn-clear position-absolute" 
+                                    id="clearSearch"
+                                    style="right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #dc3545; display: none;">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions mt-2" id="searchSuggestions" style="display: none;">
+                            <small class="text-muted">Suggestions populaires:</small>
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="BMW">BMW</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Mercedes">Mercedes</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Toyota">Toyota</span>
+                                <span class="badge bg-light text-dark suggestion-pill" data-suggestion="Audi">Audi</span>
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i>Résultats instantanés dès la première lettre
+                        </small>
+                    </div>
+                    
+                    <!-- Price Range with Visual Slider -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold d-flex align-items-center">
+                            <i class="fas fa-dollar-sign text-success me-2"></i>Gamme de Prix
+                        </label>
+                        
+                        <!-- Price Display -->
+                        <div class="price-display mb-3 p-3 rounded-3" style="background: linear-gradient(45deg, #28a745, #20c997);">
+                            <div class="d-flex justify-content-between align-items-center text-white">
+                                <div>
+                                    <small class="opacity-75">De</small>
+                                    <div class="fw-bold" id="minPriceDisplay">0 TND</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-arrows-alt-h"></i>
+                                </div>
+                                <div class="text-end">
+                                    <small class="opacity-75">À</small>
+                                    <div class="fw-bold" id="maxPriceDisplay">∞</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="priceMin" 
+                                       placeholder="Prix min"
+                                       min="0"
+                                       step="1000"
+                                       style="border-radius: 20px;">
+                                <small class="text-muted">Prix minimum</small>
+                            </div>
+                            <div class="col-6">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="priceMax" 
+                                       placeholder="Prix max"
+                                       min="0"
+                                       step="1000"
+                                       style="border-radius: 20px;">
+                                <small class="text-muted">Prix maximum</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Price Filters -->
+                        <div class="mt-3">
+                            <small class="text-muted mb-2 d-block">Sélection rapide:</small>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="0" data-max="20000">
+                                    <i class="fas fa-tag me-1"></i>Moins de 20k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="20000" data-max="50000">
+                                    <i class="fas fa-tags me-1"></i>20k - 50k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="50000" data-max="100000">
+                                    <i class="fas fa-crown me-1"></i>50k - 100k TND
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm price-filter rounded-pill" 
+                                        data-min="100000" data-max="">
+                                    <i class="fas fa-gem me-1"></i>Plus de 100k TND
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill" id="resetFilters">
+                            <i class="fas fa-refresh me-2"></i>Tout Réinitialiser
+                        </button>
+                    </div>
+                    
+                    <!-- Results Info -->
+                    <div class="mt-4 p-3 rounded-3" style="background: linear-gradient(45deg, #e3f2fd, #f3e5f5); border: 1px solid #e1bee7;">
+                        <div class="text-center">
+                            <i class="fas fa-chart-bar text-primary mb-2"></i>
+                            <div class="fw-bold text-primary" id="filterResults">Affichage de tous les véhicules</div>
+                            <small class="text-muted">Résultats en temps réel</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9 col-md-8">
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="text-center mb-4" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Recherche en cours...</span>
+                </div>
+                <p class="mt-2 text-muted">Recherche en cours...</p>
+            </div>
+            
+            <!-- Cars Grid -->
+            <div id="carsContainer">
+                {% if pagination|length > 0 %}
+                    <div class="row g-4" id="carsGrid">
+                        {% for voiture in pagination %}
+                            <div class="col-lg-4 col-md-6 car-item" 
+                                 data-marque="{{ voiture.marque|lower }}" 
+                                 data-modele="{{ voiture.modele|lower }}" 
+                                 data-prix="{{ voiture.prix ?: 0 }}"
+                                 data-search="{{ (voiture.marque ~ ' ' ~ voiture.modele)|lower }}">
+                                <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                                    <!-- Image -->
+                                    <div class="position-relative">
+                                        {% if voiture.image %}
+                                            <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                                                 alt="{{ voiture.marque ~ ' ' ~ voiture.modele }}" 
+                                                 class="card-img-top" style="height: 250px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                                                <i class="fas fa-car fa-4x text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Price Badge -->
+                                        {% if voiture.prix %}
+                                            <div class="position-absolute top-0 end-0 m-3">
+                                                <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">
+                                                    {{ voiture.prix|number_format(0, ',', ' ') }} TND
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Content -->
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title fw-bold text-primary mb-2">
+                                            {{ voiture.marque }} {{ voiture.modele }}
+                                        </h5>
+                                        
+                                        <p class="text-muted mb-3">Année {{ voiture.annee }}</p>
+                                        
+                                        <!-- Specifications -->
+                                        <div class="row g-2 mb-3 small">
+                                            {% if voiture.kilometrage %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-tachometer-alt text-primary me-1"></i>
+                                                    {{ voiture.kilometrage|number_format(0, ',', ' ') }} km
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.carburant %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-gas-pump text-danger me-1"></i>
+                                                    {{ voiture.carburant }}
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.boiteVitesse %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-cogs text-info me-1"></i>
+                                                    {{ voiture.boiteVitesse }}
+                                                </div>
+                                            {% endif %}
+                                            {% if voiture.nombrePortes %}
+                                                <div class="col-6">
+                                                    <i class="fas fa-door-open text-success me-1"></i>
+                                                    {{ voiture.nombrePortes }} portes
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Actions -->
+                                        <div class="mt-auto">
+                                            <div class="d-grid gap-2">
+                                                <a href="{{ path('front_voiture_details', {id: voiture.id}) }}" 
+                                                   class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye me-2"></i>Voir Détails
+                                                </a>
+                                                
+                                                <div class="row g-2">
+                                                    <div class="col">
+                                                        <a href="{{ path('edit_voiture', {id: voiture.id}) }}" 
+                                                           class="btn btn-warning btn-sm w-100">
+                                                            <i class="fas fa-edit me-1"></i>Modifier
+                                                        </a>
+                                                    </div>
+                                                    <div class="col">
+                                                        <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" 
+                                                           class="btn btn-success btn-sm w-100">
+                                                            <i class="fas fa-bullhorn me-1"></i>Annonce
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                
+                                                <form method="post" action="{{ path('voiture_delete', {id: voiture.id}) }}" 
+                                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette voiture ?');" 
+                                                      class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ voiture.id) }}">
+                                                    <button class="btn btn-danger btn-sm w-100" type="submit">
+                                                        <i class="fas fa-trash me-1"></i>Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 text-center">
+                            <div class="py-5">
+                                <i class="fas fa-car fa-5x text-muted mb-4"></i>
+                                <h3 class="text-muted mb-3">Aucune voiture trouvée</h3>
+                                <p class="text-muted mb-4">
+                                    Il n'y a pas encore de voitures dans notre catalogue.
+                                </p>
+                                <a href="{{ path('voiture_add') }}" class="btn btn-primary btn-lg rounded-pill">
+                                    <i class="fas fa-plus me-2"></i>
+                                    Ajouter la Première Voiture
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- No Results Message -->
+                <div id="noResults" class="row justify-content-center" style="display: none;">
+                    <div class="col-lg-6 text-center">
+                        <div class="py-5">
+                            <i class="fas fa-search fa-5x text-muted mb-4"></i>
+                            <h3 class="text-muted mb-3">Aucun résultat trouvé</h3>
+                            <p class="text-muted mb-4">
+                                Aucune voiture ne correspond à vos critères de recherche.
+                            </p>
+                            <button class="btn btn-primary" onclick="resetAllFilters()">
+                                <i class="fas fa-times me-2"></i>
+                                Effacer les filtres
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const liveSearch = document.getElementById('liveSearch');
+    const clearButton = document.getElementById('clearSearch');
+    const priceMin = document.getElementById('priceMin');
+    const priceMax = document.getElementById('priceMax');
+    const carItems = document.querySelectorAll('.car-item');
+    const carsGrid = document.getElementById('carsGrid');
+    const noResults = document.getElementById('noResults');
+    const totalCount = document.getElementById('totalCount');
+    const plural = document.getElementById('plural');
+    const pluralDisp = document.getElementById('pluralDisp');
+    const filterResults = document.getElementById('filterResults');
+    const resetBtn = document.getElementById('resetFilters');
+    const priceFilterBtns = document.querySelectorAll('.price-filter');
+    const minPriceDisplay = document.getElementById('minPriceDisplay');
+    const maxPriceDisplay = document.getElementById('maxPriceDisplay');
+    const searchSuggestions = document.getElementById('searchSuggestions');
+    const suggestionPills = document.querySelectorAll('.suggestion-pill');
+    
+    let activeFilters = {
+        search: '',
+        minPrice: '',
+        maxPrice: ''
+    };
+    
+    let searchTimeout;
+
+    // Update price display
+    function updatePriceDisplay() {
+        const minPrice = priceMin.value ? parseInt(priceMin.value).toLocaleString() + ' TND' : '0 TND';
+        const maxPrice = priceMax.value ? parseInt(priceMax.value).toLocaleString() + ' TND' : '∞';
+        if (minPriceDisplay) minPriceDisplay.textContent = minPrice;
+        if (maxPriceDisplay) maxPriceDisplay.textContent = maxPrice;
+    }
+    
+    // Show/hide clear button and suggestions
+    function toggleClearButton() {
+        if (clearButton) {
+            if (liveSearch.value.length > 0) {
+                clearButton.style.display = 'block';
+                if (searchSuggestions) searchSuggestions.style.display = 'none';
+            } else {
+                clearButton.style.display = 'none';
+                if (searchSuggestions && !liveSearch.matches(':focus')) {
+                    searchSuggestions.style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // Live search functionality
+    function performLiveSearch() {
+        const searchTerm = liveSearch.value.toLowerCase().trim();
+        const minPrice = parseFloat(priceMin.value) || 0;
+        const maxPrice = parseFloat(priceMax.value) || Infinity;
+        
+        activeFilters.search = searchTerm;
+        activeFilters.minPrice = priceMin.value;
+        activeFilters.maxPrice = priceMax.value;
+        
+        let visibleCount = 0;
+        
+        carItems.forEach(item => {
+            const searchData = item.dataset.search;
+            const itemPrice = parseFloat(item.dataset.prix) || 0;
+            
+            const matchesSearch = searchTerm === '' || searchData.includes(searchTerm);
+            const matchesPrice = itemPrice >= minPrice && itemPrice <= maxPrice;
+            
+            if (matchesSearch && matchesPrice) {
+                item.style.display = 'block';
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+                item.classList.add('fade-in');
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+                item.classList.remove('fade-in');
+            }
+        });
+        
+        // Update results info
+        updateResultsInfo(visibleCount, searchTerm, minPrice, maxPrice);
+        
+        // Show/hide no results message
+        if (noResults && carsGrid) {
+            if (visibleCount === 0) {
+                carsGrid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                carsGrid.style.display = 'block';
+                noResults.style.display = 'none';
+            }
+        }
+        
+        toggleClearButton();
+    }
+    
+    function updateResultsInfo(count, searchTerm, minPrice, maxPrice) {
+        if (totalCount) totalCount.textContent = count;
+        if (plural) plural.textContent = count > 1 ? 's' : '';
+        if (pluralDisp) pluralDisp.textContent = count > 1 ? 's' : '';
+        
+        if (filterResults) {
+            // Update with animation
+            filterResults.style.opacity = '0.5';
+            setTimeout(() => {
+                let filterText = '';
+                if (count === 0) {
+                    filterResults.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Aucun véhicule trouvé';
+                    filterResults.className = 'fw-bold text-warning';
+                } else if (searchTerm || minPrice > 0 || maxPrice < Infinity) {
+                    filterText = `<i class="fas fa-filter me-1"></i>${count} véhicule${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
+                    if (searchTerm) filterText += ` pour "${searchTerm}"`;
+                    filterResults.innerHTML = filterText;
+                    filterResults.className = 'fw-bold text-primary';
+                } else {
+                    filterResults.innerHTML = `<i class="fas fa-check-circle me-1"></i>Affichage de tous les véhicules (${count})`;
+                    filterResults.className = 'fw-bold text-success';
+                }
+                filterResults.style.opacity = '1';
+            }, 150);
+        }
+    }
+    
+    // Clear search function
+    function clearSearch() {
+        liveSearch.value = '';
+        liveSearch.focus();
+        performLiveSearch();
+        
+        // Visual feedback
+        liveSearch.style.borderColor = '#28a745';
+        setTimeout(() => {
+            liveSearch.style.borderColor = '#e9ecef';
+        }, 300);
+    }
+    
+    // Reset all filters function
+    function resetAllFilters() {
+        liveSearch.value = '';
+        priceMin.value = '';
+        priceMax.value = '';
+        
+        priceFilterBtns.forEach(btn => btn.classList.remove('active'));
+        
+        activeFilters = { search: '', minPrice: '', maxPrice: '' };
+        updatePriceDisplay();
+        performLiveSearch();
+        
+        // Visual feedback
+        const inputs = [liveSearch, priceMin, priceMax];
+        inputs.forEach(input => {
+            input.style.borderColor = '#28a745';
+            setTimeout(() => {
+                input.style.borderColor = '#e9ecef';
+            }, 300);
+        });
+    }
+    
+    // Event listeners for live search
+    if (liveSearch) {
+        liveSearch.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                // Show loading effect
+                this.style.borderColor = '#667eea';
+                performLiveSearch();
+                
+                // Reset border after search
+                setTimeout(() => {
+                    this.style.borderColor = '#e9ecef';
+                }, 300);
+            }, 150);
+        });
+        
+        // Focus events for suggestions
+        liveSearch.addEventListener('focus', function() {
+            if (this.value.length === 0 && searchSuggestions) {
+                searchSuggestions.style.display = 'block';
+            }
+            this.parentElement.classList.add('focused');
+        });
+        
+        liveSearch.addEventListener('blur', function() {
+            setTimeout(() => {
+                if (searchSuggestions) searchSuggestions.style.display = 'none';
+            }, 200);
+            this.parentElement.classList.remove('focused');
+        });
+    }
+    
+    // Clear button functionality
+    if (clearButton) {
+        clearButton.addEventListener('click', clearSearch);
+    }
+    
+    // Suggestion pills
+    suggestionPills.forEach(pill => {
+        pill.addEventListener('click', function() {
+            liveSearch.value = this.getAttribute('data-suggestion');
+            performLiveSearch();
+            liveSearch.focus();
+        });
+    });
+    
+    // Price filter event listeners
+    if (priceMin) {
+        priceMin.addEventListener('input', function() {
+            updatePriceDisplay();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performLiveSearch, 300);
+        });
+        priceMin.addEventListener('change', performLiveSearch);
+    }
+    
+    if (priceMax) {
+        priceMax.addEventListener('input', function() {
+            updatePriceDisplay();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performLiveSearch, 300);
+        });
+        priceMax.addEventListener('change', performLiveSearch);
+    }
+    
+    // Quick price filter buttons
+    priceFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const minVal = this.dataset.min;
+            const maxVal = this.dataset.max;
+            
+            priceMin.value = minVal;
+            priceMax.value = maxVal;
+            updatePriceDisplay();
+            
+            // Visual feedback
+            priceFilterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Button animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+            
+            performLiveSearch();
+        });
+    });
+    
+    // Reset filters
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetAllFilters);
+    }
+    
+    // Global function for no results button
+    window.resetAllFilters = resetAllFilters;
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Escape to clear search or reset all
+        if (e.key === 'Escape') {
+            if (liveSearch.value) {
+                clearSearch();
+            } else {
+                resetAllFilters();
+            }
+        }
+        
+        // Ctrl/Cmd + F to focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+            e.preventDefault();
+            liveSearch.focus();
+            liveSearch.select();
+        }
+    });
+    
+    // Add enhanced animations and styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .car-item {
+            transition: all 0.3s ease;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .search-container input:focus {
+            border-color: #667eea !important;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25) !important;
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-pill {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-pill:hover {
+            background-color: #667eea !important;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        
+        .focused {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+        }
+        
+        .price-filter {
+            transition: all 0.2s ease;
+        }
+        
+        .price-filter:hover {
+            transform: translateY(-1px);
+        }
+        
+        .price-filter.active {
+            background-color: #667eea !important;
+            color: white !important;
+            border-color: #667eea !important;
+        }
+        
+        .btn-clear {
+            transition: all 0.2s ease;
+        }
+        
+        .btn-clear:hover {
+            color: #dc3545 !important;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .sticky-top {
+            transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 991px) {
+            .sticky-top {
+                position: relative !important;
+                top: auto !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize
+    updatePriceDisplay();
+    toggleClearButton();
+    
+    // Initialize with any existing search term
+    if (liveSearch.value) {
+        performLiveSearch();
+    }
+});
+</script>
+{% endblock %}

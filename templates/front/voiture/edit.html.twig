@@ -1,0 +1,263 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Modifier Voiture - Neo Cars{% endblock %}
+
+{% block content %}
+<!-- Neo Page Header -->
+<div class="neo-page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <nav aria-label="breadcrumb" class="neo-breadcrumb mb-4">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_home') }}">
+                                <i class="fas fa-home"></i> Accueil
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_voiture') }}">Voitures</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('front_voiture_details', {id: voiture.id}) }}">{{ voiture.marque }} {{ voiture.modele }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">Modifier</li>
+                    </ol>
+                </nav>
+                
+                <div class="neo-header-content">
+                    <h1 class="neo-heading-1 mb-3">
+                        <i class="fas fa-edit neo-text-primary me-3"></i>
+                        Modifier la Voiture
+                    </h1>
+                    <p class="neo-body-large text-muted">
+                        {{ voiture.marque }} {{ voiture.modele }} - {{ voiture.annee }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current Image Display -->
+{% if voiture.image %}
+<section class="neo-section py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="neo-card p-4 text-center">
+                    <h4 class="neo-heading-4 mb-3">
+                        <i class="fas fa-image neo-text-primary me-2"></i>
+                        Image Actuelle
+                    </h4>
+                    <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                         alt="Image actuelle de {{ voiture.marque }} {{ voiture.modele }}" 
+                         class="img-fluid rounded-4 shadow-sm" 
+                         style="max-height: 200px;">
+                    <p class="neo-body-small text-muted mt-2">
+                        Vous pouvez télécharger une nouvelle image pour la remplacer
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Neo Form Section -->
+<section class="neo-section pb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="neo-card p-5">
+                    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'class': 'neo-form'}}) }}
+                    
+                    <div class="row g-4">
+                        <!-- Vehicle Information -->
+                        <div class="col-12">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-info-circle neo-text-primary me-2"></i>
+                                Informations du Véhicule
+                            </h3>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.marque, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.marque, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: BMW, Mercedes, Audi...'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.modele, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.modele, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Serie 3, Classe C...'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.annee, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.annee, {'attr': {'class': 'neo-form-control', 'placeholder': 'Année de fabrication'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.prix, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.prix, {'attr': {'class': 'neo-form-control', 'placeholder': 'Prix en TND'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Technical Specifications -->
+                        <div class="col-12 mt-5">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-cogs neo-text-primary me-2"></i>
+                                Spécifications Techniques
+                            </h3>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.puissance_fiscale, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.puissance_fiscale, {'attr': {'class': 'neo-form-control', 'placeholder': 'Puissance en CV'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.kilometrage, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.kilometrage, {'attr': {'class': 'neo-form-control', 'placeholder': 'Kilométrage en km'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.boite_vitesse, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.boite_vitesse, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.carburant, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.carburant, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.cylindree, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.cylindree, {'attr': {'class': 'neo-form-control', 'placeholder': 'Cylindrée en L'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="neo-form-group">
+                                {{ form_label(form.nombre_portes, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.nombre_portes, {'attr': {'class': 'neo-form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="col-12 mt-5">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-camera neo-text-primary me-2"></i>
+                                Nouvelle Photo (Optionnel)
+                            </h3>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="neo-form-group">
+                                {{ form_label(form.image, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                <div class="neo-file-upload">
+                                    {{ form_widget(form.image, {'attr': {'class': 'neo-file-input', 'accept': 'image/*'}}) }}
+                                    <div class="neo-file-upload-area">
+                                        <i class="fas fa-cloud-upload-alt fa-3x neo-text-primary mb-3"></i>
+                                        <h4 class="neo-heading-4 mb-2">Glissez une nouvelle image ici</h4>
+                                        <p class="neo-body text-muted">ou cliquez pour sélectionner un fichier</p>
+                                        <small class="text-muted">PNG, JPG jusqu'à 10MB - Laissez vide pour conserver l'image actuelle</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center mt-5">
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                <button type="submit" class="neo-btn neo-btn-primary neo-btn-lg" id="submit-btn">
+                                    <i class="fas fa-save me-2"></i>
+                                    Enregistrer les Modifications
+                                </button>
+                                <a href="{{ path('front_voiture_details', {id: voiture.id}) }}" class="neo-btn neo-btn-secondary neo-btn-lg">
+                                    <i class="fas fa-times me-2"></i>
+                                    Annuler
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Warning Section -->
+                        <div class="col-12 mt-4">
+                            <div class="neo-alert neo-alert-warning">
+                                <h5 class="neo-heading-5 mb-2">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Attention
+                                </h5>
+                                <p class="neo-body mb-0">
+                                    Les modifications seront appliquées immédiatement. Assurez-vous que toutes les informations sont correctes avant de sauvegarder.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Confirmation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const submitBtn = document.getElementById("submit-btn");
+    const form = submitBtn.closest("form");
+
+    submitBtn.addEventListener("click", function (e) {
+        if (form.checkValidity()) {
+            e.preventDefault();
+            
+            // Modern confirmation modal
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'neo-modal-overlay';
+            confirmModal.innerHTML = `
+                <div class="neo-modal">
+                    <div class="neo-modal-header">
+                        <h4 class="neo-heading-4 mb-0">
+                            <i class="fas fa-save neo-text-primary me-2"></i>
+                            Confirmer les Modifications
+                        </h4>
+                    </div>
+                    <div class="neo-modal-body">
+                        <p class="neo-body">Êtes-vous sûr de vouloir enregistrer ces modifications ?</p>
+                        <p class="neo-body-small text-muted">Cette action modifiera définitivement les informations de votre véhicule.</p>
+                    </div>
+                    <div class="neo-modal-footer">
+                        <button type="button" class="neo-btn neo-btn-secondary" onclick="this.closest('.neo-modal-overlay').remove()">
+                            Annuler
+                        </button>
+                        <button type="button" class="neo-btn neo-btn-primary" onclick="document.querySelector('form').submit()">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+        } else {
+            form.reportValidity();
+        }
+    });
+});
+</script>
+{% endblock %}

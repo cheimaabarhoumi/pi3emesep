@@ -1,0 +1,49 @@
+<style>
+    body { font-family: Arial, sans-serif; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .annonce-block { border: 1px solid #bbb; border-radius: 8px; margin-bottom: 25px; padding: 18px 20px; background: #f9f9f9; }
+    .annonce-title { font-size: 20px; color: #2c3e50; margin-bottom: 8px; font-weight: bold; }
+    .annonce-desc { margin-bottom: 10px; font-size: 15px; }
+    .section-title { font-size: 16px; color: #444; margin-bottom: 6px; font-weight: bold; }
+    .voiture-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+    .voiture-table th, .voiture-table td { border: 1px solid #ccc; padding: 6px 8px; font-size: 14px; }
+    .voiture-table th { background: #eaeaea; color: #222; }
+    .footer { text-align: center; font-size: 12px; color: #888; margin-top: 30px; }
+</style>
+<div class="header">
+    <h1>Rapport Complet des Annonces</h1>
+    <div style="font-size:14px; color:#666;">Généré le {{ "now"|date('d/m/Y H:i') }}</div>
+</div>
+
+{% for annonce in annonces %}
+    <div class="annonce-block">
+        <div class="annonce-title">{{ annonce.titre }}</div>
+        <div class="annonce-desc">{{ annonce.description }}</div>
+        <div class="section-title">Détails de l'annonce</div>
+        <table class="voiture-table">
+            <tr><th>Validée</th><td>{% if annonce.valider %}Oui{% else %}Non{% endif %}</td></tr>
+            <tr><th>ID</th><td>{{ annonce.id }}</td></tr>
+        </table>
+        <div class="section-title">Détails du véhicule associé</div>
+        <table class="voiture-table">
+            <tr><th>Marque</th><td>{{ annonce.voiture.marque }}</td></tr>
+            <tr><th>Modèle</th><td>{{ annonce.voiture.modele }}</td></tr>
+            <tr><th>Année</th><td>{{ annonce.voiture.annee }}</td></tr>
+            <tr><th>Prix</th><td>{{ annonce.voiture.prix }} TND</td></tr>
+            <tr><th>Kilométrage</th><td>{{ annonce.voiture.kilometrage }} km</td></tr>
+            <tr><th>Puissance fiscale</th><td>{{ annonce.voiture.puissanceFiscale }}</td></tr>
+            <tr><th>Boîte de vitesse</th><td>{{ annonce.voiture.boiteVitesse }}</td></tr>
+            <tr><th>Carburant</th><td>{{ annonce.voiture.carburant }}</td></tr>
+            <tr><th>Cylindrée</th><td>{{ annonce.voiture.cylindree }}</td></tr>
+            <tr><th>Nombre de portes</th><td>{{ annonce.voiture.nombrePortes }}</td></tr>
+        </table>
+        {% if annonce.voiture.image %}
+            <div style="margin-top:10px;text-align:center;">
+                <img src="{{ absolute_url(asset('uploads/' ~ annonce.voiture.image)) }}" alt="Image voiture" style="max-width:220px;max-height:120px;border:1px solid #ccc;"/>
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div style="text-align:center;font-size:16px;">Aucune annonce trouvée.</div>
+{% endfor %}
+<div class="footer">Rapport généré automatiquement par le système</div>

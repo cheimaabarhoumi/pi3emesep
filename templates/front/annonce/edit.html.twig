@@ -1,0 +1,246 @@
+{% extends 'front/base.html.twig' %}
+
+{% block title %}Modifier l'Annonce - Neo Cars{% endblock %}
+
+{% block content %}
+<!-- Neo Page Header -->
+<div class="neo-page-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <nav aria-label="breadcrumb" class="neo-breadcrumb mb-4">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_home') }}">
+                                <i class="fas fa-home"></i> Accueil
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('front_annonces') }}">Annonces</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('front_annonce_details', {id: annonce.id}) }}">{{ annonce.titre|slice(0, 30) }}...</a>
+                        </li>
+                        <li class="breadcrumb-item active">Modifier</li>
+                    </ol>
+                </nav>
+                
+                <div class="neo-header-content">
+                    <h1 class="neo-heading-1 mb-3">
+                        <i class="fas fa-edit neo-text-primary me-3"></i>
+                        Modifier l'Annonce
+                    </h1>
+                    <p class="neo-body-large text-muted">
+                        Modifiez votre annonce pour <strong>{{ voiture.marque ~ ' ' ~ voiture.modele }}</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vehicle Summary Card -->
+<section class="neo-section py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="neo-card p-4 mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            {% if voiture.image %}
+                                <img src="{{ asset('uploads/' ~ voiture.image) }}" 
+                                     alt="{{ voiture.marque }} {{ voiture.modele }}" 
+                                     class="rounded-3" 
+                                     style="width: 80px; height: 60px; object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-car fa-3x neo-text-primary"></i>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10">
+                            <h4 class="neo-heading-4 mb-2">Véhicule</h4>
+                            <p class="neo-body mb-1">
+                                <strong>{{ voiture.marque ~ ' ' ~ voiture.modele }}</strong> - {{ voiture.annee }}
+                            </p>
+                            <div class="d-flex gap-3 text-muted small">
+                                <span><i class="fas fa-tachometer-alt me-1"></i>{{ voiture.kilometrage|number_format(0, ',', ' ') }} km</span>
+                                <span><i class="fas fa-gas-pump me-1"></i>{{ voiture.carburant }}</span>
+                                <span><i class="fas fa-euro-sign me-1"></i>{{ voiture.prix|number_format(0, ',', ' ') }} TND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Neo Form Section -->
+<section class="neo-section pb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="neo-card p-5">
+                    {{ form_start(form, {'attr': {'class': 'neo-form'}}) }}
+                    
+                    <div class="row g-4">
+                        <!-- Current Information Display -->
+                        <div class="col-12">
+                            <div class="neo-alert neo-alert-info">
+                                <h5 class="neo-heading-5 mb-2">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Informations Actuelles
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Titre:</strong> {{ annonce.titre }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Statut:</strong> 
+                                        {% if annonce.valider %}
+                                            <span class="badge bg-success">Validée</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">En attente</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Announcement Details -->
+                        <div class="col-12 mt-4">
+                            <h3 class="neo-heading-3 mb-4">
+                                <i class="fas fa-edit neo-text-primary me-2"></i>
+                                Modifier les Détails
+                            </h3>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="neo-form-group">
+                                {{ form_label(form.titre, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.titre, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Magnifique BMW Serie 3 en excellent état'}}) }}
+                                <small class="neo-form-help">
+                                    <i class="fas fa-lightbulb me-1"></i>
+                                    Un titre accrocheur augmente les chances de vente
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="neo-form-group">
+                                {{ form_label(form.voiture, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.voiture, {'attr': {'class': 'neo-form-control', 'disabled': true}}) }}
+                                <small class="neo-form-help">
+                                    <i class="fas fa-lock me-1"></i>
+                                    Le véhicule ne peut pas être modifié après création de l'annonce
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="neo-form-group">
+                                {{ form_label(form.description, null, {'label_attr': {'class': 'neo-form-label'}}) }}
+                                {{ form_widget(form.description, {'attr': {'class': 'neo-form-control neo-textarea', 'rows': 6, 'placeholder': 'Décrivez votre véhicule en détail : état, équipements, historique d\'entretien, points forts...'}}) }}
+                                <small class="neo-form-help">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Une description détaillée inspire confiance aux acheteurs
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Change Summary -->
+                        <div class="col-12 mt-4">
+                            <div class="neo-alert neo-alert-warning">
+                                <h5 class="neo-heading-5 mb-2">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Information Importante
+                                </h5>
+                                <ul class="neo-body mb-0">
+                                    <li>Les modifications seront sauvegardées immédiatement</li>
+                                    <li>Si votre annonce était validée, elle pourrait nécessiter une nouvelle validation</li>
+                                    <li>Assurez-vous que toutes les informations sont exactes</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="col-12 text-center mt-5">
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                <button type="submit" class="neo-btn neo-btn-primary neo-btn-lg" id="submit-btn">
+                                    <i class="fas fa-save me-2"></i>
+                                    Enregistrer les Modifications
+                                </button>
+                                <a href="{{ path('front_annonce_details', {id: annonce.id}) }}" class="neo-btn neo-btn-secondary neo-btn-lg">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Retour à l'Annonce
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Tips Section -->
+                        <div class="col-12 mt-5">
+                            <div class="neo-alert neo-alert-info">
+                                <h5 class="neo-heading-5 mb-3">
+                                    <i class="fas fa-tips neo-text-primary me-2"></i>
+                                    Conseils pour optimiser votre annonce
+                                </h5>
+                                <ul class="neo-body mb-0">
+                                    <li>Mettez à jour régulièrement votre description</li>
+                                    <li>Mentionnez tous les nouveaux équipements ajoutés</li>
+                                    <li>Ajustez le titre si nécessaire pour plus d'impact</li>
+                                    <li>Soyez transparent sur l'état actuel du véhicule</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Confirmation Script -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const submitBtn = document.getElementById("submit-btn");
+    const form = submitBtn.closest("form");
+
+    submitBtn.addEventListener("click", function (e) {
+        if (form.checkValidity()) {
+            e.preventDefault();
+            
+            // Modern confirmation modal
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'neo-modal-overlay';
+            confirmModal.innerHTML = `
+                <div class="neo-modal">
+                    <div class="neo-modal-header">
+                        <h4 class="neo-heading-4 mb-0">
+                            <i class="fas fa-save neo-text-primary me-2"></i>
+                            Confirmer les Modifications
+                        </h4>
+                    </div>
+                    <div class="neo-modal-body">
+                        <p class="neo-body">Êtes-vous sûr de vouloir enregistrer ces modifications ?</p>
+                        <p class="neo-body-small text-muted">Votre annonce sera mise à jour avec les nouvelles informations.</p>
+                    </div>
+                    <div class="neo-modal-footer">
+                        <button type="button" class="neo-btn neo-btn-secondary" onclick="this.closest('.neo-modal-overlay').remove()">
+                            Annuler
+                        </button>
+                        <button type="button" class="neo-btn neo-btn-primary" onclick="document.querySelector('form').submit()">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmModal);
+        } else {
+            form.reportValidity();
+        }
+    });
+});
+</script>
+{% endblock %}

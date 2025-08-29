@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Sponsorings{% endblock %}
+
+{% block body %}
+<div class="container-fluid p-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3 mb-0 text-gray-800">Gestion des Sponsorings</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('app_sponsoring_dashboard') }}" class="btn btn-success me-2">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ path('app_sponsoring_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Nouveau Sponsoring
+            </a>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <div class="card shadow">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Liste des partenariats</h6>
+            <div class="input-group w-25">
+                <input type="text" class="form-control" id="searchInput" placeholder="Rechercher...">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="sponsoringTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Partenaire</th>
+                            <th>Montant</th>
+                            <th>Période</th>
+                            <th>Type</th>
+                            <th>État</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for sponsoring in pagination %}
+                        <tr>
+                            <td>{{ sponsoring.id }}</td>
+                            <td>
+                                <strong>{{ sponsoring.nomPartenaire }}</strong>
+                            </td>
+                            <td>
+                                <span class="badge bg-success">{{ sponsoring.montant }} DT</span>
+                            </td>
+                            <td>
+                                <small>
+                                    Du: {{ sponsoring.dateDebut|date('d/m/Y') }}<br>
+                                    Au: {{ sponsoring.dateFin|date('d/m/Y') }}
+                                </small>
+                            </td>
+                            <td>{{ sponsoring.typeSponsoring }}</td>
+                            <td>
+                                <span class="badge {% if sponsoring.etat == 'Actif' %}bg-success{% elseif sponsoring.etat == 'Terminé' %}bg-secondary{% else %}bg-danger{% endif %}">
+                                    {{ sponsoring.etat }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ path('app_sponsoring_show', {'id': sponsoring.id}) }}" class="btn btn-info btn-sm" title="Voir les détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_sponsoring_edit', {'id': sponsoring.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ path('app_suivi_sponsoring_by_sponsoring', {'id': sponsoring.id}) }}" class="btn btn-primary btn-sm" title="Voir les suivis">
+                                        <i class="fas fa-tasks"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Aucun sponsoring trouvé
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fonction de recherche
+    const searchInput = document.getElementById('searchInput');
+    const table = document.getElementById('sponsoringTable');
+    const rows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function() {
+        const searchText = searchInput.value.toLowerCase();
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent.toLowerCase();
+                if (cellText.indexOf(searchText) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            row.style.display = found ? '' : 'none';
+        }
+    });
+
+    // Animation pour les messages flash
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.classList.remove('show');
+            setTimeout(() => alert.remove(), 150);
+        }, 3000);
+    });
+});
+</script>
+{% endblock %}
+
+{% endblock %}

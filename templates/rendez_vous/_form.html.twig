@@ -1,0 +1,145 @@
+{# Dans templates/rendez_vous/_form.html.twig #}
+
+{{ form_start(form, {
+    'attr': {
+        'class': 'rdv-form needs-validation',
+        'novalidate': 'novalidate'
+    }
+}) }}
+    {# Section 1 : Informations principales #}
+    <div class="form-section mb-4">
+        <h5 class="section-title mb-3 text-primary">
+            <i class="fas fa-info-circle me-2"></i>Informations principales
+        </h5>
+        
+        <div class="row g-3">
+            {# Champ Date #}
+            <div class="col-md-6">
+                {{ form_label(form.dateRdv, 'Date du rendez-vous*', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                <div class="input-group" id="datetimepicker-container" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                    {{ form_widget(form.dateRdv, {
+                        'attr': {
+                            'class': 'form-control datetime-input',
+                            'placeholder': 'Sélectionnez une date',
+                            'data-td-target': '#datetimepicker-container',
+                            'autocomplete': 'off',
+                            'readonly': 'readonly'   
+                        }
+                    }) }}
+                    <button class="btn btn-outline-primary" type="button" data-td-target="#datetimepicker-container" data-td-toggle="datetimepicker">
+                        <i class="fas fa-calendar-alt me-1"></i> Choisir
+                    </button>
+                </div>
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(form.dateRdv) }}
+                </div>
+            </div>
+
+            {# Champ Type #}
+            <div class="col-md-6">
+                {{ form_label(form.typeRendezVous, 'Type de rendez-vous*', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.typeRendezVous, {
+                    'attr': {
+                        'class': 'form-select'
+                    }
+                }) }}
+                <div class="invalid-feedback d-block">
+                    {{ form_errors(form.typeRendezVous) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Section 2 : Description #}
+    <div class="form-section mb-4">
+        <h5 class="section-title mb-3 text-primary">
+            <i class="fas fa-align-left me-2"></i>Description
+        </h5>
+        
+        <div class="form-floating">
+            {{ form_widget(form.description, {
+                'attr': {
+                    'class': 'form-control',
+                    'style': 'height: 120px',
+                    'placeholder': ' '
+                }
+            }) }}
+            {{ form_label(form.description, 'Description*') }}
+            <div class="invalid-feedback d-block">
+                {{ form_errors(form.description) }}
+            </div>
+        </div>
+    </div>
+
+   {# Section 3 : Contact #}
+<div class="form-section mb-4">
+    <h5 class="section-title mb-3 text-primary">
+        <i class="fas fa-envelope me-2"></i>Coordonnées
+    </h5>
+    
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_label(form.email, 'Adresse email*', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.email, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'exemple@domaine.com',
+                    'type': 'email'
+                }
+            }) }}
+            <div class="invalid-feedback d-block">
+                {{ form_errors(form.email) }}
+            </div>
+            <small class="form-text text-muted"></small>
+        </div>
+    </div>
+</div>
+
+    {# Boutons de soumission #}
+    <div class="form-actions mt-5">
+        <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow">
+            <i class="fas fa-calendar-check me-2"></i>
+            {{ button_label|default('Confirmer le rendez-vous') }}
+        </button>
+        <a href="{{ path('app_rendez_vous_index') }}" class="btn btn-outline-secondary mt-3 w-100">
+            <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+        </a>
+    </div>
+{{ form_end(form) }}
+
+{% block js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation Tempus Dominus
+   const datePicker = new tempusDominus.TempusDominus(
+    document.getElementById('datetimepicker-container'),
+    {
+        localization: {
+            locale: 'fr',
+            format: 'yyyy-MM-dd HH:mm',
+            startOfTheWeek: 1
+        },
+        display: {
+            buttons: {
+                today: { display: true, text: "Aujourd'hui" },
+                clear: { display: true, text: "Effacer" },
+                close: { display: true, text: "Fermer" }
+            }
+        }
+    }
+);
+   
+  
+
+    // Validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>
+{% endblock %}

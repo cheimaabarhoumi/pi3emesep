@@ -1,0 +1,59 @@
+{# Modal form fragment for adding a voiture in admin modal #}
+<div class="modal-header">
+    <h5 class="modal-title">Ajouter une voiture</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'admin-voiture-form'}}) }}
+    <div class="row g-3">
+        <div class="col-md-6">
+            {{ form_label(form.marque) }}
+            {{ form_widget(form.marque, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.modele) }}
+            {{ form_widget(form.modele, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.annee) }}
+            {{ form_widget(form.annee, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.prix) }}
+            {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.puissance_fiscale) }}
+            {{ form_widget(form.puissance_fiscale, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.kilometrage) }}
+            {{ form_widget(form.kilometrage, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.boite_vitesse) }}
+            {{ form_widget(form.boite_vitesse, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.carburant) }}
+            {{ form_widget(form.carburant, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.cylindree) }}
+            {{ form_widget(form.cylindree, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.nombre_portes) }}
+            {{ form_widget(form.nombre_portes, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-12">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+    <button type="button" id="admin-voiture-submit" class="btn btn-primary">Ajouter</button>
+</div>

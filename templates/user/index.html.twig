@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'user/_navbar.html.twig' with {'css_only': true} %}
+    <style>
+        .main-content {
+            padding-top: 80px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+        .table thead th:hover {
+            background-color: #e9ecef;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .btn-link {
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+        .btn-link:hover {
+            text-decoration: none;
+        }
+        .btn-link i {
+            margin-right: 5px;
+        }
+        .sort-icon {
+            margin-left: 5px;
+            transition: transform 0.2s;
+        }
+        .search-box {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .search-box input {
+            padding-right: 30px;
+            border-radius: 20px;
+        }
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+        }
+        #roleFilter {
+            border-radius: 20px;
+        }
+        .table-responsive.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+        .table-responsive {
+            position: relative;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="main-content">
+    {% include 'user/_navbar.html.twig' with {'css_only': false} %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6>Liste des Utilisateurs</h6>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{{ path('app_users_pdf') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-file-pdf"></i> PDF
+                                </a>
+                                <a href="{{ path('app_register') }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus"></i> Ajouter
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="p-4">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="search-box">
+                                        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="roleFilter" class="form-select">
+                                        <option value="">Tous les rôles</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="client">Client</option>
+                                        <option value="prestataire">Prestataire</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="id">
+                                            ID <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="nom">
+                                            Nom <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="prenom">
+                                            Prénom <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="email">
+                                            Email <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="cin">
+                                            CIN <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" data-sort="role">
+                                            Rôle <i class="fas fa-sort sort-icon"></i>
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Statut</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.nom }}</td>
+                                        <td>{{ user.prenom }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.cin }}</td>
+                                        <td>{{ user.role }}</td>
+                                        <td>{{ user.isVerified ? 'Actif' : 'Inactif' }}</td>
+                                        <td>
+                                            <form action="{{ path('app_user_toggle', {id: user.id}) }}" method="POST" style="display:inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ user.id) }}">
+                                                <button type="submit" class="btn btn-sm {{ user.isVerified ? 'btn-danger' : 'btn-success' }}">
+                                                    {{ user.isVerified ? 'Désactiver' : 'Activer' }}
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            let currentSort = 'id';
+            let currentOrder = 'ASC';
+            let searchTimeout = null;
+            let isLoading = false;
+
+            function showLoading() {
+                isLoading = true;
+                $('.table-responsive').addClass('loading');
+                $('.table').css('opacity', '0.5');
+            }
+
+            function hideLoading() {
+                isLoading = false;
+                $('.table-responsive').removeClass('loading');
+                $('.table').css('opacity', '1');
+            }
+
+            function updateTable() {
+                if (isLoading) return;
+                
+                showLoading();
+                $.ajax({
+                    url: '{{ path('app_users_search') }}',  // This should match your route name
+                    method: 'GET',
+                    data: {
+                        q: $('#searchInput').val(),
+                        role: $('#roleFilter').val(),
+                        sort: currentSort,
+                        order: currentOrder
+                    },
+                    success: function(response) {
+                        $('tbody').replaceWith(response);
+                        updateSortIcons();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    },
+                    complete: function() {
+                        hideLoading();
+                    }
+                });
+            }
+
+            function updateSortIcons() {
+                $('.sort-icon').each(function() {
+                    const column = $(this).closest('th').data('sort');
+                    if (column === currentSort) {
+                        $(this)
+                            .removeClass('fa-sort')
+                            .addClass(currentOrder === 'ASC' ? 'fa-sort-up' : 'fa-sort-down');
+                    } else {
+                        $(this)
+                            .removeClass('fa-sort-up fa-sort-down')
+                            .addClass('fa-sort');
+                    }
+                });
+            }
+
+            // Search input handler with debounce
+            $('#searchInput').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(updateTable, 300);
+            });
+
+            // Role filter handler
+            $('#roleFilter').on('change', updateTable);
+
+            // Sorting handlers
+            $('th[data-sort]').on('click', function() {
+                if (isLoading) return;
+
+                const sortBy = $(this).data('sort');
+                if (currentSort === sortBy) {
+                    currentOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC';
+                } else {
+                    currentSort = sortBy;
+                    currentOrder = 'ASC';
+                }
+
+                updateTable();
+            });
+
+            // Initialize sort icons
+            updateSortIcons();
+        });
+    </script>
+{% endblock %}

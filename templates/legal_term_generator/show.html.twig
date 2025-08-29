@@ -1,0 +1,12 @@
+{% extends 'base3.html.twig' %}
+
+{% block title %}Clause générée{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Clause Générée</h1>
+        <div class="alert alert-info">
+            {{ clause|nl2br }}
+        </div>
+    </div>
+{% endblock %}

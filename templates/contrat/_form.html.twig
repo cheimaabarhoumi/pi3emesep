@@ -1,0 +1,39 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+<div class="container-fluid" style="margin-top: 100px;">
+    <div class="row">
+        {% for field in form %}
+            {% set type = field.vars.block_prefixes|last %}
+            {% if field.vars.name == '_token' %}
+                {{ form_widget(field) }}
+            {% elseif field.vars.name == 'renouvellement_automatique' %}
+                <div class="col-12 mb-3">
+                    <div class="form-check">
+                        {{ form_widget(field, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(field, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        {{ form_errors(field) }}
+                    </div>
+                </div>
+            {% elseif field.vars.name == 'clauses' %}
+                {# On l'affiche à part plus bas #}
+            {% else %}
+                <div class="col-md-6 mb-3">
+                    {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(field, {'attr': {'class': type == 'choice' ? 'form-select' : 'form-control'}}) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+
+      

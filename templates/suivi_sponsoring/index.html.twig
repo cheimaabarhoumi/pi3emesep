@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Suivis de Sponsoring{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Liste des Suivis de Sponsoring</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sponsoring</th>
+                            <th>Date de Suivi</th>
+                            <th>État</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for suivi in suivi_sponsorings %}
+                        <tr>
+                            <td>{{ suivi.id }}</td>
+                            <td>{{ suivi.sponsoring.nomPartenaire }}</td>
+                            <td>{{ suivi.dateSuivi|date('d/m/Y') }}</td>
+                            <td>
+                                <span class="badge {% if suivi.etatSuivi == 'En_Cours' %}bg-primary{% elseif suivi.etatSuivi == 'Terminé' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ suivi.etatSuivi }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ path('app_suivi_sponsoring_show', {'id': suivi.id}) }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> Voir
+                                    </a>
+                                    <a href="{{ path('app_suivi_sponsoring_edit', {'id': suivi.id}) }}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">Aucun suivi trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

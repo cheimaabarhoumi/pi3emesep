@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Entretien PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        h1 { color: #3498db; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ccc; }
+        th, td { padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Détails de l'Entretien</h1>
+    <table>
+        <tr>
+            <th>Type</th>
+            <td>{{ entretien.typeEntretien }}</td>
+        </tr>
+        <tr>
+            <th>Date Planifiée</th>
+            <td>{{ entretien.datePlanifiee ? entretien.datePlanifiee|date('d/m/Y') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Coût</th>
+            <td>{{ entretien.cout }} €</td>
+        </tr>
+        <tr>
+            <th>Statut</th>
+            <td>{{ entretien.status }}</td>
+        </tr>
+        <tr>
+            <th>Rendez-vous lié</th>
+            <td>
+                {% if entretien.rendezVous %}
+                    RDV N° {{ entretien.rendezVous.id }} - {{ entretien.rendezVous.typeRendezVous }}
+                {% else %}
+                    Aucun
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

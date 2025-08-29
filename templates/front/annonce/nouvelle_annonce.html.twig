@@ -1,0 +1,10 @@
+<h2>Nouvelle annonce disponible !</h2>
+
+<p><strong>Titre :</strong> {{ annonce.titre }}</p>
+<p><strong>Description :</strong> {{ annonce.description }}</p>
+<p><strong>Voiture :</strong> {{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</p>
+<p><strong>Prix :</strong> {{ annonce.voiture.prix ? annonce.voiture.prix ~ ' TND' : 'Non spécifié' }}</p>
+<p><strong>Année :</strong> {{ annonce.voiture.annee }}</p>
+<p><strong>Kilométrage :</strong> {{ annonce.voiture.kilometrage }} km</p>
+
+<p><a href="{{ url('front_annonce_details', {id: annonce.id}) }}">Voir l'annonce</a></p>

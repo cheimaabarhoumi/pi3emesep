@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<main class="main-content mt-0">
+  <section class="min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-4 col-lg-5 col-md-6">
+          <div class="card card-plain shadow-lg">
+            <div class="card-header pb-0 text-left bg-transparent">
+              <h3 class="font-weight-bolder text-info text-gradient">Bienvenue</h3>
+              <p class="mb-0">Connectez-vous avec votre compte</p>
+            </div>
+            <div class="card-body">
+              {% if error %}
+                <div class="alert alert-danger border border-danger rounded text-sm d-flex align-items-center" role="alert">
+                  <i class="fas fa-exclamation-circle me-2"></i>
+                  <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                </div>
+              {% endif %}
+              <form method="post" id="login-form" onsubmit="return validateForm()">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <div class="input-group input-group-outline">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" value="{{ last_username }}" name="email" id="email" class="form-control" placeholder="Email" required autofocus>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Mot de passe</label>
+                  <div class="input-group input-group-outline">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="motdepasse" id="password" class="form-control" placeholder="Mot de passe" required>
+                  </div>
+                </div>
+                <div class="mb-4 d-flex justify-content-center">
+                  <!-- Temporarily disabled reCAPTCHA for testing -->
+                  <!-- <div class="g-recaptcha rounded" data-sitekey="{{ recaptcha_site_key }}" data-callback="enableSubmit"></div> -->
+                </div>
+                <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="test">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="text-center">
+                  <button class="btn bg-gradient-info w-100 mt-3 mb-3 shadow" type="submit" id="submit-button">
+                    <i class="fas fa-sign-in-alt me-1"></i> Se connecter
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer text-center pt-0 px-lg-2 px-1">
+              <p class="mb-2 text-sm mx-auto">
+                <a href="{{ path('app_register') }}" class="text-info text-gradient font-weight-bold">Pas encore de compte ? S’inscrire</a>
+              </p>
+              <p class="mb-0 text-sm mx-auto">
+                <a href="{{ path('app_forgot_password_request') }}" class="text-secondary font-weight-bold">Mot de passe oublié ?</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+  // Temporarily disabled reCAPTCHA validation
+  // function enableSubmit(response) {
+  //   document.getElementById('recaptcha_token').value = response;
+  //   document.getElementById('submit-button').disabled = false;
+  // }
+
+  function validateForm() {
+    // Temporarily disabled reCAPTCHA validation
+    // if (!document.getElementById('recaptcha_token').value) {
+    //   alert('Veuillez compléter le reCAPTCHA pour vous connecter.');
+    //   return false;
+    // }
+    return true;
+  }
+</script>
+{% endblock %}

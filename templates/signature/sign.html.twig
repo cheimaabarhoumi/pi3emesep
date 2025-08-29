@@ -1,0 +1,46 @@
+{% extends 'base3.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Signer Le Contrat</h2>
+
+    <form id="signature-form" method="post" action="{{ path('app_signature', {idContrat: contrat.idContrat}) }}">
+        <div class="text-center">
+            <canvas id="signature-pad" width="500" height="250" style="border:1px solid #ccc; background-color: #fff;"></canvas>
+        </div>
+
+        <input type="hidden" name="base64" id="signature_base64" />
+
+        <div class="mt-3 text-center">
+            <button type="button" id="clear-signature" class="btn btn-secondary me-2">Effacer</button>
+            <button type="button" id="save-signature" class="btn btn-success">Signer</button>
+        </div>
+    </form>
+</div>
+
+{# SignaturePad Script #}
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+<script>
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas, {
+        backgroundColor: 'rgb(255, 255, 255)'
+    });
+
+    // Clear signature
+    document.getElementById('clear-signature').addEventListener('click', function () {
+        signaturePad.clear();
+    });
+
+    // Save signature
+    document.getElementById('save-signature').addEventListener('click', function () {
+        if (signaturePad.isEmpty()) {
+            alert('Veuillez signer avant de sauvegarder.');
+        } else {
+            const dataURL = signaturePad.toDataURL();
+            document.getElementById('signature_base64').value = dataURL;
+            document.getElementById('signature-form').submit();
+        }
+    });
+</script>
+{% endblock %}

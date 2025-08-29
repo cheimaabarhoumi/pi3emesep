@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Sponsoring{% endblock %}
+
+{% block body %}
+<div class="container-fluid p-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-plus-circle me-2"></i>
+                Nouveau Sponsoring
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Informations du sponsoring</h6>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.nomPartenaire, 'Nom du partenaire', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.nomPartenaire, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom du partenaire'}}) }}
+                                    {{ form_errors(form.nomPartenaire, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.montant, 'Montant', {'label_attr': {'class': 'form-label'}}) }}
+                                    <div class="input-group">
+                                        {{ form_widget(form.montant, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le montant'}}) }}
+                                        <span class="input-group-text">DT</span>
+                                    </div>
+                                    {{ form_errors(form.montant, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.dateDebut, 'Date de début', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.dateDebut, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.dateFin, 'Date de fin', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.dateFin, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.typeSponsoring, 'Type de sponsoring', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.typeSponsoring, {'attr': {'class': 'form-control', 'placeholder': 'Type de sponsoring'}}) }}
+                                    {{ form_errors(form.typeSponsoring, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form_label(form.etat, 'État', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.etat, {'attr': {'class': 'form-select'}}) }}
+                                    {{ form_errors(form.etat, {'attr': {'class': 'form-text text-danger'}}) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <a href="{{ path('app_sponsoring_index') }}" class="btn btn-secondary me-2">
+                                <i class="fas fa-times me-1"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Créer le sponsoring
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-info-circle me-1"></i> Guide
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-0">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-lightbulb me-1"></i> Conseils
+                        </h6>
+                        <hr>
+                        <ul class="mb-0 ps-3">
+                            <li>Remplissez tous les champs obligatoires</li>
+                            <li>Le montant doit être un nombre positif</li>
+                            <li>La date de fin doit être postérieure à la date de début</li>
+                            <li>Choisissez l'état initial du sponsoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validation de la date de fin
+    const dateDebut = document.querySelector('#sponsoring_dateDebut');
+    const dateFin = document.querySelector('#sponsoring_dateFin');
+
+    if (dateDebut && dateFin) {
+        dateFin.addEventListener('change', function() {
+            if (dateDebut.value && dateFin.value && dateDebut.value > dateFin.value) {
+                dateFin.setCustomValidity('La date de fin doit être postérieure à la date de début');
+            } else {
+                dateFin.setCustomValidity('');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% endblock %}

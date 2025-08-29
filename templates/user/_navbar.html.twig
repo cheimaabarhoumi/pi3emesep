@@ -1,0 +1,173 @@
+{% if css_only is defined and css_only %}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Rufina:400,700" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/linearicons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootsnav.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
+{% else %}
+    <!-- Navigation -->
+    <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+        <div class="container">
+            <!-- Start Header Navigation -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="{{ path('app_home') }}">CARVILLA</a>
+            </div><!--/.navbar-header-->
+            <!-- End Header Navigation -->
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                <ul class="nav navbar-nav" data-in="fadeInDown" data-out="fadeOutUp">
+                    <li class="scroll {% if app.request.get('_route') == 'app_home' %}active{% endif %}">
+                        <a href="{{ path('app_home') }}">Accueil</a>
+                    </li>
+                    <li class="scroll {% if app.request.get('_route') == 'app_users' %}active{% endif %}">
+                        <a href="{{ path('app_users') }}">Utilisateurs</a>
+                    </li>
+                    <li class="scroll {% if app.request.get('_route') == 'app_profile' %}active{% endif %}">
+                        <a href="{{ path('app_profile') }}">Mon Profil</a>
+                    </li>
+                    {% if app.user %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="scroll {% if app.request.get('_route') == 'app_register' %}active{% endif %}">
+                                <a href="{{ path('app_register') }}">Ajouter Utilisateur</a>
+                            </li>
+                        {% endif %}
+                        <li class="scroll">
+                            <a href="{{ path('app_profile') }}" class="btn btn-primary">
+                                <i class="fa fa-user"></i> Mon Profil
+                            </a>
+                        </li>
+                        <li class="scroll {% if app.request.get('_route') == 'app_sponsoring_new' %}active{% endif %}">
+                            <a href="{{ path('app_sponsoring_new') }}" class="btn btn-info">
+                                <i class="fa fa-star"></i> Sponsoring
+                            </a>
+                        </li>
+                        <li class="scroll {% if app.request.get('_route') == 'app_sponsoring_dashboard' %}active{% endif %}">
+                            <a href="{{ path('app_sponsoring_dashboard') }}" class="btn btn-success">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="scroll">
+                            <a href="{{ path('app_logout') }}" class="btn btn-danger">
+                                <i class="fa fa-sign-out"></i> Déconnexion
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="scroll">
+                            <a href="{{ path('app_login') }}" class="btn btn-success">
+                                <i class="fa fa-sign-in"></i> Connexion
+                            </a>
+                        </li>
+                        <li class="scroll">
+                            <a href="{{ path('app_register') }}" class="btn btn-info">
+                                <i class="fa fa-user-plus"></i> Inscription
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul><!--/.nav -->
+            </div><!-- /.navbar-collapse -->
+        </div><!--/.container-->
+    </nav><!--/nav-->
+    <!-- End Navigation -->
+
+    <style>
+        .navbar.navbar-default.bootsnav {
+            background-color: #000000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 15px 0;
+        }
+        .navbar.navbar-default.bootsnav .navbar-brand {
+            color: #ffffff !important;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 0;
+        }
+        .navbar-collapse {
+            text-align: center;
+        }
+        .navbar-nav {
+            display: inline-flex;
+            float: none;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            margin: 0 auto;
+        }
+        .navbar-nav li {
+            float: none;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar-nav li a {
+            padding: 15px 20px;
+            display: inline-block;
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+        .navbar-nav li a:hover,
+        .navbar-nav li a:focus {
+            color: #ffffff !important;
+            background-color: transparent !important;
+        }
+        .navbar-nav li.active a {
+            color: #ffffff !important;
+            background-color: transparent !important;
+        }
+        .navbar-nav .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            color: white !important;
+            margin: 0 5px;
+            white-space: nowrap;
+        }
+        .navbar-nav .btn i {
+            margin-right: 5px;
+        }
+        .navbar-nav .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .navbar-toggle {
+            border-color: #ffffff !important;
+            margin-top: 15px;
+        }
+        .navbar-toggle .icon-bar {
+            background-color: #ffffff !important;
+        }
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .navbar-nav li {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+            .navbar-nav .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+            .navbar-collapse {
+                background-color: #000000;
+            }
+        }
+    </style>
+{% endif %} 
