@@ -194,6 +194,13 @@
                     </div>
                     
                     {{ form_end(form) }}
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('.neo-form', {
+    titre: { required: true, minLength: 5, messages: { required: 'Titre requis', minLength: 'Au moins 5 caractères' } },
+    description: { required: true, minLength: 10, messages: { required: 'Description requise', minLength: 'Au moins 10 caractères' } }
+  });
+</script>
                 </div>
             </div>
         </div>

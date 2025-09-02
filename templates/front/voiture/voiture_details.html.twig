@@ -1,200 +1,214 @@
 {% extends 'front/base.html.twig' %}
 
-{% block title %}{{ voiture.marque }} {{ voiture.modele }} - Neo Cars{% endblock %}
+{% block title %}{{ voiture.marque }} {{ voiture.modele }} - NeoCarVilla{% endblock %}
 
 {% block content %}
-<section id="voiture-details" class="py-5" style="background: linear-gradient(135deg, #fafdff 0%, #e9ecef 100%); min-height: 100vh; position: relative;">
-    <!-- Subtle Animated Background Elements -->
-    <div class="animated-bg">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-        <div class="floating-shape shape-4"></div>
+<!-- Enhanced Neo Breadcrumb Section -->
+<section class="neo-section py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 80px; position: relative; overflow: hidden;">
+    <!-- Animated Background Particles -->
+    <div class="particles-bg">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
-
-    <div class="container position-relative">
-        <!-- Enhanced Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-4">
-            <div class="breadcrumb-container">
-                <ol class="breadcrumb mb-0">
+    
+    <div class="neo-container position-relative">
+        <nav aria-label="breadcrumb" class="neo-animate-on-scroll">
+            <div class="modern-breadcrumb p-4 rounded-4">
+                <ol class="breadcrumb mb-0 d-flex align-items-center">
                     <li class="breadcrumb-item">
                         <a href="{{ path('app_voiture') }}" class="breadcrumb-link">
                             <i class="fas fa-home me-2"></i>Voitures
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">
+                    <li class="breadcrumb-item active">
                         <i class="fas fa-car me-2"></i>{{ voiture.marque }} {{ voiture.modele }}
                     </li>
                 </ol>
             </div>
         </nav>
+        
+        <!-- Hero Title Section -->
+        <div class="hero-title-section text-center text-white mt-4 neo-animate-on-scroll" style="animation-delay: 0.2s;">
+            <h1 class="display-3 fw-bold mb-3" style="text-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                {{ voiture.marque }} {{ voiture.modele }}
+            </h1>
+            {% if voiture.prix %}
+                <div class="price-highlight d-inline-block px-4 py-2 rounded-pill" 
+                     style="background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3);">
+                    <span class="h3 mb-0 fw-bold">{{ voiture.prix|number_format(0, ',', ' ') }} TND</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
-        <div class="row">
-            <!-- Main Content -->
+<!-- Enhanced Neo Car Details Section -->
+<section class="neo-section py-5" style="background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);">
+    <div class="neo-container">
+        <div class="row g-5">
+            <!-- Main Image & Gallery -->
             <div class="col-lg-8">
-                <!-- Hero Section -->
-                <div class="voiture-hero mb-4">
-                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden position-relative voiture-details-main-card">
+                <div class="neo-animate-on-scroll">
+                    <!-- Enhanced Main Image Display -->
+                    <div class="image-showcase-card neo-card overflow-hidden mb-5 position-relative">
                         {% if voiture.image %}
-                            <div class="hero-image-container position-relative">
-                                <img src="{{ asset('uploads/' ~ voiture.image) }}"
+                            <div class="position-relative image-container">
+                                <img src="{{ asset('uploads/' ~ voiture.image) }}" 
                                      alt="{{ voiture.marque }} {{ voiture.modele }}"
-                                     class="hero-image">
+                                     class="showcase-image w-100"
+                                     style="height: 550px; object-fit: cover;"
+                                     id="mainCarImage">
                                 
-                                <!-- Enhanced Floating Badges -->
-                                {% if voiture.prix %}
-                                    <div class="floating-badge price-badge">
-                                        <div class="badge-content price-content">
-                                            <i class="fas fa-tag me-2"></i>
-                                            <span class="price-amount">{{ voiture.prix }}</span>
-                                            <small class="currency">TND</small>
-                                        </div>
-                                    </div>
-                                {% endif %}
+                                <!-- Enhanced Status Badges -->
+                                <div class="position-absolute top-0 start-0 m-4 badge-container">
+                                    <span class="status-badge available-badge">
+                                        <i class="fas fa-check-circle me-2"></i>Disponible
+                                    </span>
+                                </div>
                                 
-                                {% if voiture.annee %}
-                                    <div class="floating-badge year-badge">
-                                        <div class="badge-content year-content">
-                                            <i class="fas fa-calendar me-2"></i>
-                                            {{ voiture.annee }}
-                                        </div>
-                                    </div>
-                                {% endif %}
-
-                                <!-- Premium Badge -->
+                                <!-- Enhanced Premium Badge -->
                                 {% if voiture.prix and voiture.prix > 50000 %}
-                                    <div class="premium-badge">
-                                        <i class="fas fa-crown me-2"></i>
-                                        <span>Premium</span>
+                                    <div class="position-absolute top-0 end-0 m-4">
+                                        <span class="premium-badge-enhanced">
+                                            <i class="fas fa-crown me-2"></i>Premium
+                                        </span>
                                     </div>
                                 {% endif %}
+                                
+                                <!-- Enhanced Zoom Overlay -->
+                                <div class="zoom-overlay-enhanced position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <div class="zoom-button">
+                                        <i class="fas fa-search-plus fa-2x"></i>
+                                        <span class="d-block mt-2">Cliquer pour agrandir</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Image Counter -->
+                                <div class="position-absolute bottom-0 end-0 m-4">
+                                    <span class="image-counter">
+                                        <i class="fas fa-images me-2"></i>1 / 1
+                                    </span>
+                                </div>
                             </div>
                         {% else %}
-                            <div class="no-image-hero d-flex align-items-center justify-content-center">
+                            <div class="no-image-placeholder w-100 d-flex align-items-center justify-content-center" 
+                                 style="height: 550px;">
                                 <div class="text-center">
-                                    <div class="no-image-icon mb-3">
-                                        <i class="fas fa-car fa-5x text-muted"></i>
+                                    <div class="no-image-icon-enhanced mb-4">
+                                        <i class="fas fa-car fa-6x"></i>
                                     </div>
-                                    <h4 class="text-muted">Aucune image disponible</h4>
+                                    <h4 class="text-muted mb-2">Aucune image disponible</h4>
+                                    <p class="text-muted mb-0">L'image sera ajoutée prochainement</p>
                                 </div>
                             </div>
                         {% endif %}
-                        
-                        <!-- Enhanced Hero Info -->
-                        <div class="hero-info p-4" style="background: linear-gradient(135deg, #fafdff 0%, #e9ecef 100%); color: #23272f; border-top: 1px solid #e9ecef;">
-                            <div class="row align-items-center">
-                                <div class="col-md-8">
-                                    <h1 class="display-4 fw-bold mb-2" style="color: #23272f; text-shadow: 0 2px 8px rgba(0,0,0,0.07);">
-                                        {{ voiture.marque }} {{ voiture.modele }}
-                                    </h1>
-                                    <p class="lead text-secondary mb-0" style="font-size: 1.15rem;">
-                                        {% if voiture.annee %}Année {{ voiture.annee }}{% endif %}
-                                        {% if voiture.kilometrage %} • {{ voiture.kilometrage }} km{% endif %}
-                                        {% if voiture.puissanceFiscale %} • {{ voiture.puissanceFiscale }} CV{% endif %}
-                                    </p>
-                                </div>
-                                <div class="col-md-4 text-md-end">
-                                    <div class="voiture-actions d-flex flex-column flex-md-row gap-2 mt-auto">
-                                        <a href="{{ path('edit_voiture', {id: voiture.id}) }}" 
-                                           class="btn btn-warning btn-sm w-100 action-btn d-flex align-items-center justify-content-center gap-1">
-                                            <i class="fas fa-edit"></i>Modifier
-                                        </a>
-                                        <form method="post" action="{{ path('voiture_delete', {id: voiture.id}) }}" 
-                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette voiture ?');" 
-                                              class="d-inline w-100">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ voiture.id) }}">
-                                            <button class="btn btn-danger btn-sm w-100 action-btn d-flex align-items-center justify-content-center gap-1" type="submit">
-                                                <i class="fas fa-trash"></i>Supprimer
-                                            </button>
-                                        </form>
-                                        <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" 
-                                           class="btn btn-success btn-sm action-btn w-100 d-flex align-items-center justify-content-center gap-1">
-                                            <i class="fas fa-plus"></i>Créer une annonce
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-
-                <!-- Enhanced Specifications Grid -->
-                <div class="specifications-section mb-4">
-                    <div class="card border-0 shadow-lg rounded-4">
-                        <div class="card-header bg-white text-primary rounded-top-4" style="border-bottom: 1.5px solid #e9ecef;">
-                            <h3 class="h4 mb-0" style="font-weight:700;">
-                                <i class="fas fa-cogs me-2"></i>Spécifications techniques
-                            </h3>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row g-4">
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-primary-subtle">
-                                            <i class="fas fa-tachometer-alt text-primary"></i>
+                    
+                    <!-- Enhanced Vehicle Info Cards -->
+                    <div class="vehicle-info-grid mb-5">
+                        <div class="row g-4">
+                            <!-- Main Info Card -->
+                            <div class="col-12">
+                                <div class="main-info-card neo-card p-4">
+                                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start">
+                                        <div class="vehicle-title-section flex-grow-1">
+                                            <div class="brand-model-badge mb-3">
+                                                <span class="brand-badge">{{ voiture.marque }}</span>
+                                                <span class="model-badge">{{ voiture.modele }}</span>
+                                            </div>
+                                            <p class="vehicle-specs mb-0">
+                                                {% if voiture.annee %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-calendar text-primary me-2"></i>
+                                                        <strong>{{ voiture.annee }}</strong>
+                                                    </span>
+                                                {% endif %}
+                                                {% if voiture.kilometrage %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-tachometer-alt text-warning me-2"></i>
+                                                        <strong>{{ voiture.kilometrage|number_format(0, ',', ' ') }} km</strong>
+                                                    </span>
+                                                {% endif %}
+                                                {% if voiture.puissanceFiscale %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-bolt text-success me-2"></i>
+                                                        <strong>{{ voiture.puissanceFiscale }} CV</strong>
+                                                    </span>
+                                                {% endif %}
+                                            </p>
                                         </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Kilométrage</h6>
-                                            <p class="spec-value">{{ voiture.kilometrage ? voiture.kilometrage ~ ' km' : 'Non spécifié' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-warning-subtle">
-                                            <i class="fas fa-bolt text-warning"></i>
-                                        </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Puissance fiscale</h6>
-                                            <p class="spec-value">{{ voiture.puissanceFiscale ? voiture.puissanceFiscale ~ ' CV' : 'Non spécifié' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-info-subtle">
-                                            <i class="fas fa-cog text-info"></i>
-                                        </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Boîte de vitesse</h6>
-                                            <p class="spec-value">{{ voiture.boiteVitesse ?: 'Non spécifié' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-success-subtle">
-                                            <i class="fas fa-gas-pump text-success"></i>
-                                        </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Carburant</h6>
-                                            <p class="spec-value">{{ voiture.carburant ?: 'Non spécifié' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-danger-subtle">
-                                            <i class="fas fa-industry text-danger"></i>
-                                        </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Cylindrée</h6>
-                                            <p class="spec-value">{{ voiture.cylindree ?: 'Non spécifié' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="spec-item enhanced d-flex align-items-center gap-3" style="background: #fafdff;">
-                                        <div class="spec-icon bg-light border border-2 border-secondary-subtle">
-                                            <i class="fas fa-door-open text-secondary"></i>
-                                        </div>
-                                        <div class="spec-content">
-                                            <h6 class="spec-label">Nombre de portes</h6>
-                                            <p class="spec-value">{{ voiture.nombrePortes ?: 'Non spécifié' }}</p>
-                                        </div>
+                                        {% if not voiture.prix %}
+                                            <div class="price-section text-lg-end mt-3 mt-lg-0">
+                                                <div class="price-on-demand">
+                                                    <span class="price-label">Prix sur demande</span>
+                                                    <button class="contact-price-btn neo-btn neo-btn-primary mt-2">
+                                                        <i class="fas fa-phone me-2"></i>Demander le prix
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- Enhanced Quick Specs Grid -->
+                        <div class="row g-3 mt-2">
+                            {% if voiture.annee %}
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Année</span>
+                                            <span class="spec-value">{{ voiture.annee }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if voiture.kilometrage %}
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-warning">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Kilométrage</span>
+                                            <span class="spec-value">{{ voiture.kilometrage|number_format(0, ',', ' ') }} km</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if voiture.carburant %}
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-success">
+                                            <i class="fas fa-gas-pump"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Carburant</span>
+                                            <span class="spec-value">{{ voiture.carburant }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if voiture.boiteVitesse %}
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-info">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Transmission</span>
+                                            <span class="spec-value">{{ voiture.boiteVitesse }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -202,73 +216,122 @@
 
             <!-- Enhanced Sidebar -->
             <div class="col-lg-4">
-                <!-- Quick Actions Card -->
-                <div class="quick-actions-card mb-4">
-                    <div class="card border-0 shadow-lg rounded-4">
-                        <div class="card-header bg-white text-primary rounded-top-4" style="border-bottom: 1.5px solid #e9ecef;">
-                            <h4 class="h5 mb-0">
-                                <i class="fas fa-tools me-2"></i>Actions rapides
-                            </h4>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="d-grid gap-2">
-                                <a href="{{ path('edit_voiture', { id: voiture.id }) }}" class="btn btn-action btn-lg w-100">
-                                    <i class="fas fa-edit me-2"></i>Modifier
-                                </a>
-                                <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" class="btn btn-action btn-lg w-100 btn-success">
-                                    <i class="fas fa-plus me-2"></i>Créer une annonce
-                                </a>
-                                <form action="{{ path('voiture_delete', {id: voiture.id}) }}" method="post" class="w-100" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette voiture ?');">
-                                    <button type="submit" class="btn btn-action btn-lg w-100 btn-delete">
-                                        <i class="fas fa-trash me-2"></i>Supprimer
-                                    </button>
-                                </form>
-                                <a href="{{ path('app_voiture') }}" class="btn btn-action btn-lg w-100 btn-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Retourner
+                <div class="neo-animate-on-scroll" style="animation-delay: 0.2s;">
+                    <!-- Enhanced Create Announcement Card -->
+                    <div class="announcement-card neo-card mb-4 overflow-hidden position-relative">
+                        <!-- Gradient Background -->
+                        <div class="gradient-bg"></div>
+                        
+                        <div class="card-content p-4 position-relative">
+                            <div class="text-center text-white mb-4">
+                                <div class="announcement-icon mb-3">
+                                    <i class="fas fa-bullhorn fa-2x"></i>
+                                </div>
+                                <h3 class="h4 mb-2 fw-bold">Créer une Annonce</h3>
+                                <p class="small mb-0 opacity-90">
+                                    Transformez votre véhicule en annonce professionnelle
+                                </p>
+                            </div>
+                            
+                            <div class="announcement-features mb-4">
+                                <div class="feature-item d-flex align-items-center mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="small text-white">Publication instantanée</span>
+                                </div>
+                                <div class="feature-item d-flex align-items-center mb-2">
+                                    <i class="fas fa-eye text-info me-2"></i>
+                                    <span class="small text-white">Visibilité maximale</span>
+                                </div>
+                                <div class="feature-item d-flex align-items-center">
+                                    <i class="fas fa-shield-alt text-warning me-2"></i>
+                                    <span class="small text-white">Publication sécurisée</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <a href="{{ path('create_annonce', {voitureId: voiture.id}) }}" 
+                                   class="announcement-btn">
+                                    <i class="fas fa-plus me-2"></i>Créer l'Annonce
                                 </a>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Enhanced Vehicle Summary Card -->
-                <div class="vehicle-summary-card">
-                    <div class="card border-0 shadow-lg rounded-4">
-                        <div class="card-header bg-gradient-info text-white rounded-top-4">
-                            <h4 class="h5 mb-0">
-                                <i class="fas fa-info-circle me-2"></i>Résumé du véhicule
+                    <!-- Enhanced Quick Actions Card -->
+                    <div class="quick-actions-card neo-card mb-4">
+                        <div class="card-header-enhanced p-4 border-bottom">
+                            <h4 class="h5 mb-0 d-flex align-items-center">
+                                <i class="fas fa-bolt text-warning me-2"></i>Actions Rapides
                             </h4>
                         </div>
                         <div class="card-body p-4">
-                            <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                                <span class="summary-label">
-                                    <i class="fas fa-car me-2 text-primary"></i>Marque
-                                </span>
-                                <span class="summary-value fw-bold">{{ voiture.marque }}</span>
+                            <div class="action-buttons-grid">
+                                <button onclick="printVehicleInfo()" class="action-btn-enhanced">
+                                    <i class="fas fa-print"></i>
+                                    <span>Imprimer</span>
+                                </button>
+                                <button onclick="shareVehicle()" class="action-btn-enhanced">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>Partager</span>
+                                </button>
+                                <button onclick="saveToFavorites()" class="action-btn-enhanced">
+                                    <i class="fas fa-heart"></i>
+                                    <span>Favoris</span>
+                                </button>
+                                <a href="{{ path('app_voiture') }}" class="action-btn-enhanced">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Retour</span>
+                                </a>
                             </div>
-                            <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                                <span class="summary-label">
-                                    <i class="fas fa-tag me-2 text-info"></i>Modèle
-                                </span>
-                                <span class="summary-value fw-bold">{{ voiture.modele }}</span>
-                            </div>
-                            <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                                <span class="summary-label">
-                                    <i class="fas fa-calendar me-2 text-warning"></i>Année
-                                </span>
-                                <span class="summary-value fw-bold">{{ voiture.annee ?: 'Non spécifié' }}</span>
-                            </div>
-                            <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                                <span class="summary-label">
-                                    <i class="fas fa-tag me-2 text-success"></i>Prix
-                                </span>
-                                <span class="summary-value fw-bold text-primary">{{ voiture.prix ? voiture.prix ~ ' TND' : 'Non spécifié' }}</span>
-                            </div>
-                            <div class="summary-item d-flex justify-content-between align-items-center">
-                                <span class="summary-label">
-                                    <i class="fas fa-tachometer-alt me-2 text-danger"></i>Kilométrage
-                                </span>
-                                <span class="summary-value fw-bold">{{ voiture.kilometrage ? voiture.kilometrage ~ ' km' : 'Non spécifié' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Vehicle Summary Card -->
+                    <div class="vehicle-summary-card neo-card">
+                        <div class="summary-header p-4 border-bottom">
+                            <h4 class="h5 mb-0 d-flex align-items-center">
+                                <i class="fas fa-info-circle text-primary me-2"></i>Résumé du Véhicule
+                            </h4>
+                        </div>
+                        <div class="summary-content p-4">
+                            <div class="summary-items">
+                                <div class="summary-row">
+                                    <div class="summary-label">
+                                        <i class="fas fa-car text-primary"></i>
+                                        <span>Marque</span>
+                                    </div>
+                                    <div class="summary-value">{{ voiture.marque }}</div>
+                                </div>
+                                <div class="summary-row">
+                                    <div class="summary-label">
+                                        <i class="fas fa-tag text-info"></i>
+                                        <span>Modèle</span>
+                                    </div>
+                                    <div class="summary-value">{{ voiture.modele }}</div>
+                                </div>
+                                <div class="summary-row">
+                                    <div class="summary-label">
+                                        <i class="fas fa-calendar text-warning"></i>
+                                        <span>Année</span>
+                                    </div>
+                                    <div class="summary-value">{{ voiture.annee ?: 'Non spécifié' }}</div>
+                                </div>
+                                {% if voiture.prix %}
+                                    <div class="summary-row highlight">
+                                        <div class="summary-label">
+                                            <i class="fas fa-tag text-success"></i>
+                                            <span>Prix</span>
+                                        </div>
+                                        <div class="summary-value price">{{ voiture.prix|number_format(0, ',', ' ') }} TND</div>
+                                    </div>
+                                {% endif %}
+                                <div class="summary-row">
+                                    <div class="summary-label">
+                                        <i class="fas fa-tachometer-alt text-danger"></i>
+                                        <span>Kilométrage</span>
+                                    </div>
+                                    <div class="summary-value">{{ voiture.kilometrage ? voiture.kilometrage|number_format(0, ',', ' ') ~ ' km' : 'Non spécifié' }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,687 +341,1082 @@
     </div>
 </section>
 
-<style>
-.btn-action {
-    background: #fafdff;
-    color: #23272f;
-    border: 1.5px solid #e9ecef;
-    border-radius: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    box-shadow: 0 2px 8px rgba(36, 37, 42, 0.06);
-    transition: box-shadow 0.25s, transform 0.25s, background 0.25s, color 0.25s, border-color 0.25s;
-    position: relative;
-    overflow: hidden;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-.btn-action:active,
-.btn-action:focus {
-    outline: 2px solid #4e8cff;
-}
-.btn-action:hover {
-    background: #e9ecef;
-    color: #23272f;
-    border-color: #4e8cff;
-    box-shadow: 0 8px 24px #4e8cff22;
-    transform: translateY(-2px) scale(1.02);
-}
-.btn-action.btn-success {
-    background: #e6f9f0;
-    color: #198754;
-    border-color: #b2f7ef;
-}
-.btn-action.btn-success:hover {
-    background: #b2f7ef;
-    color: #198754;
-    border-color: #20c997;
-}
-.btn-action.btn-delete {
-    background: #fff0f0;
-    color: #dc3545;
-    border-color: #f5c2c7;
-}
-.btn-action.btn-delete:hover {
-    background: #f5c2c7;
-    color: #fff;
-    border-color: #dc3545;
-}
-.btn-action.btn-secondary {
-    background: #f5f7fa;
-    color: #495057;
-    border-color: #e9ecef;
-}
-.btn-action.btn-secondary:hover {
-    background: #e9ecef;
-    color: #23272f;
-    border-color: #adb5bd;
-}
-.btn-futuristic {
-    background: linear-gradient(90deg,#00c3ff,#ffff1c);
-    color: #23272f;
-    border: none;
-    border-radius: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    box-shadow: 0 2px 16px rgba(0,255,255,0.08), 0 1.5px 4px rgba(32,201,151,0.04);
-    transition: box-shadow 0.35s, transform 0.35s, background 0.35s, color 0.35s;
-    position: relative;
-    overflow: hidden;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    outline: none;
-}
-.btn-futuristic:active,
-.btn-futuristic:focus {
-    outline: 2px solid #00c3ff;
-}
-.btn-futuristic:hover {
-    background: linear-gradient(90deg,#ffff1c,#00c3ff);
-    color: #23272f;
-    box-shadow: 0 8px 32px #00c3ff44;
-    transform: translateY(-3px) scale(1.03);
-}
-/* Subtle Animated Background */
-.animated-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.floating-shape {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 50%;
-    animation: float 15s ease-in-out infinite;
-}
-
-.shape-1 {
-    width: 140px;
-    height: 140px;
-    top: 15%;
-    left: 8%;
-    animation-delay: 0s;
-}
-
-.shape-2 {
-    width: 200px;
-    height: 200px;
-    top: 55%;
-    right: 12%;
-    animation-delay: 5s;
-}
-
-.shape-3 {
-    width: 120px;
-    height: 120px;
-    bottom: 25%;
-    left: 15%;
-    animation-delay: 10s;
-}
-
-.shape-4 {
-    width: 160px;
-    height: 160px;
-    top: 75%;
-    left: 60%;
-    animation-delay: 7s;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.04; }
-    50% { transform: translateY(-20px) rotate(90deg) scale(1.05); opacity: 0.08; }
-}
-
-/* Enhanced Breadcrumb */
-.breadcrumb-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 1.5rem;
-    border-radius: 1.5rem;
-    backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s ease;
-}
-
-.breadcrumb-container:hover {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.12);
-}
-
-.breadcrumb {
-    background: transparent;
-    margin: 0;
-    padding: 0;
-}
-
-.breadcrumb-item a {
-    color: #667eea;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.4s ease;
-    position: relative;
-}
-
-.breadcrumb-item a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    transition: width 0.4s ease;
-}
-
-.breadcrumb-item a:hover::after {
-    width: 100%;
-}
-
-.breadcrumb-item a:hover {
-    color: #764ba2;
-    transform: translateX(8px);
-}
-
-.breadcrumb-item.active {
-    color: #6c757d;
-}
-
-/* Enhanced Hero Section */
-.voiture-hero {
-    position: relative;
-}
-
-.hero-image-container {
-    height: 500px;
-    overflow: hidden;
-    position: relative;
-}
-
-.hero-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.voiture-hero:hover .hero-image {
-    transform: scale(1.08);
-}
-
-.no-image-hero {
-    height: 500px;
-    background: linear-gradient(45deg, #f8f9fa 25%, #e9ecef 25%, #e9ecef 50%, #f8f9fa 50%, #f8f9fa 75%, #e9ecef 75%, #e9ecef);
-    background-size: 30px 30px;
-    animation: move 35s linear infinite;
-}
-
-@keyframes move {
-    0% { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
-
-.no-image-icon {
-    animation: bounce 3.5s infinite;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-18px); }
-    60% { transform: translateY(-9px); }
-}
-
-/* Enhanced Floating Badges */
-.floating-badge {
-    position: absolute;
-    z-index: 15;
-}
-
-.price-badge {
-    top: 30px;
-    right: 30px;
-}
-
-.year-badge {
-    top: 30px;
-    right: 30px;
-    margin-top: 90px;
-}
-
-.badge-content {
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 1.2rem 2rem;
-    border-radius: 3.5rem;
-    backdrop-filter: blur(30px);
-    font-weight: 700;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-}
-
-.badge-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.8s;
-}
-
-.badge-content:hover::before {
-    left: 100%;
-}
-
-.badge-content:hover {
-    transform: scale(1.1);
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
-}
-
-.price-content {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(40, 167, 69, 0.8));
-    border-color: rgba(40, 167, 69, 0.6);
-}
-
-.year-content {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(255, 193, 7, 0.8));
-    border-color: rgba(255, 193, 7, 0.6);
-}
-
-.price-amount {
-    font-size: 1.3rem;
-    color: #ffd700;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-.currency {
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-/* Premium Badge */
-.premium-badge {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
-    color: #8b4513;
-    padding: 1rem 2rem;
-    border-radius: 3.5rem;
-    font-weight: bold;
-    font-size: 0.95rem;
-    z-index: 15;
-    box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
-    animation: premiumPulse 4s infinite;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    position: relative;
-    overflow: hidden;
-}
-
-.premium-badge::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.8s;
-}
-
-.premium-badge:hover::before {
-    left: 100%;
-}
-
-@keyframes premiumPulse {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(4deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-
-/* Enhanced Hero Info */
-.hero-info {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-info::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.08"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.08"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.08"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.08"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.4;
-}
-
-.hero-info > * {
-    position: relative;
-    z-index: 2;
-}
-
-/* Enhanced Action Buttons */
-.action-btn {
-    border-radius: 1.2rem;
-    font-weight: 700;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: none;
-    position: relative;
-    overflow: hidden;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    padding: 1rem 1.5rem;
-}
-
-.action-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.8s;
-}
-
-.action-btn:hover::before {
-    left: 100%;
-}
-
-.action-btn:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-}
-
-/* Enhanced Specifications */
-.specifications-section .card-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    position: relative;
-    overflow: hidden;
-}
-
-.specifications-section .card-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12.5" cy="12.5" r="1" fill="white" opacity="0.15"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
-}
-
-.spec-item.enhanced {
-    display: flex;
-    align-items: center;
-    padding: 2rem;
-    background: linear-gradient(135deg, #f8f9fa, #f1f3f4);
-    border-radius: 1.5rem;
-    border: 2px solid #e9ecef;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    position: relative;
-    overflow: hidden;
-}
-
-.spec-item.enhanced::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-    transition: left 0.8s;
-}
-
-.spec-item.enhanced:hover::before {
-    left: 100%;
-}
-
-.spec-item.enhanced:hover {
-    background: linear-gradient(135deg, #e9ecef, #dee2e6);
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-    border-color: #667eea;
-}
-
-.spec-icon {
-    width: 70px;
-    height: 70px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 2rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s ease;
-    border: 3px solid #f8f9fa;
-}
-
-.spec-item.enhanced:hover .spec-icon {
-    transform: scale(1.15) rotate(8deg);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.spec-icon i {
-    font-size: 1.8rem;
-}
-
-.spec-label {
-    color: #6c757d;
-    margin-bottom: 0.6rem;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    font-weight: 600;
-}
-
-.spec-value {
-    color: #495057;
-    margin-bottom: 0;
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-/* Enhanced Sidebar Cards */
-.quick-actions-card .card-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-}
-
-.vehicle-summary-card .card-header {
-    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
-}
-
-.action-btn-outline {
-    border-radius: 1.2rem;
-    font-weight: 600;
-    transition: all 0.4s ease;
-    border-width: 2px;
-    position: relative;
-    overflow: hidden;
-    padding: 0.8rem 1.2rem;
-}
-
-.action-btn-outline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-}
-
-.action-btn-outline:hover::before {
-    left: 100%;
-}
-
-.action-btn-outline:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-.summary-item {
-    padding: 1.2rem 0;
-    border-bottom: 2px solid #f8f9fa;
-    transition: all 0.4s ease;
-    position: relative;
-}
-
-.summary-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    transition: width 0.4s ease;
-}
-
-.summary-item:hover::before {
-    width: 100%;
-}
-
-.summary-item:hover {
-    background: #f8f9fa;
-    padding-left: 1.2rem;
-    padding-right: 1.2rem;
-    margin-left: -1.2rem;
-    margin-right: -1.2rem;
-    border-radius: 0.8rem;
-}
-
-.summary-item:last-child {
-    border-bottom: none;
-}
-
-.summary-label {
-    color: #6c757d;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.summary-value {
-    color: #495057;
-    font-size: 1.05rem;
-}
-
-/* Enhanced Cards */
-.card {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(35px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
-    transform: scaleX(0);
-    transition: transform 0.6s ease;
-}
-
-.card:hover::before {
-    transform: scaleX(1);
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    border-color: rgba(102, 126, 234, 0.4);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-image-container,
-    .no-image-hero {
-        height: 400px;
-    }
+<!-- Neo Detailed Specifications Section -->
+<section class="neo-section" style="background: var(--neo-gray-50);">
+    <div class="neo-container">
+        <div class="row g-5">
+            <!-- Technical Specifications -->
+            <div class="col-lg-8">
+                <div class="neo-animate-on-scroll">
+                    <div class="neo-card p-4 mb-4">
+                        <h3 class="neo-heading-2 mb-4">
+                            <i class="fas fa-cog text-primary me-2"></i>Spécifications Techniques
+                        </h3>
+                        <div class="row g-4">
+                            {% if voiture.puissanceFiscale %}
+                                <div class="col-md-6">
+                                    <div class="spec-item d-flex align-items-center gap-3">
+                                        <div class="spec-icon bg-warning">
+                                            <i class="fas fa-bolt text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="spec-label">Puissance Fiscale</div>
+                                            <div class="spec-value">{{ voiture.puissanceFiscale }} CV</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if voiture.cylindree %}
+                                <div class="col-md-6">
+                                    <div class="spec-item d-flex align-items-center gap-3">
+                                        <div class="spec-icon bg-danger">
+                                            <i class="fas fa-industry text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="spec-label">Cylindrée</div>
+                                            <div class="spec-value">{{ voiture.cylindree }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if voiture.nombrePortes %}
+                                <div class="col-md-6">
+                                    <div class="spec-item d-flex align-items-center gap-3">
+                                        <div class="spec-icon bg-secondary">
+                                            <i class="fas fa-door-open text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="spec-label">Nombre de Portes</div>
+                                            <div class="spec-value">{{ voiture.nombrePortes }} portes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="col-md-6">
+                                <div class="spec-item d-flex align-items-center gap-3">
+                                    <div class="spec-icon bg-primary">
+                                        <i class="fas fa-info-circle text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="spec-label">État Général</div>
+                                        <div class="spec-value">Excellent</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle History Section -->
+                    <div class="neo-card p-4">
+                        <h3 class="neo-heading-2 mb-4">
+                            <i class="fas fa-history text-primary me-2"></i>Historique du Véhicule
+                        </h3>
+                        <div class="neo-body text-muted" style="line-height: 1.8;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Ce véhicule {{ voiture.marque }} {{ voiture.modele }} 
+                                {% if voiture.annee %}de {{ voiture.annee }}{% endif %} 
+                                est en excellente condition. 
+                                {% if voiture.kilometrage %}Avec {{ voiture.kilometrage|number_format(0, ',', ' ') }} km au compteur{% endif %}, 
+                                il représente une excellente opportunité d'achat.
+                            </div>
+                            <p>
+                                <strong>Points forts du véhicule :</strong>
+                            </p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Entretien régulier effectué</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Aucun accident déclaré</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Carnet d'entretien disponible</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Contrôle technique à jour</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Garantie constructeur disponible</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="col-lg-4">
+                <div class="neo-animate-on-scroll" style="animation-delay: 0.3s;">
+                    <!-- Features & Equipment -->
+                    <div class="neo-card p-4 mb-4">
+                        <h4 class="neo-heading-3 mb-3">
+                            <i class="fas fa-star text-warning me-2"></i>Équipements & Options
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Climatisation automatique</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Système de navigation GPS</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Bluetooth & connectivité</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="neo-body-small">Airbags multiples</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="neo-card p-4">
+                        <h4 class="neo-heading-3 mb-3">
+                            <i class="fas fa-phone text-primary me-2"></i>Informations de Contact
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-building text-primary"></i>
+                                    <strong>NeoCarVilla</strong>
+                                </div>
+                                <div class="neo-body-small text-muted">Concessionnaire agréé</div>
+                            </div>
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-phone text-success"></i>
+                                    <strong>+216 12 345 678</strong>
+                                </div>
+                                <div class="neo-body-small text-muted">Téléphone direct</div>
+                            </div>
+                            <div class="neo-glass p-3 rounded-3">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <i class="fas fa-envelope text-info"></i>
+                                    <strong>contact@neocarvilla.tn</strong>
+                                </div>
+                                <div class="neo-body-small text-muted">Email professionnel</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Neo Similar Vehicles Section -->
+<section class="neo-section">
+    <div class="neo-container">
+        <div class="text-center mb-5 neo-animate-on-scroll">
+            <h2 class="neo-heading-1 mb-3">Véhicules Similaires</h2>
+            <p class="neo-body-large text-muted">Découvrez d'autres véhicules de la même catégorie</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Similar Vehicle 1 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <div class="w-100 d-flex align-items-center justify-content-center text-muted" 
+                             style="height: 220px; background: var(--neo-gray-100);">
+                            <i class="fas fa-car fa-3x"></i>
+                        </div>
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">{{ voiture.marque }} Modèle Similaire</h4>
+                        <p class="neo-body-small text-muted mb-3">2023 • 20,000 km • Automatique</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">Prix sur demande</span>
+                        </div>
+                        <a href="{{ path('app_voiture') }}" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Vehicle 2 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll" style="animation-delay: 0.2s;">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <div class="w-100 d-flex align-items-center justify-content-center text-muted" 
+                             style="height: 220px; background: var(--neo-gray-100);">
+                            <i class="fas fa-car fa-3x"></i>
+                        </div>
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">Alternative {{ voiture.marque }}</h4>
+                        <p class="neo-body-small text-muted mb-3">2022 • 30,000 km • Manuelle</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">Prix sur demande</span>
+                        </div>
+                        <a href="{{ path('app_voiture') }}" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Similar Vehicle 3 -->
+            <div class="col-lg-4 col-md-6 neo-animate-on-scroll" style="animation-delay: 0.4s;">
+                <div class="neo-card overflow-hidden">
+                    <div class="position-relative">
+                        <div class="w-100 d-flex align-items-center justify-content-center text-muted" 
+                             style="height: 220px; background: var(--neo-gray-100);">
+                            <i class="fas fa-car fa-3x"></i>
+                        </div>
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge" style="background: var(--neo-gradient-success); padding: 0.5rem 1rem;">Disponible</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="neo-heading-3 mb-2">Gamme {{ voiture.marque }}</h4>
+                        <p class="neo-body-small text-muted mb-3">2024 • 10,000 km • Automatique</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="neo-heading-3 text-primary">Prix sur demande</span>
+                        </div>
+                        <a href="{{ path('app_voiture') }}" class="neo-btn neo-btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ path('app_voiture') }}" class="neo-btn neo-btn-secondary" style="padding: 1rem 2rem;">
+                <i class="fas fa-th-large me-2"></i>Voir Tous les Véhicules
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Enhanced Design System */
+        
+        /* Animated Background Particles */
+        .particles-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float-particles 20s infinite linear;
+        }
+        
+        .particle:nth-child(1) {
+            width: 20px;
+            height: 20px;
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        .particle:nth-child(2) {
+            width: 15px;
+            height: 15px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 4s;
+        }
+        
+        .particle:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            top: 80%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+        
+        .particle:nth-child(4) {
+            width: 12px;
+            height: 12px;
+            top: 30%;
+            left: 70%;
+            animation-delay: 12s;
+        }
+        
+        .particle:nth-child(5) {
+            width: 18px;
+            height: 18px;
+            top: 70%;
+            left: 10%;
+            animation-delay: 16s;
+        }
+        
+        @keyframes float-particles {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Enhanced Breadcrumb */
+        .modern-breadcrumb {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-breadcrumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .breadcrumb-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb-link:hover {
+            color: white !important;
+            transform: translateX(5px);
+        }
+        
+        .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Enhanced Image Showcase */
+        .image-showcase-card {
+            border-radius: 20px !important;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+        
+        .showcase-image {
+            transition: transform 0.6s ease;
+        }
+        
+        .image-showcase-card:hover .showcase-image {
+            transform: scale(1.05);
+        }
+        
+        /* Enhanced Badges */
+        .status-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            animation: pulse-badge 2s infinite;
+        }
+        
+        .premium-badge-enhanced {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+        
+        /* Enhanced Zoom Overlay */
+        .zoom-overlay-enhanced {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(30, 58, 138, 0.7));
+            opacity: 0;
+            transition: all 0.4s ease;
+            cursor: zoom-in;
+        }
+        
+        .image-showcase-card:hover .zoom-overlay-enhanced {
+            opacity: 1;
+        }
+        
+        .zoom-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .zoom-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        /* Enhanced Vehicle Info Cards */
+        .main-info-card {
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .main-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+        
+        .brand-model-badge {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .brand-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .model-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+        }
+        
+        .vehicle-specs .spec-item {
+            display: inline-block;
+            margin-right: 2rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+        
+        /* Enhanced Quick Spec Cards */
+        .quick-spec-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .quick-spec-card:hover::before {
+            left: 100%;
+        }
+        
+        .quick-spec-card:hover {
+            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+        }
+        
+        .spec-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-spec-card:hover .spec-icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .spec-label {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .spec-value {
+            display: block;
+            font-size: 1rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        
+        /* Enhanced Announcement Card */
+        .announcement-card {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 300% 300%;
+            animation: gradient-shift 6s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .announcement-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            animation: icon-bounce 2s infinite;
+        }
+        
+        @keyframes icon-bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .announcement-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea !important;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .announcement-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Enhanced Action Buttons */
+        .action-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .action-btn-enhanced {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-btn-enhanced:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+        
+        .action-btn-enhanced i {
+            font-size: 1.25rem;
+        }
+        
+        /* Enhanced Summary Card */
+        .vehicle-summary-card {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .summary-header {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-bottom: 2px solid #e2e8f0 !important;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .summary-row:hover {
+            background: #f8fafc;
+            margin: 0 -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            border-radius: 12px;
+        }
+        
+        .summary-row.highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 12px;
+            margin: 0 -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .summary-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .summary-value.price {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.1rem;
+        }
+        
+        /* Enhanced Card Headers */
+        .card-header-enhanced {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        /* Price Highlight */
+        .price-highlight {
+            animation: price-glow 3s infinite;
+        }
+        
+        @keyframes price-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+        
+        /* Image Counter */
+        .image-counter {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        /* No Image Placeholder */
+        .no-image-placeholder {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+        }
+        
+        .no-image-icon-enhanced {
+            color: #94a3b8;
+            animation: no-image-pulse 3s infinite;
+        }
+        
+        @keyframes no-image-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Enhanced animations */
+        .neo-animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Breadcrumb styling */
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: var(--neo-gray-400);
+            font-weight: 600;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--neo-primary-dark) !important;
+        }
+        
+        /* Enhanced card shadows */
+        .neo-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .neo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Price styling */
+        .neo-display-2.text-primary {
+            background: var(--neo-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        /* Quick specs cards */
+        .row.g-3 .neo-glass {
+            transition: all 0.3s ease;
+        }
+        
+        .row.g-3 .neo-glass:hover {
+            transform: translateY(-5px);
+            background: var(--neo-white);
+            box-shadow: var(--neo-shadow-lg);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .neo-display-2 {
+                font-size: 2rem !important;
+            }
+            
+            .neo-heading-2 {
+                font-size: 1.5rem !important;
+            }
+            
+            #mainCarImage {
+                height: 300px !important;
+            }
+            
+            .spec-item {
+                padding: 1rem;
+            }
+            
+            .spec-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
     
-    .action-buttons {
-        margin-top: 1rem;
-        text-align: center;
-    }
-    
-    .action-buttons .btn {
-        margin-bottom: 0.5rem;
-        width: 100%;
-    }
-    
-    .floating-badge {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
-        margin: 1rem auto;
-        display: inline-block;
-    }
-    
-    .floating-shape {
-        display: none;
-    }
-    
-    .breadcrumb-container {
-        padding: 1rem;
-    }
-    
-    .spec-item.enhanced {
-        padding: 1.5rem;
-    }
-    
-    .spec-icon {
-        width: 60px;
-        height: 60px;
-        margin-right: 1.5rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero-image-container,
-    .no-image-hero {
-        height: 350px;
-    }
-    
-    .display-4 {
-        font-size: 2.5rem;
-    }
-    
-    .badge-content {
-        padding: 1rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    .premium-badge {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.85rem;
-    }
-}
-</style>
+    <script>
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.neo-animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+        
+        // Enhanced JavaScript functionality
+        
+        // Save to favorites function
+        function saveToFavorites() {
+            const vehicleData = {
+                id: '{{ voiture.id }}',
+                marque: '{{ voiture.marque }}',
+                modele: '{{ voiture.modele }}',
+                prix: '{{ voiture.prix }}',
+                image: '{{ voiture.image }}'
+            };
+            
+            // Get existing favorites
+            let favorites = JSON.parse(localStorage.getItem('vehicleFavorites') || '[]');
+            
+            // Check if already in favorites
+            const existingIndex = favorites.findIndex(fav => fav.id === vehicleData.id);
+            
+            if (existingIndex > -1) {
+                // Remove from favorites
+                favorites.splice(existingIndex, 1);
+                showNotification('Retiré des favoris', 'info');
+                document.querySelector('[onclick="saveToFavorites()"] i').className = 'fas fa-heart';
+            } else {
+                // Add to favorites
+                favorites.push(vehicleData);
+                showNotification('Ajouté aux favoris', 'success');
+                document.querySelector('[onclick="saveToFavorites()"] i').className = 'fas fa-heart text-danger';
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('vehicleFavorites', JSON.stringify(favorites));
+        }
+        
+        // Check if vehicle is in favorites on page load
+        function checkFavoriteStatus() {
+            const favorites = JSON.parse(localStorage.getItem('vehicleFavorites') || '[]');
+            const isFavorite = favorites.some(fav => fav.id === '{{ voiture.id }}');
+            
+            if (isFavorite) {
+                document.querySelector('[onclick="saveToFavorites()"] i').className = 'fas fa-heart text-danger';
+            }
+        }
+        
+        // Enhanced notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.custom-notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = `custom-notification alert alert-${type} position-fixed`;
+            notification.style.cssText = `
+                top: 100px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : 'exclamation-triangle'} me-2"></i>
+                    <span>${message}</span>
+                    <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Enhanced image zoom with carousel functionality
+        function createImageModal(imageSrc, vehicleTitle) {
+            const modal = document.createElement('div');
+            modal.className = 'image-modal-enhanced';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.95);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
+            
+            modal.innerHTML = `
+                <div class="modal-content-enhanced" style="max-width: 95%; max-height: 95%; position: relative;">
+                    <img src="${imageSrc}" alt="${vehicleTitle}" style="
+                        max-width: 100%;
+                        max-height: 100%;
+                        object-fit: contain;
+                        border-radius: 15px;
+                        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+                    ">
+                    <button class="close-modal-btn" style="
+                        position: absolute;
+                        top: -15px;
+                        right: -15px;
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        border: none;
+                        background: white;
+                        color: #333;
+                        font-size: 1.5rem;
+                        cursor: pointer;
+                        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="image-info" style="
+                        position: absolute;
+                        bottom: -60px;
+                        left: 0;
+                        right: 0;
+                        text-align: center;
+                        color: white;
+                        background: rgba(0,0,0,0.7);
+                        padding: 1rem;
+                        border-radius: 10px;
+                        backdrop-filter: blur(10px);
+                    ">
+                        <h5 class="mb-0">${vehicleTitle}</h5>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Animate in
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+            
+            // Close functionality
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            modal.querySelector('.close-modal-btn').addEventListener('click', closeModal);
+            
+            function closeModal() {
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            }
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check favorite status
+            checkFavoriteStatus();
+            
+            // Enhanced scroll animations with stagger
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 100);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.neo-animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Enhanced image click handler
+            const mainImage = document.getElementById('mainCarImage');
+            if (mainImage) {
+                mainImage.addEventListener('click', function() {
+                    createImageModal(this.src, '{{ voiture.marque }} {{ voiture.modele }}');
+                });
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

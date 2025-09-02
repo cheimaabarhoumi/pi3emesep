@@ -70,7 +70,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="neo-card p-5">
-                    {{ form_start(form, {'attr': {'class': 'neo-form'}}) }}
+                    {{ form_start(form, {'attr': {'class': 'neo-form', 'id': 'front-annonce-form'}}) }}
                     
                     <div class="row g-4">
                         <!-- Announcement Details -->
@@ -84,7 +84,7 @@
                         <div class="col-12">
                             <div class="neo-form-group">
                                 {{ form_label(form.titre, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.titre, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Magnifique BMW Serie 3 en excellent état'}}) }}
+                                {{ form_widget(form.titre, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Magnifique BMW Serie 3 en excellent état', 'required': 'required'}}) }}
                                 <small class="neo-form-help">
                                     <i class="fas fa-lightbulb me-1"></i>
                                     Un titre accrocheur augmente les chances de vente
@@ -95,7 +95,7 @@
                         <div class="col-12">
                             <div class="neo-form-group">
                                 {{ form_label(form.voiture, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.voiture, {'attr': {'class': 'neo-form-control', 'readonly': true}}) }}
+                                {{ form_widget(form.voiture, {'attr': {'class': 'neo-form-control', 'readonly': true, 'required': 'required'}}) }}
                                 <small class="neo-form-help">
                                     <i class="fas fa-lock me-1"></i>
                                     Véhicule sélectionné automatiquement
@@ -106,7 +106,7 @@
                         <div class="col-12">
                             <div class="neo-form-group">
                                 {{ form_label(form.description, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.description, {'attr': {'class': 'neo-form-control neo-textarea', 'rows': 6, 'placeholder': 'Décrivez votre véhicule en détail : état, équipements, historique d\'entretien, points forts...'}}) }}
+                                {{ form_widget(form.description, {'attr': {'class': 'neo-form-control neo-textarea', 'rows': 6, 'placeholder': 'Décrivez votre véhicule en détail : état, équipements, historique d\'entretien, points forts...', 'required': 'required'}}) }}
                                 <small class="neo-form-help">
                                     <i class="fas fa-info-circle me-1"></i>
                                     Une description détaillée inspire confiance aux acheteurs
@@ -117,7 +117,7 @@
                         <!-- Action Buttons -->
                         <div class="col-12 text-center mt-5">
                             <div class="d-flex gap-3 justify-content-center flex-wrap">
-                                <button type="submit" class="neo-btn neo-btn-primary neo-btn-lg" id="submit-btn">
+                                <button type="submit" form="front-annonce-form" class="neo-btn neo-btn-primary neo-btn-lg" id="submit-btn">
                                     <i class="fas fa-rocket me-2"></i>
                                     Publier l'Annonce
                                 </button>
@@ -147,6 +147,13 @@
                     
                     {{ form_end(form) }}
                 </div>
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('#front-annonce-form', {
+    titre: { required: true, minLength: 5, messages: { required: 'Titre requis', minLength: 'Au moins 5 caractères' } },
+    description: { required: true, minLength: 10, messages: { required: 'Description requise', minLength: 'Au moins 10 caractères' } }
+  });
+</script>
             </div>
         </div>
     </div>
@@ -195,4 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+
+{# Form validation is loaded globally through app.js #}
 {% endblock %}

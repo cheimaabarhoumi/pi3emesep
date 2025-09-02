@@ -20,10 +20,10 @@
     <!-- Add Voiture/Annonce Button -->
     <div class="row mb-4">
         <div class="col-12 text-center">
-            <a href="{{ path('voiture_add') }}" class="btn btn-success btn-lg rounded-pill shadow">
+            <a href="{{ path('voiture_add') }}" class="btn btn-success btn-lg shadow-lg">
                 <i class="fas fa-plus me-2"></i>Ajouter une Voiture
             </a>
-            <p class="text-muted mt-2 small">
+            <p class="text-muted mt-3 small">
                 <i class="fas fa-info-circle me-1"></i>Ajoutez d'abord une voiture, puis créez une annonce pour celle-ci
             </p>
         </div>
@@ -263,12 +263,12 @@
                                         <div class="mt-auto">
                                             <div class="d-grid gap-2">
                                                 <a href="{{ path('front_annonce_details', {id: annonce.id}) }}" 
-                                                   class="btn btn-primary btn-sm">
+                                                   class="btn btn-primary">
                                                     <i class="fas fa-eye me-2"></i>Voir Détails
                                                 </a>
                                                 
                                                 {% if voiture.prix %}
-                                                    <small class="text-center text-muted">
+                                                    <small class="text-center text-muted mt-2">
                                                         <i class="fas fa-tag me-1"></i>
                                                         Prix: <strong>{{ voiture.prix|number_format(0, ',', ' ') }} TND</strong>
                                                     </small>
@@ -290,7 +290,7 @@
                         <i class="fas fa-car fa-4x text-muted mb-4"></i>
                         <h3 class="text-muted">Aucune annonce disponible</h3>
                         <p class="text-muted">Il n'y a actuellement aucune annonce à afficher.</p>
-                        <a href="{{ path('voiture_add') }}" class="btn btn-primary">
+                        <a href="{{ path('voiture_add') }}" class="btn btn-primary btn-lg">
                             <i class="fas fa-plus me-2"></i>Ajouter une Voiture
                         </a>
                     </div>
@@ -299,11 +299,11 @@
             
             <!-- No Results Message -->
             <div id="noResults" class="text-center mt-5" style="display: none;">
-                <div class="card border-0 shadow-sm p-5">
+                <div class="card border-0 shadow-lg p-5">
                     <i class="fas fa-search fa-4x text-muted mb-4"></i>
                     <h3 class="fw-bold text-muted mb-3">Aucune annonce trouvée</h3>
                     <p class="text-muted mb-4">Essayez de modifier vos critères de recherche ou explorez toutes nos annonces.</p>
-                    <button class="btn btn-primary rounded-pill" onclick="resetAllFilters()">
+                    <button class="btn btn-primary btn-lg" onclick="resetAllFilters()">
                         <i class="fas fa-refresh me-2"></i>Voir toutes les annonces
                     </button>
                 </div>
@@ -313,39 +313,246 @@
 </div>
 
 <style>
-/* Search enhancements */
-.search-container .form-control:focus {
-    border-color: #667eea !important;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+/* Enhanced Neo Design System for Annonces Page */
+:root {
+    --neo-primary: #667eea;
+    --neo-secondary: #764ba2;
+    --neo-success: #10b981;
+    --neo-warning: #f59e0b;
+    --neo-info: #3b82f6;
+    --neo-glass: rgba(255, 255, 255, 0.25);
+    --neo-glass-border: rgba(255, 255, 255, 0.18);
+    --neo-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --neo-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --neo-radius: 16px;
+    --neo-radius-lg: 24px;
 }
 
+/* Enhanced Search Container */
+.search-container .form-control {
+    border: 2px solid var(--neo-glass-border) !important;
+    border-radius: 50px !important;
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.search-container .form-control:focus {
+    border-color: var(--neo-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Enhanced Suggestion Pills */
 .suggestion-pill {
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: 20px !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 600;
 }
 
 .suggestion-pill:hover {
-    background-color: var(--bs-primary) !important;
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary)) !important;
     color: white !important;
+    transform: translateY(-2px);
+    box-shadow: var(--neo-shadow);
+}
+
+/* Enhanced Price Filter Buttons */
+.price-filter {
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: 25px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    color: #4b5563 !important;
 }
 
 .price-filter:hover, .price-filter.active {
-    background-color: var(--bs-primary) !important;
-    border-color: var(--bs-primary) !important;
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary)) !important;
+    border-color: transparent !important;
     color: white !important;
+    transform: translateY(-3px) !important;
+    box-shadow: var(--neo-shadow) !important;
 }
 
-/* Card hover effects */
+/* Enhanced Main Action Buttons */
+.btn-success {
+    background: linear-gradient(135deg, var(--neo-success), #059669) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 1rem 2rem !important;
+    font-weight: 700 !important;
+    box-shadow: var(--neo-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: var(--neo-shadow-lg) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary)) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--neo-secondary), var(--neo-primary)) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Enhanced Reset Button */
+.btn-outline-secondary {
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: 25px !important;
+    color: #6b7280 !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.btn-outline-secondary:hover {
+    background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+    border-color: transparent !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: var(--neo-shadow) !important;
+}
+
+/* Enhanced Card Styling */
 .car-item .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: var(--neo-radius-lg) !important;
+    box-shadow: var(--neo-shadow) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    overflow: hidden !important;
 }
 
 .car-item:hover .card {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    transform: translateY(-8px) !important;
+    box-shadow: var(--neo-shadow-lg) !important;
 }
 
-/* Sticky sidebar */
+/* Enhanced Badges */
+.badge {
+    font-weight: 600 !important;
+    border-radius: 25px !important;
+    padding: 0.6rem 1.2rem !important;
+    font-size: 0.85rem !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, var(--neo-success), #059669) !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3) !important;
+}
+
+.badge.bg-warning {
+    background: linear-gradient(135deg, var(--neo-warning), #d97706) !important;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3) !important;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary)) !important;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Enhanced Sidebar Card */
+.card.shadow-lg {
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary)) !important;
+    border: none !important;
+    border-radius: var(--neo-radius-lg) !important;
+    box-shadow: var(--neo-shadow-lg) !important;
+    backdrop-filter: blur(16px) !important;
+}
+
+.card-body {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) !important;
+    border-radius: var(--neo-radius) !important;
+}
+
+/* Enhanced Price Display */
+.price-display {
+    background: linear-gradient(135deg, var(--neo-success), #20c997) !important;
+    border-radius: var(--neo-radius) !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Enhanced Form Controls */
+.form-control {
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: 20px !important;
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--neo-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Enhanced Results Info */
+.mt-4.p-3.rounded-3 {
+    background: var(--neo-glass) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: var(--neo-radius) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced Clear Button */
+.btn-clear {
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important;
+    font-size: 1.2rem !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.btn-clear:hover {
+    color: #b02a37 !important;
+    transform: scale(1.1) !important;
+}
+
+/* Enhanced Loading Indicator */
+.spinner-border {
+    color: var(--neo-primary) !important;
+    animation: spinner-border 0.75s linear infinite !important;
+}
+
+/* Enhanced No Results Card */
+#noResults .card {
+    background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+    border: 1px solid var(--neo-glass-border) !important;
+    border-radius: var(--neo-radius-lg) !important;
+    box-shadow: var(--neo-shadow) !important;
+}
+
+/* Sticky sidebar enhancement */
 @media (min-width: 992px) {
     .sticky-top {
         position: sticky !important;
@@ -353,18 +560,7 @@
     }
 }
 
-/* Loading animation */
-.spinner-border {
-    animation: spinner-border 0.75s linear infinite;
-}
-
-/* Price display gradient */
-.price-display {
-    background: linear-gradient(45deg, #28a745, #20c997) !important;
-    color: white !important;
-}
-
-/* Responsive adjustments */
+/* Enhanced Responsive Design */
 @media (max-width: 768px) {
     .col-lg-3 {
         margin-bottom: 2rem;
@@ -374,6 +570,73 @@
         position: relative !important;
         top: auto !important;
     }
+    
+    .btn-lg {
+        padding: 0.875rem 1.75rem !important;
+        font-size: 1rem !important;
+    }
+    
+    .card-img-top {
+        height: 200px !important;
+    }
+}
+
+/* Enhanced Animation Keyframes */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Page load animations */
+.car-item {
+    animation: slideInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    opacity: 0;
+}
+
+.car-item:nth-child(1) { animation-delay: 0.1s; }
+.car-item:nth-child(2) { animation-delay: 0.2s; }
+.car-item:nth-child(3) { animation-delay: 0.3s; }
+.car-item:nth-child(4) { animation-delay: 0.4s; }
+.car-item:nth-child(5) { animation-delay: 0.5s; }
+.car-item:nth-child(6) { animation-delay: 0.6s; }
+
+/* Enhanced Button Hover States */
+.btn:active {
+    transform: translateY(0) !important;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--neo-primary), var(--neo-secondary));
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--neo-secondary), var(--neo-primary));
 }
 </style>
 

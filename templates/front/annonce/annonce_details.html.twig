@@ -3,140 +3,224 @@
 {% block title %}{{ annonce.titre }} - NeoCarVilla{% endblock %}
 
 {% block content %}
-<!-- Neo Breadcrumb Section -->
-<section class="neo-section py-4" style="background: var(--neo-gray-50); margin-top: 80px;">
-    <div class="neo-container">
+<!-- Enhanced Neo Breadcrumb Section -->
+<section class="neo-section py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 80px; position: relative; overflow: hidden;">
+    <!-- Animated Background Particles -->
+    <div class="particles-bg">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
+    <div class="neo-container position-relative">
         <nav aria-label="breadcrumb" class="neo-animate-on-scroll">
-            <ol class="breadcrumb mb-0" style="background: transparent;">
-                <li class="breadcrumb-item">
-                    <a href="{{ path('app_front_accueil') }}" class="text-decoration-none text-primary">
-                        <i class="fas fa-home me-1"></i>Accueil
-                    </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ path('front_annonces') }}" class="text-decoration-none text-primary">Annonces</a>
-                </li>
-                <li class="breadcrumb-item active text-muted">{{ annonce.titre }}</li>
-            </ol>
+            <div class="modern-breadcrumb p-4 rounded-4">
+                <ol class="breadcrumb mb-0 d-flex align-items-center">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('app_front_accueil') }}" class="breadcrumb-link">
+                            <i class="fas fa-home me-2"></i>Accueil
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('front_annonces') }}" class="breadcrumb-link">Annonces</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ annonce.titre }}</li>
+                </ol>
+            </div>
         </nav>
+        
+        <!-- Hero Title Section -->
+        <div class="hero-title-section text-center text-white mt-4 neo-animate-on-scroll" style="animation-delay: 0.2s;">
+            <h1 class="display-3 fw-bold mb-3" style="text-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                {{ annonce.titre }}
+            </h1>
+            <h2 class="h4 mb-3 opacity-90">{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</h2>
+            {% if annonce.voiture.prix %}
+                <div class="price-highlight d-inline-block px-4 py-2 rounded-pill" 
+                     style="background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3);">
+                    <span class="h3 mb-0 fw-bold">{{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</span>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </section>
 
-<!-- Neo Car Details Section -->
-<section class="neo-section">
+<!-- Enhanced Neo Car Details Section -->
+<section class="neo-section py-5" style="background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);">
     <div class="neo-container">
         <div class="row g-5">
             <!-- Main Image & Gallery -->
             <div class="col-lg-8">
                 <div class="neo-animate-on-scroll">
-                    <!-- Main Image Display -->
-                    <div class="neo-card overflow-hidden mb-4">
+                    <!-- Enhanced Main Image Display -->
+                    <div class="image-showcase-card neo-card overflow-hidden mb-5 position-relative">
                         {% if annonce.voiture.image %}
-                            <div class="position-relative">
+                            <div class="position-relative image-container">
                                 <img src="{{ asset('uploads/' ~ annonce.voiture.image) }}" 
-                                     alt="{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}"
-                                     class="w-100" 
-                                     style="height: 500px; object-fit: cover; transition: transform 0.3s ease;"
+                                     alt="{{ annonce.titre }}"
+                                     class="showcase-image w-100"
+                                     style="height: 550px; object-fit: cover;"
                                      id="mainCarImage">
                                 
-                                <!-- Status Badges -->
-                                <div class="position-absolute top-0 start-0 m-4">
+                                <!-- Enhanced Status Badges -->
+                                <div class="position-absolute top-0 start-0 m-4 badge-container">
                                     {% if annonce.valider %}
-                                        <span class="badge" style="background: var(--neo-gradient-success); padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 600;">
+                                        <span class="status-badge available-badge">
                                             <i class="fas fa-check-circle me-2"></i>Vérifié & Certifié
                                         </span>
                                     {% else %}
-                                        <span class="badge" style="background: var(--neo-gradient-secondary); padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 600;">
+                                        <span class="status-badge pending-badge">
                                             <i class="fas fa-clock me-2"></i>En cours de validation
                                         </span>
                                     {% endif %}
                                 </div>
                                 
-                                <!-- Premium Badge -->
+                                <!-- Enhanced Premium Badge -->
                                 {% if annonce.voiture.prix and annonce.voiture.prix > 50000 %}
                                     <div class="position-absolute top-0 end-0 m-4">
-                                        <span class="badge" style="background: linear-gradient(45deg, #ffd700, #ffed4e); color: #8b4513; padding: 0.75rem 1.5rem; border-radius: var(--neo-radius-full); font-weight: 700;">
+                                        <span class="premium-badge-enhanced">
                                             <i class="fas fa-crown me-2"></i>COLLECTION PRESTIGE
                                         </span>
                                     </div>
                                 {% endif %}
                                 
-                                <!-- Zoom Overlay -->
-                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 zoom-overlay" 
-                                     style="background: rgba(0,0,0,0.7); transition: opacity 0.3s ease; cursor: zoom-in;">
-                                    <div class="text-white text-center">
-                                        <i class="fas fa-search-plus fs-1 mb-2"></i>
-                                        <div>Cliquer pour agrandir</div>
+                                <!-- Enhanced Zoom Overlay -->
+                                <div class="zoom-overlay-enhanced position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <div class="zoom-button">
+                                        <i class="fas fa-search-plus fa-2x"></i>
+                                        <span class="d-block mt-2">Cliquer pour agrandir</span>
                                     </div>
+                                </div>
+                                
+                                <!-- Image Counter -->
+                                <div class="position-absolute bottom-0 end-0 m-4">
+                                    <span class="image-counter">
+                                        <i class="fas fa-images me-2"></i>1 / 1
+                                    </span>
                                 </div>
                             </div>
                         {% else %}
-                            <div class="w-100 d-flex align-items-center justify-content-center text-muted" 
-                                 style="height: 500px; background: var(--neo-gray-100);">
+                            <div class="no-image-placeholder w-100 d-flex align-items-center justify-content-center" 
+                                 style="height: 550px;">
                                 <div class="text-center">
-                                    <i class="fas fa-car" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                                    <h4 class="neo-heading-3 text-muted">Image en cours de traitement</h4>
-                                    <p class="neo-body text-muted">L'image du véhicule sera disponible sous peu</p>
+                                    <div class="no-image-icon-enhanced mb-4">
+                                        <i class="fas fa-car fa-6x"></i>
+                                    </div>
+                                    <h4 class="text-muted mb-2">Aucune image disponible</h4>
+                                    <p class="text-muted mb-0">L'image sera ajoutée prochainement</p>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
                     
-                    <!-- Car Title & Basic Info -->
-                    <div class="mb-4">
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-                            <div>
-                                <h1 class="neo-display-2 mb-2">{{ annonce.titre }}</h1>
-                                <h2 class="neo-heading-2 text-primary">{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}</h2>
+                    <!-- Enhanced Vehicle Info Cards -->
+                    <div class="vehicle-info-grid mb-5">
+                        <div class="row g-4">
+                            <!-- Main Info Card -->
+                            <div class="col-12">
+                                <div class="main-info-card neo-card p-4">
+                                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start">
+                                        <div class="vehicle-title-section flex-grow-1">
+                                            <div class="brand-model-badge mb-3">
+                                                <span class="brand-badge">{{ annonce.voiture.marque }}</span>
+                                                <span class="model-badge">{{ annonce.voiture.modele }}</span>
+                                            </div>
+                                            <p class="vehicle-specs mb-0">
+                                                {% if annonce.voiture.annee %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-calendar text-primary me-2"></i>
+                                                        <strong>{{ annonce.voiture.annee }}</strong>
+                                                    </span>
+                                                {% endif %}
+                                                {% if annonce.voiture.kilometrage %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-tachometer-alt text-warning me-2"></i>
+                                                        <strong>{{ annonce.voiture.kilometrage|number_format(0, ',', ' ') }} km</strong>
+                                                    </span>
+                                                {% endif %}
+                                                {% if annonce.voiture.puissanceFiscale %}
+                                                    <span class="spec-item">
+                                                        <i class="fas fa-bolt text-success me-2"></i>
+                                                        <strong>{{ annonce.voiture.puissanceFiscale }} CV</strong>
+                                                    </span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        {% if annonce.voiture.prix %}
+                                            <div class="price-section text-lg-end mt-3 mt-lg-0">
+                                                <div class="price-display">
+                                                    <span class="price-amount">{{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</span>
+                                                    <span class="price-label">Prix négociable</span>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="price-section text-lg-end mt-3 mt-lg-0">
+                                                <div class="price-on-demand">
+                                                    <span class="price-label">Prix sur demande</span>
+                                                    <button class="contact-price-btn neo-btn neo-btn-primary mt-2">
+                                                        <i class="fas fa-phone me-2"></i>Demander le prix
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                            {% if annonce.voiture.prix %}
-                                <div class="text-end">
-                                    <div class="neo-display-2 text-primary mb-1">{{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</div>
-                                    <div class="neo-body-small text-muted">Prix négociable</div>
-                                </div>
-                            {% else %}
-                                <div class="text-end">
-                                    <div class="neo-heading-2 text-muted">Prix sur demande</div>
-                                    <div class="neo-body-small text-muted">Contactez-nous</div>
-                                </div>
-                            {% endif %}
                         </div>
                         
-                        <!-- Quick Specs Row -->
-                        <div class="row g-3">
+                        <!-- Enhanced Quick Specs Grid -->
+                        <div class="row g-3 mt-2">
                             {% if annonce.voiture.annee %}
-                                <div class="col-6 col-md-3">
-                                    <div class="neo-glass p-3 rounded-3 text-center">
-                                        <i class="fas fa-calendar-alt text-primary fs-4 mb-2"></i>
-                                        <div class="neo-body-small text-muted">Année</div>
-                                        <div class="fw-bold">{{ annonce.voiture.annee }}</div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Année</span>
+                                            <span class="spec-value">{{ annonce.voiture.annee }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             {% endif %}
                             {% if annonce.voiture.kilometrage %}
-                                <div class="col-6 col-md-3">
-                                    <div class="neo-glass p-3 rounded-3 text-center">
-                                        <i class="fas fa-road text-success fs-4 mb-2"></i>
-                                        <div class="neo-body-small text-muted">Kilométrage</div>
-                                        <div class="fw-bold">{{ annonce.voiture.kilometrage|number_format(0, ',', ' ') }} km</div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-warning">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Kilométrage</span>
+                                            <span class="spec-value">{{ annonce.voiture.kilometrage|number_format(0, ',', ' ') }} km</span>
+                                        </div>
                                     </div>
                                 </div>
                             {% endif %}
                             {% if annonce.voiture.carburant %}
-                                <div class="col-6 col-md-3">
-                                    <div class="neo-glass p-3 rounded-3 text-center">
-                                        <i class="fas fa-gas-pump text-warning fs-4 mb-2"></i>
-                                        <div class="neo-body-small text-muted">Carburant</div>
-                                        <div class="fw-bold">{{ annonce.voiture.carburant }}</div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-success">
+                                            <i class="fas fa-gas-pump"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Carburant</span>
+                                            <span class="spec-value">{{ annonce.voiture.carburant }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             {% endif %}
                             {% if annonce.voiture.boiteVitesse %}
-                                <div class="col-6 col-md-3">
-                                    <div class="neo-glass p-3 rounded-3 text-center">
-                                        <i class="fas fa-cogs text-info fs-4 mb-2"></i>
-                                        <div class="neo-body-small text-muted">Transmission</div>
-                                        <div class="fw-bold">{{ annonce.voiture.boiteVitesse }}</div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="quick-spec-card">
+                                        <div class="spec-icon-wrapper bg-info">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="spec-details">
+                                            <span class="spec-label">Transmission</span>
+                                            <span class="spec-value">{{ annonce.voiture.boiteVitesse }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             {% endif %}
@@ -145,112 +229,129 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
+            <!-- Enhanced Sidebar -->
             <div class="col-lg-4">
                 <div class="neo-animate-on-scroll" style="animation-delay: 0.2s;">
-                    <!-- Contact Card -->
-                    <div class="neo-card p-4 mb-4" style="background: var(--neo-gradient-primary); color: white;">
-                        <h3 class="neo-heading-3 text-white mb-3">
-                            <i class="fas fa-phone-alt me-2"></i>Contactez le Vendeur
-                        </h3>
-                        <div class="d-grid gap-2 mb-3">
-                            <a href="tel:+21612345678" class="neo-btn" style="background: white; color: var(--neo-primary);">
-                                <i class="fas fa-phone me-2"></i>Appeler Maintenant
-                            </a>
-                            <a href="mailto:?subject=Intérêt%20pour%20{{ annonce.titre|url_encode }}&body=Bonjour,%0D%0A%0D%0AJe%20suis%20intéressé(e)%20par%20votre%20annonce%20:%20{{ annonce.titre|url_encode }}%0D%0A%0D%0ALien%20:%20{{ app.request.uri }}" 
-                               class="neo-btn neo-btn-ghost" style="border-color: white; color: white;">
-                                <i class="fas fa-envelope me-2"></i>Envoyer un Email
-                            </a>
-                        </div>
-                        <div class="neo-glass p-3 rounded-3">
-                            <div class="d-flex align-items-center justify-content-center gap-2 text-white">
-                                <i class="fas fa-shield-check"></i>
-                                <span class="neo-body-small">Vendeur vérifié & certifié</span>
+                    <!-- Enhanced Contact Card with Glass Effect -->
+                    <div class="contact-card-enhanced mb-4">
+                        <div class="contact-card-header">
+                            <h3 class="contact-title">
+                                <i class="fas fa-phone-alt me-2"></i>Contactez le Vendeur
+                            </h3>
+                            <div class="seller-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>Vendeur vérifié</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="neo-card p-4 mb-4">
-                        <h4 class="neo-heading-3 mb-3">Actions Rapides</h4>
-                        <div class="d-grid gap-2">
-                            <a href="{{ path('front_annonce_pdf', { id: annonce.id }) }}" 
-                               class="neo-btn neo-btn-secondary" target="_blank">
-                                <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
-                            </a>
-                            <a href="{{ path('edit_annonce', { id: annonce.id }) }}" 
-                               class="neo-btn neo-btn-ghost">
-                                <i class="fas fa-edit me-2"></i>Modifier l'Annonce
-                            </a>
-                            <form action="{{ path('annonce_delete', {id: annonce.id}) }}" 
-                                  method="post" 
-                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?');" 
-                                  class="d-grid">
-                                <button class="neo-btn neo-btn-ghost text-danger border-danger" type="submit">
-                                    <i class="fas fa-trash-alt me-2"></i>Supprimer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- QR Code -->
-                    <div class="neo-card p-4 text-center">
-                        <h4 class="neo-heading-3 mb-3">
-                            <i class="fas fa-qrcode text-primary me-2"></i>Code QR - Carte de Contact
-                        </h4>
-                        <div class="mb-3">
-                            <img src="{{ qrCode }}" alt="QR Code pour {{ annonce.titre }}" class="img-fluid rounded-3" style="max-width: 200px; border: 2px solid var(--neo-gray-200);">
-                        </div>
-                        <p class="neo-body-small text-muted mb-3">
-                            <i class="fas fa-mobile-alt me-1"></i>
-                            Scannez ce code QR pour ajouter cette annonce comme contact avec toutes les informations
-                        </p>
-                        <div class="neo-glass p-3 rounded-3 mb-3">
-                            <div class="row g-2 text-start small">
-                                <div class="col-12"><strong>📱 Format vCard:</strong></div>
-                                <div class="col-12">🏢 Neo Cars</div>
-                                <div class="col-12">🚗 {{ annonce.titre }}</div>
-                                <div class="col-12">🔧 {{ annonce.voiture.marque }} {{ annonce.voiture.modele }} ({{ annonce.voiture.annee }})</div>
-                                {% if annonce.voiture.prix %}
-                                    <div class="col-12">💰 {{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND</div>
-                                {% endif %}
-                                <div class="col-12 text-muted">📝 + spécifications complètes</div>
-                            </div>
-                        </div>
-                        <div class="alert alert-info p-2 mb-3">
-                            <small>
-                                <i class="fas fa-info-circle me-1"></i>
-                                Ce QR code créera un contact dans votre téléphone avec toutes les informations du véhicule
-                            </small>
                         </div>
                         
-                        <h5 class="neo-heading-4 mb-3">Partager l'Annonce</h5>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ annonceUrl|url_encode }}" 
-                               target="_blank" 
-                               class="neo-btn neo-btn-ghost" 
-                               style="width: 40px; height: 40px; padding: 0;"
-                               title="Partager sur Facebook">
+                        <div class="contact-actions">
+                            <button class="contact-btn-primary" onclick="callSeller()">
+                                <i class="fas fa-phone me-2"></i>Appeler Maintenant
+                                <div class="btn-glow"></div>
+                            </button>
+                            <button class="contact-btn-secondary" onclick="emailSeller()">
+                                <i class="fas fa-envelope me-2"></i>Envoyer un Email
+                            </button>
+                            <button class="contact-btn-secondary" onclick="whatsappSeller()">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                            </button>
+                        </div>
+                        
+                        <div class="seller-trust-badge">
+                            <i class="fas fa-shield-check me-2"></i>
+                            <span>Vendeur Certifié & Vérifié</span>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Related Announcement Card -->
+                    <div class="announcement-card mb-4 position-relative">
+                        <div class="gradient-bg"></div>
+                        <div class="card-body text-white text-center position-relative p-4">
+                            <div class="announcement-icon mb-3">
+                                <i class="fas fa-bullhorn fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Créer une voiture </h4>
+                            <p class="mb-4 opacity-90"> Créez votre propre voiture maintenant !</p>
+                            <a href="{{ path('voiture_add') }}" class="announcement-btn">
+                                <i class="fas fa-plus me-2"></i>Créer une voiture
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced QR Code Card -->
+                    <div class="qr-card-enhanced mb-4">
+                        <div class="qr-card-header">
+                            <h4 class="qr-title">
+                                <i class="fas fa-qrcode me-2"></i>Code QR - Contact
+                            </h4>
+                        </div>
+                        
+                        <div class="qr-content">
+                            <div class="qr-code-container">
+                                <img src="{{ qrCode }}" alt="QR Code pour {{ annonce.titre }}" class="qr-code-image">
+                                <div class="qr-overlay">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="qr-info">
+                                <h5 class="qr-subtitle">Scannez pour ajouter le contact</h5>
+                                <div class="qr-details">
+                                    <div class="qr-detail-item">
+                                        <i class="fas fa-building me-2"></i>Neo Cars
+                                    </div>
+                                    <div class="qr-detail-item">
+                                        <i class="fas fa-car me-2"></i>{{ annonce.titre }}
+                                    </div>
+                                    <div class="qr-detail-item">
+                                        <i class="fas fa-cog me-2"></i>{{ annonce.voiture.marque }} {{ annonce.voiture.modele }}
+                                    </div>
+                                    {% if annonce.voiture.prix %}
+                                        <div class="qr-detail-item">
+                                            <i class="fas fa-tag me-2"></i>{{ annonce.voiture.prix|number_format(0, ',', ' ') }} TND
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Share Card -->
+                    <div class="share-card-enhanced">
+                        <div class="share-header">
+                            <h4 class="share-title">
+                                <i class="fas fa-share-alt me-2"></i>Partager l'Annonce
+                            </h4>
+                        </div>
+                        
+                        <div class="share-buttons">
+                            <button class="share-btn facebook" onclick="shareOnFacebook()">
                                 <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="https://twitter.com/intent/tweet?url={{ annonceUrl|url_encode }}&text=Découvrez%20cette%20{{ annonce.titre|url_encode }}" 
-                               target="_blank" 
-                               class="neo-btn neo-btn-ghost" 
-                               style="width: 40px; height: 40px; padding: 0;"
-                               title="Partager sur Twitter">
+                                <span>Facebook</span>
+                            </button>
+                            <button class="share-btn twitter" onclick="shareOnTwitter()">
                                 <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="https://wa.me/?text=Découvrez%20cette%20annonce%20:%20{{ annonceUrl|url_encode }}" 
-                               target="_blank" 
-                               class="neo-btn neo-btn-ghost" 
-                               style="width: 40px; height: 40px; padding: 0;"
-                               title="Partager sur WhatsApp">
+                                <span>Twitter</span>
+                            </button>
+                            <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
                                 <i class="fab fa-whatsapp"></i>
-                            </a>
-                            <button onclick="copyToClipboard('{{ annonceUrl }}')"
-                                    class="neo-btn neo-btn-ghost" 
-                                    style="width: 40px; height: 40px; padding: 0;"
-                                    title="Copier le lien">
+                                <span>WhatsApp</span>
+                            </button>
+                            <button class="share-btn copy" onclick="copyToClipboard('{{ app.request.uri }}')">
+                                <i class="fas fa-copy"></i>
+                                <span>Copier</span>
+                            </button>
+                        </div>
+                        
+                        <div class="share-url">
+                            <input type="text" value="{{ app.request.uri }}" readonly class="share-url-input" id="shareUrl">
+                            <button class="share-url-copy" onclick="copyToClipboard('{{ app.request.uri }}')">
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
@@ -507,134 +608,651 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        /* Enhanced Neo Design for Annonce Details */
+        /* Enhanced Design System - Matching Voiture Details */
         
-        /* Image hover effects */
-        #mainCarImage:hover {
+        /* Animated Background Particles */
+        .particles-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float-particles 20s infinite linear;
+        }
+        
+        .particle:nth-child(1) {
+            width: 20px;
+            height: 20px;
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        .particle:nth-child(2) {
+            width: 15px;
+            height: 15px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 4s;
+        }
+        
+        .particle:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            top: 80%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+        
+        .particle:nth-child(4) {
+            width: 12px;
+            height: 12px;
+            top: 30%;
+            left: 70%;
+            animation-delay: 12s;
+        }
+        
+        .particle:nth-child(5) {
+            width: 18px;
+            height: 18px;
+            top: 70%;
+            left: 10%;
+            animation-delay: 16s;
+        }
+        
+        @keyframes float-particles {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Enhanced Breadcrumb */
+        .modern-breadcrumb {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .modern-breadcrumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .breadcrumb-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb-link:hover {
+            color: white !important;
+            transform: translateX(5px);
+        }
+        
+        .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Enhanced Image Showcase */
+        .image-showcase-card {
+            border-radius: 20px !important;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-showcase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+        
+        .showcase-image {
+            transition: transform 0.6s ease;
+        }
+        
+        .image-showcase-card:hover .showcase-image {
             transform: scale(1.05);
         }
         
-        .zoom-overlay {
-            transition: opacity 0.3s ease;
-        }
-        
-        .neo-card:hover .zoom-overlay {
-            opacity: 1 !important;
-        }
-        
-        /* Specification items */
-        .spec-item {
-            padding: 1.5rem;
-            background: var(--neo-gray-50);
-            border-radius: var(--neo-radius-lg);
-            border: 2px solid var(--neo-gray-200);
-            transition: all 0.3s ease;
-        }
-        
-        .spec-item:hover {
-            border-color: var(--neo-primary);
-            background: var(--neo-white);
-            transform: translateY(-2px);
-            box-shadow: var(--neo-shadow-lg);
-        }
-        
-        .spec-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--neo-gradient-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Enhanced Badges */
+        .status-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            font-size: 1.25rem;
-            box-shadow: var(--neo-shadow-md);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            animation: pulse-badge 2s infinite;
         }
         
-        /* Enhanced Glass Effect */
-        .neo-glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .pending-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+        }
+        
+        .premium-badge-enhanced {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #8b4513;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+        
+        /* Enhanced Zoom Overlay */
+        .zoom-overlay-enhanced {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(30, 58, 138, 0.7));
+            opacity: 0;
+            transition: all 0.4s ease;
+            cursor: zoom-in;
+        }
+        
+        .image-showcase-card:hover .zoom-overlay-enhanced {
+            opacity: 1;
+        }
+        
+        .zoom-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            text-align: center;
             transition: all 0.3s ease;
         }
         
-        .neo-glass:hover {
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(-2px);
+        .zoom-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
         }
         
-        /* Badge enhancements */
-        .badge {
-            font-size: 0.85rem;
+        /* Enhanced Vehicle Info Cards */
+        .main-info-card {
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .main-info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+        
+        .brand-model-badge {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .brand-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .model-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
             font-weight: 600;
-            letter-spacing: 0.025em;
-            text-transform: uppercase;
-            box-shadow: var(--neo-shadow-md);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
         }
         
-        /* Contact card gradient overlay */
-        .neo-card[style*="--neo-gradient-primary"] {
+        .vehicle-specs .spec-item {
+            display: inline-block;
+            margin-right: 2rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+        
+        /* Enhanced Quick Spec Cards */
+        .quick-spec-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
         
-        .neo-card[style*="--neo-gradient-primary"]::before {
+        .quick-spec-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></svg>');
-            background-size: 30px 30px;
-            pointer-events: none;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.6s ease;
         }
         
-        /* Social sharing buttons */
-        .neo-btn[style*="width: 40px"] {
+        .quick-spec-card:hover::before {
+            left: 100%;
+        }
+        
+        .quick-spec-card:hover {
+            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+        }
+        
+        .spec-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.25rem;
             transition: all 0.3s ease;
         }
         
-        .neo-btn[style*="width: 40px"]:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        .quick-spec-card:hover .spec-icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
         }
         
-        /* Image zoom modal effect */
-        @media (min-width: 768px) {
-            .zoom-overlay {
-                cursor: zoom-in;
-            }
+        .spec-label {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .neo-display-2 {
-                font-size: 2rem !important;
-            }
-            
-            .neo-heading-2 {
-                font-size: 1.5rem !important;
-            }
-            
-            #mainCarImage {
-                height: 300px !important;
-            }
-            
-            .spec-item {
-                padding: 1rem;
-            }
-            
-            .spec-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
+        .spec-value {
+            display: block;
+            font-size: 1rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        
+        /* Enhanced Announcement Card */
+        .announcement-card {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 300% 300%;
+            animation: gradient-shift 6s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .announcement-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            animation: icon-bounce 2s infinite;
+        }
+        
+        @keyframes icon-bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .announcement-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea !important;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .announcement-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Enhanced Contact Card */
+        .contact-card-enhanced {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-card-enhanced::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+        
+        .contact-card-header {
+            padding: 2rem 2rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .seller-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .stars {
+            color: #fbbf24;
+            font-size: 0.9rem;
+        }
+        
+        .contact-actions {
+            padding: 0 2rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .contact-btn-primary, .contact-btn-secondary {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .contact-btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
+        }
+        
+        .contact-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4);
+        }
+        
+        .contact-btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            backdrop-filter: blur(16px);
+        }
+        
+        .contact-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .seller-trust-badge {
+            padding: 1rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Enhanced QR and Share Cards */
+        .qr-card-enhanced, .share-card-enhanced {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(241, 245, 249, 0.5);
+        }
+        
+        .qr-title, .share-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .qr-code-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .qr-code-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border: 3px solid rgba(241, 245, 249, 0.5);
+        }
+        
+        .qr-subtitle {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .qr-details {
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid rgba(241, 245, 249, 0.5);
+        }
+        
+        .qr-detail-item {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Enhanced Share Buttons */
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .share-btn {
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(241, 245, 249, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            color: #4b5563;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .share-btn.facebook:hover {
+            background: #1877f2;
+            color: white;
+            border-color: #1877f2;
+        }
+        
+        .share-btn.twitter:hover {
+            background: #1da1f2;
+            color: white;
+            border-color: #1da1f2;
+        }
+        
+        .share-btn.whatsapp:hover {
+            background: #25d366;
+            color: white;
+            border-color: #25d366;
+        }
+        
+        .share-btn.copy:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .share-url {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .share-url-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid rgba(241, 245, 249, 0.5);
+            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(16px);
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+        
+        .share-url-copy {
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .share-url-copy:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        
+        /* Price Highlight */
+        .price-highlight {
+            animation: price-glow 3s infinite;
+        }
+        
+        @keyframes price-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+        
+        /* Image Counter */
+        .image-counter {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        /* No Image Placeholder */
+        .no-image-placeholder {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+        }
+        
+        .no-image-icon-enhanced {
+            color: #94a3b8;
+            animation: no-image-pulse 3s infinite;
+        }
+        
+        @keyframes no-image-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
         }
         
         /* Enhanced animations */
@@ -652,17 +1270,8 @@
         /* Breadcrumb styling */
         .breadcrumb-item + .breadcrumb-item::before {
             content: "›";
-            color: var(--neo-gray-400);
+            color: rgba(255, 255, 255, 0.6);
             font-weight: 600;
-        }
-        
-        .breadcrumb-item a:hover {
-            color: var(--neo-primary-dark) !important;
-        }
-        
-        /* Form button improvements */
-        form[onsubmit] {
-            margin: 0;
         }
         
         /* Enhanced card shadows */
@@ -675,48 +1284,19 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
         
-        /* Price styling */
-        .neo-display-2.text-primary {
-            background: var(--neo-gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 800;
-        }
-        
-        /* Quick specs cards */
-        .row.g-3 .neo-glass {
-            transition: all 0.3s ease;
-        }
-        
-        .row.g-3 .neo-glass:hover {
-            transform: translateY(-5px);
-            background: var(--neo-white);
-            box-shadow: var(--neo-shadow-lg);
-        }
-        
-        /* QR Code enhancements */
-        .neo-card img[alt*="QR Code"] {
-            transition: transform 0.3s ease;
-        }
-        
-        .neo-card img[alt*="QR Code"]:hover {
-            transform: scale(1.05);
-        }
-        
         /* Copy button animation */
-        .neo-btn[onclick*="copyToClipboard"] {
-            position: relative;
-            overflow: hidden;
+        .copied {
+            background: #10b981 !important;
+            transform: scale(1.1) !important;
         }
         
-        .neo-btn[onclick*="copyToClipboard"].copied::after {
+        .copied::after {
             content: '✓';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--neo-success);
+            background: #10b981;
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -733,10 +1313,38 @@
             50% { opacity: 1; scale: 1.2; }
             100% { opacity: 1; scale: 1; }
         }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .display-3 {
+                font-size: 2rem !important;
+            }
+            
+            .h4 {
+                font-size: 1.25rem !important;
+            }
+            
+            .showcase-image {
+                height: 300px !important;
+            }
+            
+            .brand-model-badge {
+                justify-content: center;
+            }
+            
+            .share-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-card-header, .contact-actions, .seller-trust-badge {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
     </style>
     
     <script>
-        // Animation on scroll
+        // Enhanced Animation on scroll with stagger effect
         document.addEventListener('DOMContentLoaded', function() {
             const observerOptions = {
                 threshold: 0.1,
@@ -756,7 +1364,42 @@
             });
         });
         
-        // Copy to clipboard function
+        // Enhanced contact functions
+        function callSeller() {
+            window.location.href = 'tel:+21612345678';
+            // Track interaction
+            console.log('User initiated call to seller');
+        }
+        
+        function emailSeller() {
+            const subject = encodeURIComponent('Intérêt pour {{ annonce.titre }}');
+            const body = encodeURIComponent(`Bonjour,\n\nJe suis intéressé(e) par votre annonce : {{ annonce.titre }}\n\nLien : {{ app.request.uri }}`);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        }
+        
+        function whatsappSeller() {
+            const message = encodeURIComponent(`Bonjour, je suis intéressé par votre annonce : {{ annonce.titre }} - {{ app.request.uri }}`);
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+        
+        // Enhanced sharing functions
+        function shareOnFacebook() {
+            const url = encodeURIComponent('{{ app.request.uri }}');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnTwitter() {
+            const url = encodeURIComponent('{{ app.request.uri }}');
+            const text = encodeURIComponent('Découvrez cette {{ annonce.titre }}');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnWhatsApp() {
+            const message = encodeURIComponent(`Découvrez cette annonce : {{ app.request.uri }}`);
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+        }
+        
+        // Enhanced copy to clipboard function with visual feedback
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
                 // Success - show visual feedback
@@ -764,17 +1407,15 @@
                 const originalContent = button.innerHTML;
                 
                 button.classList.add('copied');
-                button.innerHTML = '<i class="fas fa-check"></i>';
+                button.innerHTML = '<i class="fas fa-check"></i> Copié!';
                 
                 setTimeout(() => {
                     button.classList.remove('copied');
                     button.innerHTML = originalContent;
                 }, 2000);
                 
-                // Show toast notification if available
-                if (typeof showToast === 'function') {
-                    showToast('Lien copié dans le presse-papiers!', 'success');
-                }
+                // Show enhanced toast notification
+                showToast('Lien copié dans le presse-papiers!', 'success');
             }).catch(function(err) {
                 console.error('Erreur lors de la copie: ', err);
                 // Fallback for older browsers
@@ -784,22 +1425,67 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    if (typeof showToast === 'function') {
-                        showToast('Lien copié dans le presse-papiers!', 'success');
-                    }
+                    showToast('Lien copié dans le presse-papiers!', 'success');
                 } catch (err) {
                     console.error('Fallback copy failed: ', err);
+                    showToast('Erreur lors de la copie', 'error');
                 }
                 document.body.removeChild(textArea);
             });
         }
         
-        // Image zoom functionality
+        // Enhanced toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'linear-gradient(135deg, #10b981, #059669)' : 
+                           type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 
+                           'linear-gradient(135deg, #3b82f6, #2563eb)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+                font-weight: 600;
+                backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            `;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Enhanced image zoom functionality with smooth animations
         document.addEventListener('DOMContentLoaded', function() {
             const mainImage = document.getElementById('mainCarImage');
             if (mainImage) {
                 mainImage.addEventListener('click', function() {
-                    // Create modal for image zoom
+                    // Create enhanced modal for image zoom
                     const modal = document.createElement('div');
                     modal.style.cssText = `
                         position: fixed;
@@ -807,41 +1493,303 @@
                         left: 0;
                         width: 100%;
                         height: 100%;
-                        background: rgba(0,0,0,0.9);
+                        background: rgba(0, 0, 0, 0.95);
+                        backdrop-filter: blur(8px);
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         z-index: 9999;
                         cursor: zoom-out;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
                     `;
                     
                     const img = document.createElement('img');
                     img.src = this.src;
                     img.style.cssText = `
-                        max-width: 95%;
-                        max-height: 95%;
+                        max-width: 90%;
+                        max-height: 90%;
                         object-fit: contain;
-                        border-radius: 10px;
+                        border-radius: 16px;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                        transform: scale(0.8);
+                        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                     `;
                     
-                    modal.appendChild(img);
-                    document.body.appendChild(modal);
+                    // Close button
+                    const closeBtn = document.createElement('button');
+                    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    closeBtn.style.cssText = `
+                        position: absolute;
+                        top: 30px;
+                        right: 30px;
+                        background: rgba(255, 255, 255, 0.2);
+                        backdrop-filter: blur(16px);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        color: white;
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        transition: all 0.3s ease;
+                    `;
                     
-                    // Close on click
-                    modal.addEventListener('click', function() {
-                        document.body.removeChild(modal);
+                    closeBtn.addEventListener('mouseenter', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.3)';
+                        this.style.transform = 'scale(1.1)';
                     });
                     
-                    // Close on escape key
-                    document.addEventListener('keydown', function(e) {
-                        if (e.key === 'Escape') {
+                    closeBtn.addEventListener('mouseleave', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.2)';
+                        this.style.transform = 'scale(1)';
+                    });
+                    
+                    modal.appendChild(img);
+                    modal.appendChild(closeBtn);
+                    document.body.appendChild(modal);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        modal.style.opacity = '1';
+                        img.style.transform = 'scale(1)';
+                    }, 10);
+                    
+                    // Close function
+                    function closeModal() {
+                        modal.style.opacity = '0';
+                        img.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
                             if (document.body.contains(modal)) {
                                 document.body.removeChild(modal);
                             }
+                        }, 300);
+                    }
+                    
+                    // Close on click
+                    modal.addEventListener('click', closeModal);
+                    closeBtn.addEventListener('click', closeModal);
+                    
+                    // Close on escape key
+                    function handleEscape(e) {
+                        if (e.key === 'Escape') {
+                            closeModal();
+                            document.removeEventListener('keydown', handleEscape);
                         }
-                    });
+                    }
+                    document.addEventListener('keydown', handleEscape);
                 });
             }
+        });
+        
+        // Enhanced scroll animations with performance optimization
+        document.addEventListener('DOMContentLoaded', function() {
+            let ticking = false;
+            
+            function updateAnimations() {
+                const elements = document.querySelectorAll('.quick-spec-card, .contact-card-enhanced, .qr-card-enhanced, .share-card-enhanced');
+                
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const inView = rect.top < window.innerHeight * 0.8;
+                    
+                    if (inView && !el.classList.contains('animated')) {
+                        el.classList.add('animated');
+                        el.style.animation = 'slideInUp 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards';
+                    }
+                });
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateAnimations);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick);
+            updateAnimations(); // Initial check
+        });
+        
+        // Add CSS animations dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            
+            @keyframes zoomIn {
+                from { transform: scale(0.5); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+            
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Enhanced Copy to Clipboard with Visual Feedback
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                const originalClasses = btn.className;
+                
+                // Visual feedback
+                btn.classList.add('copied');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copié!';
+                btn.style.transform = 'scale(1.1)';
+                
+                // Create floating notification
+                const notification = document.createElement('div');
+                notification.textContent = 'Lien copié dans le presse-papiers!';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 12px;
+                    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+                    z-index: 9999;
+                    animation: slideInRight 0.3s ease;
+                    font-weight: 600;
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(function() {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = originalText;
+                    btn.className = originalClasses;
+                    btn.style.transform = '';
+                    
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                
+                // Fallback notification
+                const errorNotification = document.createElement('div');
+                errorNotification.textContent = 'Erreur lors de la copie';
+                errorNotification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #ef4444, #dc2626);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 12px;
+                    z-index: 9999;
+                    animation: slideInRight 0.3s ease;
+                `;
+                
+                document.body.appendChild(errorNotification);
+                setTimeout(() => {
+                    errorNotification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => errorNotification.remove(), 300);
+                }, 3000);
+            });
+        };
+
+        // Enhanced Social Share Functions with Tracking
+        window.shareToFacebook = function(url, title) {
+            const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`;
+            const popup = window.open(shareUrl, 'facebook-share', 'width=600,height=400,scrollbars=yes,resizable=yes');
+            
+            // Visual feedback
+            const btn = event.target.closest('.share-btn');
+            if (btn) {
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => btn.style.transform = '', 150);
+            }
+        };
+
+        window.shareToTwitter = function(url, title) {
+            const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+            const popup = window.open(shareUrl, 'twitter-share', 'width=600,height=400,scrollbars=yes,resizable=yes');
+            
+            // Visual feedback
+            const btn = event.target.closest('.share-btn');
+            if (btn) {
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => btn.style.transform = '', 150);
+            }
+        };
+
+        window.shareToWhatsApp = function(url, title) {
+            const shareUrl = `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`;
+            window.open(shareUrl, 'whatsapp-share');
+            
+            // Visual feedback
+            const btn = event.target.closest('.share-btn');
+            if (btn) {
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => btn.style.transform = '', 150);
+            }
+        };
+
+        // Enhanced Contact Button Interactions
+        const contactButtons = document.querySelectorAll('.contact-btn-primary, .contact-btn-secondary');
+        contactButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => this.style.transform = '', 150);
+            });
+        });
+
+        // Enhanced Announcement Button Tracking
+        const announcementBtn = document.querySelector('.announcement-btn');
+        if (announcementBtn) {
+            announcementBtn.addEventListener('click', function() {
+                // Save referrer information
+                localStorage.setItem('announcement_referrer', window.location.href);
+                localStorage.setItem('announcement_referrer_type', 'announcement_details');
+                localStorage.setItem('announcement_referrer_id', '{{ annonce.id }}');
+            });
+        }
+
+        // Smooth Scrolling for Internal Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 {% endblock %}

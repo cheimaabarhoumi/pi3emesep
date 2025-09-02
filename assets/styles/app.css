@@ -1,3 +1,116 @@
 body {
     background-color: skyblue;
 }
+
+/* Form Validation Styles */
+.validation-error-message {
+    color: #dc3545 !important;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    display: block;
+    font-weight: 500;
+}
+
+.validation-error-message i {
+    margin-right: 0.25rem;
+}
+
+/* Invalid field styling */
+.form-control.is-invalid,
+.neo-form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.form-control.is-invalid:focus,
+.neo-form-control.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Error message positioning */
+.form-group {
+    position: relative;
+}
+
+.fv-error {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border-left: 3px solid #dc3545;
+}
+
+/* Modal form specific styles */
+.modal-body .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.modal-body .validation-error-message {
+    margin-top: 0.5rem;
+}
+
+/* Neo form specific styles */
+.neo-form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.neo-form-group .validation-error-message {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* File input validation */
+.neo-file-upload.is-invalid .neo-file-upload-area {
+    border-color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+/* Animation for error messages */
+.validation-error-message {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus states for better UX */
+.form-control:focus,
+.neo-form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Success states */
+.form-control.is-valid,
+.neo-form-control.is-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .fv-error {
+        position: static;
+        margin-top: 0.25rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .validation-error-message {
+        font-size: 0.8rem;
+    }
+}

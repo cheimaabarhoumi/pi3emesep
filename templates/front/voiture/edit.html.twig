@@ -211,7 +211,33 @@
                     </div>
                     
                     {{ form_end(form) }}
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('.neo-form', {
+    marque: { required: true, minLength: 2, messages: { required: 'Marque requise', minLength: 'Au moins 2 caractères' } },
+    modele: { required: true },
+    annee: { required: true, pattern: '^[0-9]{4}$', messages: { pattern: 'Entrez une année valide' } },
+    prix: { required: true, min: 0 },
+    puissance_fiscale: { required: true, min: 1 },
+    kilometrage: { required: true, min: 0 },
+    boite_vitesse: { required: true },
+    carburant: { required: true }
+  });
+</script>
                 </div>
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('.neo-form', {
+    marque: { required: true, minLength: 2, messages: { required: 'Marque requise', minLength: 'Au moins 2 caractères' } },
+    modele: { required: true },
+    annee: { required: true, pattern: '^[0-9]{4}$', messages: { pattern: 'Entrez une année valide' } },
+    prix: { required: true, min: 0 },
+    puissance_fiscale: { required: true, min: 1 },
+    kilometrage: { required: true, min: 0 },
+    boite_vitesse: { required: true },
+    carburant: { required: true }
+  });
+</script>
             </div>
         </div>
     </div>

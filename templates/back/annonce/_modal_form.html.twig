@@ -7,21 +7,34 @@
   {{ form_start(form, {'attr': {'id': 'admin-annonce-form'}}) }}
   <div class="row g-3">
     <div class="col-md-6">
-      {{ form_label(form.titre) }}
-      {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+      <div class="form-group">
+        {{ form_label(form.titre) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+      </div>
     </div>
     <div class="col-md-6">
-      {{ form_label(form.voiture) }}
-      {{ form_widget(form.voiture, {'attr': {'class': 'form-control'}}) }}
+      <div class="form-group">
+        {{ form_label(form.voiture) }}
+        {{ form_widget(form.voiture, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+      </div>
     </div>
     <div class="col-12">
-      {{ form_label(form.description) }}
-      {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4}}) }}
+      <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 4, 'required': 'required'}}) }}
+      </div>
     </div>
   </div>
   {{ form_end(form) }}
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('#admin-annonce-form', {
+    titre: { required: true, minLength: 5, messages: { required: 'Titre requis', minLength: 'Au moins 5 caractères' } },
+    description: { required: true, minLength: 10, messages: { required: 'Description requise', minLength: 'Au moins 10 caractères' } }
+  });
+</script>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-  <button type="button" id="admin-annonce-submit" class="btn btn-primary">Créer</button>
+  <button type="submit" form="admin-annonce-form" id="admin-annonce-submit" class="btn btn-primary">Créer</button>
 </div>

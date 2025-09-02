@@ -29,10 +29,9 @@ class GestionAnnonceController extends AbstractController {
 
     $options = new Options();
     $options->set('defaultFont', 'Arial');
-    $options->set('isRemoteEnabled', true); // Allow Dompdf to fetch remote images
+    $options->set('isRemoteEnabled', true); 
     $dompdf = new Dompdf($options);
 
-        // Render the PDF template
         $html = $this->renderView('back/annonce/pdf_annonces.html.twig', [
             'annonces' => $annonces
         ]);
@@ -40,7 +39,6 @@ class GestionAnnonceController extends AbstractController {
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        // Output the generated PDF (force download)
         return new Response(
             $dompdf->output(),
             200,

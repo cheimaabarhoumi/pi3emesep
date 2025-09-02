@@ -10,4 +10,7 @@ import './styles/app.css';
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 // import generic form validation (client-side)
-import './js/form-validation.js';
+import initFormValidation from './js/form-validation.js';
+
+// Initialize form validation
+initFormValidation();

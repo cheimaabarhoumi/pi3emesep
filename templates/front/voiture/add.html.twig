@@ -56,28 +56,28 @@
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.marque, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.marque, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: BMW, Mercedes, Audi...'}}) }}
+                                {{ form_widget(form.marque, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: BMW, Mercedes, Audi...', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.modele, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.modele, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Serie 3, Classe C...'}}) }}
+                                {{ form_widget(form.modele, {'attr': {'class': 'neo-form-control', 'placeholder': 'Ex: Serie 3, Classe C...', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.annee, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.annee, {'attr': {'class': 'neo-form-control', 'placeholder': 'Année de fabrication'}}) }}
+                                {{ form_widget(form.annee, {'attr': {'class': 'neo-form-control', 'placeholder': 'Année de fabrication', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.prix, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.prix, {'attr': {'class': 'neo-form-control', 'placeholder': 'Prix en €'}}) }}
+                                {{ form_widget(form.prix, {'attr': {'class': 'neo-form-control', 'placeholder': 'Prix en €', 'required': 'required'}}) }}
                             </div>
                         </div>
 
@@ -92,42 +92,42 @@
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.puissance_fiscale, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.puissance_fiscale, {'attr': {'class': 'neo-form-control', 'placeholder': 'Puissance en CV'}}) }}
+                                {{ form_widget(form.puissance_fiscale, {'attr': {'class': 'neo-form-control', 'placeholder': 'Puissance en CV', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.kilometrage, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.kilometrage, {'attr': {'class': 'neo-form-control', 'placeholder': 'Kilométrage en km'}}) }}
+                                {{ form_widget(form.kilometrage, {'attr': {'class': 'neo-form-control', 'placeholder': 'Kilométrage en km', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.boite_vitesse, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.boite_vitesse, {'attr': {'class': 'neo-form-control'}}) }}
+                                {{ form_widget(form.boite_vitesse, {'attr': {'class': 'neo-form-control', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.carburant, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.carburant, {'attr': {'class': 'neo-form-control'}}) }}
+                                {{ form_widget(form.carburant, {'attr': {'class': 'neo-form-control', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.cylindree, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.cylindree, {'attr': {'class': 'neo-form-control', 'placeholder': 'Cylindrée en L'}}) }}
+                                {{ form_widget(form.cylindree, {'attr': {'class': 'neo-form-control', 'placeholder': 'Cylindrée en L', 'required': 'required'}}) }}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="neo-form-group">
                                 {{ form_label(form.nombre_portes, null, {'label_attr': {'class': 'neo-form-label'}}) }}
-                                {{ form_widget(form.nombre_portes, {'attr': {'class': 'neo-form-control'}}) }}
+                                {{ form_widget(form.nombre_portes, {'attr': {'class': 'neo-form-control', 'required': 'required'}}) }}
                             </div>
                         </div>
 
@@ -169,9 +169,24 @@
                     
                     {{ form_end(form) }}
                 </div>
+<script src="{{ asset('js/form-validator.js') }}"></script>
+<script>
+  initFormValidation('.neo-form', {
+    marque: { required: true, minLength: 2, messages: { required: 'Marque requise', minLength: 'Au moins 2 caractères' } },
+    modele: { required: true },
+    annee: { required: true, pattern: '^[0-9]{4}$', messages: { pattern: 'Entrez une année valide' } },
+    prix: { required: true, min: 0 },
+    puissance_fiscale: { required: true, min: 1 },
+    kilometrage: { required: true, min: 0 },
+    boite_vitesse: { required: true },
+    carburant: { required: true }
+  });
+</script>
             </div>
         </div>
     </div>
 </section>
+
+{# Form validation is loaded globally through app.js #}
 {% endblock %}
 
