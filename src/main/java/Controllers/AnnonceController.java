@@ -130,7 +130,7 @@ public class AnnonceController {
             ResultSet rs = pstmt.executeQuery();
 
             System.out.println("📚 Début du chargement des voitures...");
-            voitureInfos.clear(); // Nettoyer les anciennes données
+            voitureInfos.clear(); 
             int count = 0;
 
             while (rs.next()) {
